@@ -1,0 +1,110 @@
+---
+title: "first-analysis"
+author: "mariesaitou"
+date: "2020-08-13"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+##########################
+master working directory
+```{bash, eval = FALSE}
+
+cd /project2/xuanyao/marie/E-GEUV-1
+```
+
+## Downlord the gene expression data (fastq) and genotype (vcf) files 
+## Download the fastq dataset from the Geuvadis project
+## sample information https://www.ebi.ac.uk/arrayexpress/files/E-GEUV-1/
+## fastq files ftp://ftp.sra.ebi.ac.uk/vol1/fastq/
+
+
+```{bash, eval = FALSE}
+cat getfastq.csv | awk 'NR==21,NR==90' > getfastqtest2.csv
+csvfile=getfastqtest2.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  url=`echo ${line} | cut -d ',' -f 2`
+  file=`echo ${line} | cut -d ',' -f 4`
+  wget ${url} -O fastq2/${file}.fastq.gz
+done
+```
+
+### Download the genotype dataset from the 1000 Genomes project phase 3 
+```{bash, eval = FALSE}
+mkdir genotype
+wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr{1..22}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
+```
+
+## Gene expression quantification with Kallisto
+## Kallisto - make index files ### 
+```{bash, eval = FALSE}
+module load kallisto
+wget ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.cdna.all.fa.gz
+gunzip Homo_sapiens.GRCh37.cdna.all.fa.gz
+kallisto index -i human.GRCh37.cdna.all.idx Homo_sapiens.GRCh37.cdna.all.fa
+
+wget https://github.com/pachterlab/kallisto-transcriptome-indices/releases/download/ensembl-96/homo_sapiens.tar.gz
+gunzip Homo_sapiens
+homo_sapiens/transcriptome.idx
+```
+
+### Gene expression quantification for all samples with Kallisto
+```{bash, eval = FALSE}
+module load kallisto
+csvfile=sample.filelist.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  file=`echo ${line} | cut -d ',' -f 5`
+  kallisto quant -i human.GRCh37.cdna.all.idx -o kallisto/${file}.kallistoOut -n 100 -t 32 fastq/${file}.1.fastq fastq/${file}.2.fastq
+done
+
+```
+
+*test
+test
+## Kallisto index 
+```{bash, eval = FALSE}
+module load kallisto
+wget ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.cdna.all.fa.gz
+gunzip Homo_sapiens.GRCh37.cdna.all.fa.gz
+kallisto index -i human.GRCh37.cdna.all.idx Homo_sapiens.GRCh37.cdna.all.fa
+
+wget https://github.com/pachterlab/kallisto-transcriptome-indices/releases/download/ensembl-96/homo_sapiens.tar.gz
+gunzip Homo_sapiens
+homo_sapiens/transcriptome.idx
+```
+
+
+### all samples kallisto
+```{bash, eval = FALSE}
+module load kallisto
+csvfile=sample.filelist.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  file=`echo ${line} | cut -d ',' -f 5`
+  kallisto quant -i human.GRCh37.cdna.all.idx -o kallisto/${file}.kallistoOut -n 100 -t 32 fastq/${file}.1.fastq fastq/${file}.2.fastq
+done
+```
+
+
+
+## Filter the genotype files with vcftools
+```{bash, eval = FALSE}
+## keep the individuals who are reported in both the 1000 Genome Project and Geuvadis
+module load vcftools
+for i in `seq 1 22`
+do
+   vcftools --gzvcf /genotype/phase3/ALL.chr$i.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz --keep 1000g.ind.sample.txt --recode --out /genotype/phase3/chr$i.1000gphase3.455 
+done
+
+## exclude rare variants 
+vcftools --vcf /genotype/phase3/chr$i.1000gphase3.455.recode.vcf --maf 0.01 --max-maf 0.99 --recode --out /genotype/phase3/chr$i.1000gphase3.455.0.01
+
+## keep only bi-allelic variants
+vcftools --vcf /genotype/phase3/chr$i.1000gphase3.455.0.01.recode.vcf --min-alleles 2 --max-alleles 2 --recode --out /genotype/phase3/chr$i.1000gphase3.455.0.01.biallelic
+```
+
+
