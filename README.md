@@ -1,4 +1,4 @@
-# myproject
+# trans-ethnic eQTL project.
 
 A [workflowr][] project.
 
