@@ -1,0 +1,284 @@
+---
+title: "varLD"
+author: "mariesaitou"
+date: "2020-08-13"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+##########################
+# varLD input file preparation
+```{python, eval = FALSE,python.reticulate = FALSE}
+#######vcf to varLD genotype format
+
+import pandas as pd
+import numpy as np
+pd.set_option('display.max_colwidth', 9999)
+#### from all the genes
+### files from csv list
+genelist=pd.read_csv('/project2/xuanyao/marie/E-GEUV-1/finemap/finemapped.location.csv')
+## for 0 to len(genelist)
+genes=genelist.iloc[:,0]
+
+dfYRI = []
+for gene in genes:
+    df = pd.read_table(f'{gene}.Yoruba.genotype.recode.vcf',header=252)
+    df = df.replace('0|0', '1').replace('0|1', '2').replace('1|0', '2').replace('1|1', '3')
+    df = df.iloc[:, [2,1] + list(range(10, len(df.columns)))]
+    df.to_csv(f'{gene}.varLDgenotype.Yoruba.csv',index=0,header=False,sep="\t")
+
+dfEUR = []
+for gene in genes:
+    df = pd.read_table(f'{gene}.EUR.genotype.recode.vcf',header=252)
+    df = df.replace('0|0', '1').replace('0|1', '2').replace('1|0', '2').replace('1|1', '3')
+    df = df.iloc[:, [2,1] + list(range(10, len(df.columns)))]
+    df.to_csv(f'{gene}.varLDgenotype.EUR.csv',index=0,header=False,sep="\t")
+############
+```
+
+# run varLD
+```{bash, eval = FALSE}
+csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/finemapped.location.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} |cut -d ',' -f 1`
+  java -jar rgenetics-1.0.jar -p VarLD /project2/xuanyao/marie/E-GEUV-1/finemap/YRI/${gene}.varLDgenotype.Yoruba.csv /project2/xuanyao/marie/E-GEUV-1/finemap/EUR/${gene}.varLDgenotype.EUR.csv -o varLD${gene}.txt
+done
+
+```
+
+
+# make LD matrix for one gene
+```{bash, eval = FALSE}
+
+module load plink
+plink --vcf ENSG00000267733.Yoruba.genotype.recode.vcf --r --matrix --out ENSG00000267733.Yoruba.LD.matrix
+plink --vcf ENSG00000267733.Yoruba.genotype.recode.vcf --recode --out ENSG00000267733.Yoruba.ped
+
+```
+
+
+# PESCA and PAINTOR preparation - ongoing and for one gene; Aug 2020-
+```{r, eval = FALSE}
+
+####### matix for trans-pop-finemapping analysis
+setwd("/Users/saitoumarie/Dropbox/Chicago/RCC/eQTL.practice/LDSC/PESCA")
+
+EURgeno<-read.table("ENSG00000160284.EUR.genotype.recode.vcf", header = FALSE, sep = "\t", skip = 252)
+#head(EURgeno)
+EURLD<-read.table("ENSG00000160284.EUR.LD.matrix.ld", header = FALSE, sep = " ")
+#head(EURLD)
+
+rownames(EURLD) <- EURgeno$V3
+colnames(EURLD) <- EURgeno$V3
+
+#####
+YRIgeno<-read.table("ENSG00000160284.Yoruba.genotype.recode.vcf", header = FALSE, sep = "\t", skip = 252)
+YRILD<-read.table("ENSG00000160284.Yoruba.LD.matrix.ld", header = FALSE, sep = " ")
+
+
+rownames(YRILD) <- YRIgeno$V3
+colnames(YRILD) <- YRIgeno$V3
+
+###
+EURz<-read.table("ENSG00000160284.zscore.EUR.txt", header = FALSE, sep = " ")
+YRIz<-read.table("ENSG00000160284.zscore.Yoruba.txt", header = FALSE, sep = " ")
+
+
+#(1) Extract the shared genes from EURLD and YRILD 
+#(2) Extract the shared genes of (1) from EURz and YRIz 
+#(3) make a new matrix by pasting EURgeno$V1, EURgeno$V2, EURgeno$V3, EURz$V5, YRIz$V5
+#(4) make two new matrices by pasting EURgeno$V3, EURgeno$V2,  (EURgeno$V4 and  EURgeno$V5) , EURz$V5, 
+
+#(1) LD file
+dat <- YRILD[!apply(is.na(YRILD), 1, all),]
+YRILD2<-dat[ ,!apply(is.na(dat), 2, all) ]
+
+dat1 <- EURLD[!apply(is.na(EURLD), 1, all),]
+EURLD2<-dat1[,!apply(is.na(dat1), 2, all) ]
+
+YRILD3 <- YRILD2[ intersect(names(YRILD2), names(EURLD2)),intersect(names(YRILD2), names(EURLD2))]
+EURLD3 <- EURLD2[ intersect(names(YRILD2), names(EURLD2)),intersect(names(YRILD2), names(EURLD2))]
+
+#(2) shared gene extraction
+EURz2<-subset(EURz,EURz$V2 %in% intersect(names(YRILD2), names(EURLD2)))
+YRIz2<-subset(YRIz,YRIz$V2 %in% intersect(names(YRILD2), names(EURLD2)))
+
+#(3) PAINTOR z-score
+
+EURgeno2<-subset(EURgeno,EURgeno$V3 %in% intersect(names(YRILD2), names(EURLD2)))
+YRIgeno2<-subset(YRIgeno,YRIgeno$V3 %in% intersect(names(YRILD2), names(EURLD2)))
+
+z.2pop<-data.frame(EURgeno2$V1, EURgeno2$V2, EURgeno2$V3, EURz2$V5, YRIz2$V5)
+names(z.2pop) <- c("CHR","POS","RSID","ZSCORE.EUR","ZSCORE.YRI")
+
+
+head(z.2pop)
+plot(z.2pop$ZSCORE.EUR,z.2pop$ZSCORE.YRI)
+
+hist(z.2pop$POS, breaks=20)
+
+plot(z.2pop$POS,z.2pop$ZSCORE.EUR)
+
+
+## output PAINTOR
+write.table(z.2pop, file = "ENSG00000160284.Paintor.z.txt", sep = " ",quote=FALSE,
+            row.names = FALSE,col.names = TRUE)
+write.table(EURLD3, file = "ENSG00000160284.EUR.LD", sep = " ",quote=FALSE,
+            row.names = FALSE,col.names = FALSE)
+write.table(YRILD3, file = "ENSG00000160284.YRI.LD", sep = " ",quote=FALSE,
+            row.names = FALSE,col.names = FALSE)
+write.table(anno, file = "ENSG00000160284.anno", sep = " ",quote=FALSE,
+            row.names = FALSE,col.names = TRUE)
+
+
+#(4) PESCA z-score
+# N= 358, 87
+# SNP         BP         A2      A1      Z           N 
+#(4) make two new matrices by pasting EURgeno$V3, EURgeno$V2,  (EURgeno$V4 and  EURgeno$V5) , EURz$V5, 
+# if EURz2$V5 < 0, take EURgeno2$V4. If EURz2$V5 >= 0, take EURgeno2$V5)
+# A2: Effect allele (i.e. trait increasing allele) of the SNP. The sign of Z-score is with respect to this allele.
+
+z.EUR.pesca<-data.frame(EURgeno2$V3, EURgeno2$V2, EURgeno2$V4, EURgeno2$V5, EURz2$V5)
+z.EUR.pesca$V6<-c(358)
+names(z.EUR.pesca) <- c("SNP","BP","A2","A1","Z","N")
+#z.EUR.pesca<-data.frame(EURgeno2$V3, EURgeno2$V2, EURgeno2$V4 or EURgeno2$V5, EURz2$V5, abs(EURz2$V5))
+### 8/6
+z.EUR.pesca$V6 <- NA
+z.EUR.pesca$V7 <- NA
+
+for(i in 1:nrow(z.EUR.pesca)){
+  if (EURz2[i,5] < 0){
+    z.EUR.pesca$V6[i] <- EURgeno2[i,4]
+    z.EUR.pesca$V7[i] <- EURgeno2[i,5]
+  } else {   
+    z.EUR.pesca$V6[i] <- EURgeno2[i,5]
+    z.EUR.pesca$V7[i] <- EURgeno2[i,4]
+  }
+}
+
+z.EUR.pesca2<-data.frame(z.EUR.pesca$SNP, z.EUR.pesca$BP, z.EUR.pesca$V6, z.EUR.pesca$V7, z.EUR.pesca$Z,z.EUR.pesca$N)
+names(z.EUR.pesca2) <- c("SNP","BP","A2","A1","Z","N")
+
+write.table(z.EUR.pesca2, file = "ENSG00000160284.PESCA.EUR.z.txt", sep = " ",quote=FALSE,
+            row.names = FALSE,col.names = TRUE)
+
+
+write.table(z.YRI.pesca2, file = "ENSG00000160284.PESCA.YRI.z.txt", sep = " ",quote=FALSE,
+            row.names = FALSE,col.names = TRUE)
+
+###
+
+
+z.YRI.pesca<-data.frame(YRIgeno2$V3, YRIgeno2$V2, YRIgeno2$V4, YRIgeno2$V5, YRIz2$V5)
+z.YRI.pesca$V6<-c(87)
+names(z.YRI.pesca) <- c("SNP","BP","A2","A1","Z","N")
+
+z.YRI.pesca$V6 <- NA
+z.YRI.pesca$V7 <- NA
+
+for(i in 1:nrow(z.YRI.pesca)){
+  if (YRIz2[i,5] < 0){
+    z.YRI.pesca$V6[i] <- YRIgeno2[i,4]
+    z.YRI.pesca$V7[i] <- YRIgeno2[i,5]
+  } else {   
+    z.YRI.pesca$V6[i] <- YRIgeno2[i,5]
+    z.YRI.pesca$V7[i] <- YRIgeno2[i,4]
+  }
+}
+
+z.YRI.pesca2<-data.frame(z.YRI.pesca$SNP, z.YRI.pesca$BP, z.YRI.pesca$V6, z.YRI.pesca$V7, z.YRI.pesca$Z,z.YRI.pesca$N)
+names(z.YRI.pesca2) <- c("SNP","BP","A2","A1","Z","N")
+
+
+
+
+########### for
+for(i in 1:nrow(z.EUR.pesca)){
+  if (EURz2[i,5] < 0){
+    EURz2$V6 <- EURgeno2[i,4]
+    EURz2$V7 <- EURgeno2[i,5]
+  } else {   
+    EURz2$V6 <- EURgeno2[i,5]
+    EURz2$V7 <- EURgeno2[i,4]
+  }
+}
+############## ikkai
+if (EURz2[1,5] < 0){
+  print(EURgeno2[1,4])
+}else{
+  print(EURgeno2[1,5])
+}
+##############
+matches <- list(c(2,1),c(5,2),c(6,3))
+for (match in matches){
+  if (match[1] > match[2]){
+    print("Win")
+  } else {
+    print ("Lose")
+  }
+}
+
+
+i==1
+answer[1,3]
+z.EUR.pesca[1,3] 
+z.EUR.pesca[[i],3] 
+
+
+matches <- list(c(2,1),c(5,2),c(6,3))
+for (match in matches){
+  if (match[1] > match[2]){
+    print("Win")
+  } else {
+    print ("Lose")
+  }
+}
+
+for(i in 1:nrow(z.EUR.pesca)){
+  hako <- data.frame(cbind(c(names(EURlist), names(Yorubalist)), c(names(EURlist), names(Yorubalist))))
+  hako$EUR <- c(as.numeric(EURlist[EURlist$gene==comlist[i],]), rep(NA, length(Yorubalist)))
+  hako$Yoruba <-  c(rep(NA, length(EURlist)), as.numeric(Yorubalist[Yorubalist$X==comlist[i],]))
+  hako<-subset(hako,hako$X1!="gene")
+  hako<-subset(hako,hako$X1!="X")
+  colnames(hako) <- c('ID', 'ID', 'EUR', 'Yoruba')
+
+}
+
+
+
+#(5) make a dummy annotation file (1 * SNP number)
+anno<-data.frame(rep(1,length(EURgeno2$V1)))
+names(anno) <- c("dummy")
+```
+
+# run PESCA 
+```{bash, eval = FALSE}
+module load boost/1.55
+/home/maries1/pesca/src/pesca \
+    --mode fit \
+    --zscore1 input.EUR.z.ENSG00000160284.txt \
+    --zscore2 input.YRI.z.ENSG00000160284.txt \
+    --ld1 input.EUR.LD.ENSG00000160284.txt\
+    --ld2 input.YRI.LD.ENSG00000160284.txt \
+    --nburn 5000 \
+    --nsample 5000 \
+    --lambda 0.0001 \
+    --sigmasq1 105.89 \
+    --sigmasq2 44.75 \
+    --totnsnp 837 \
+    --max_iter 200 \
+    --out ENSG00000160284.PESCA.step1
+```
+
+
+# run PAINTOR
+
+```{bash, eval = FALSE}
+./PAINTOR -input input.files.ENSG00000160284.txt -in -Zhead ZSCORE.EUR,ZSCORE.YRI -LDname EUR.LD,YRI.LD -in /ENSG00000160284/ -out /ENSG00000160284/ -enumerate 3 -annotations dummy
+```
+
+
+

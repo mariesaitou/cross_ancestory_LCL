@@ -1,0 +1,196 @@
+---
+title: "correl"
+author: "mariesaitou"
+date: "2020-08-13"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+##########################
+mashR
+```{bash, eval = FALSE}
+## install mashR on RCC
+pip install --user sos
+
+/project2/xuanyao/marie/E-GEUV-1/mashr
+module load python/3.7.0
+pip install --user sos sos-notebook
+/home/maries1/.local/bin/sos run fastqtl_to_mash.ipynb -h
+
+
+```
+
+# Prepare the input file
+```{bash, eval = FALSE}
+# Run fastQTL without filterin (see page1)
+# Merge the fastQTL nominal outputs
+# Separate the fastQTL output into gene categories
+
+cat Yoruba.chr{1..22}.nominals.txt  > Yoruba.auto.nominals.txt
+cat EUR.chr{1..22}.nominals.txt >  EUR.auto.nominals.txt
+
+csvfile=susieR.gene.both.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} |cut -d ',' -f 1`
+  grep -w "${gene}" Yoruba.auto.nominals.txt  >> Yoruba.both.nominals.txt
+  grep -w "${gene}" EUR.auto.nominals.txt  >> EUR.both.nominals.txt
+done
+
+csvfile=susieR.gene.diff.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} |cut -d ',' -f 1`
+  grep -w "${gene}" Yoruba.auto.nominals.txt  >> Yoruba.diff.nominals.txt
+  grep -w "${gene}" EUR.auto.nominals.txt  >> EUR.diff.nominals.txt
+done
+
+csvfile=susieR.gene.YRI.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} |cut -d ',' -f 1`
+  grep -w "${gene}" Yoruba.auto.nominals.txt  >> Yoruba.YRI.nominals.txt
+  grep -w "${gene}" EUR.auto.nominals.txt  >> EUR.YRI.nominals.txt
+done
+
+csvfile=susieR.gene.EUR.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} |cut -d ',' -f 1`
+  grep -w "${gene}" Yoruba.auto.nominals.txt  >> Yoruba.EUR.nominals.txt
+  grep -w "${gene}" EUR.auto.nominals.txt  >> EUR.EUR.nominals.txt
+done
+```
+
+
+
+Convert the fastQTL outout to mashR input format
+```{bash, eval = FALSE}
+sos run fastqtl_to_mash.ipynb --gene-list genes.both.txt --data-list both.file.txt --cols 5 4
+
+```
+
+
+run mashR (mean)
+```{r, eval = FALSE}
+data <- readRDS("EUR.file.mash.rds")
+
+
+data.temp = mash_set_data(data$random.b,data$random.s,zero_Shat_reset = 1)
+Vhat = estimate_null_correlation_simple(data.temp)
+rm(data.temp)
+
+data.random = mash_set_data(data$random.b,data$random.s,V=Vhat,zero_Shat_reset = 1)
+data.strong = mash_set_data(data$strong.b,data$strong.s, V=Vhat,zero_Shat_reset = 1)
+
+U.pca = cov_pca(data.strong,2)
+U.ed = cov_ed(data.strong, U.pca)
+U.c = cov_canonical(data.random)
+m = mash(data.random, Ulist = c(U.ed,U.c))
+print(get_pairwise_sharing(m))
+```
+
+
+run mashR (SD)
+```{r, eval = FALSE}
+
+get_pairwise_sharing1 = function(m, factor=0.5, lfsr_thresh=0.05, FUN= identity){
+  R = mashr:::get_ncond(m)
+  lfsr = get_lfsr(m)
+  S=matrix(NA,nrow = R, ncol=R)
+  SD=matrix(NA,nrow = R, ncol=R)
+  for(i in 1:R){
+    for(j in i:R){
+      sig_i=get_significant_results(m,thresh=lfsr_thresh,conditions = i)
+      sig_j=get_significant_results(m,thresh=lfsr_thresh,conditions = j)
+      a=union(sig_i,sig_j)
+      ratio=FUN(get_pm(m)[a,i])/FUN(get_pm(m)[a,j])##divide effect sizes
+      S[i,j]=mean(ratio>factor & ratio<(1/factor))
+      SD[i,j]=sd(ratio>factor & ratio<(1/factor))
+    }
+  }
+  S[lower.tri(S, diag = FALSE)] = t(S)[lower.tri(S, diag = FALSE)]
+  colnames(S) = row.names(S) = colnames(m$result$PosteriorMean)
+  
+  SD[lower.tri(SD, diag = FALSE)] = t(SD)[lower.tri(SD, diag = FALSE)]
+  colnames(SD) = row.names(SD) = colnames(m$result$PosteriorMean)
+  
+  return(list(S,SD))
+}
+
+```
+
+Prapere phenotype (gene expression) files for GCTA
+```{r, eval = FALSE}
+genelist=read.csv("LDSC/test3.location.csv", header=T,stringsAsFactors = F)
+
+EUR = read.csv("EUR.TPM.scaled.csv", header=T,stringsAsFactors = F)
+Yoruba = read.csv("Yoruba.TPM.scaled.csv", header=T,stringsAsFactors = F)
+
+## extract genes from the gene expression list
+
+for(i in 1:3){
+grep(genelist[i,1],Yoruba )
+}
+
+Yorubalist<-Yoruba[Yoruba[,1]%in%genelist[,1],]
+EURlist <- EUR[EUR[,1]%in%genelist[,1],]
+
+comlist <- Yorubalist$X[Yorubalist$X%in% EURlist$gene]
+setwd("/Users/saitoumarie/Dropbox/Chicago/RCC/eQTL.practice/LDSC/phen")
+for(i in 1:length(comlist)){
+  hako <- data.frame(cbind(c(names(EURlist), names(Yorubalist)), c(names(EURlist), names(Yorubalist))))
+  hako$EUR <- c(as.numeric(EURlist[EURlist$gene==comlist[i],]), rep(NA, length(Yorubalist)))
+  hako$Yoruba <-  c(rep(NA, length(EURlist)), as.numeric(Yorubalist[Yorubalist$X==comlist[i],]))
+  hako<-subset(hako,hako$X1!="gene")
+  hako<-subset(hako,hako$X1!="X")
+  colnames(hako) <- c('ID', 'ID', 'EUR', 'Yoruba')
+ # write.csv(hako, comlist[i])
+  write.table(hako, file = paste(comlist[i], ".pre"), sep = "\t", row.names = FALSE,
+              col.names = FALSE,quote=FALSE)
+}
+
+```
+
+
+                     
+run GCTA
+```{bash, eval = FALSE}
+
+export PATH="$PATH:/home/maries1/gcta_1.93.2beta"
+#./gcta64
+
+csvfile=finemapped.location.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} | cut -d ',' -f 1`
+  gcta64  --bfile ${gene}.EandY  --autosome  --make-grm  --out ${gene}
+  gcta64  --reml-bivar --grm ${gene}  --pheno phen/${gene}.phen  --out result/${gene}
+
+done
+
+csvfile=finemapped.location.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} | cut -d ',' -f 1`
+
+  grep 'V(G)/Vp_tr1' result/${gene}.hsq >> result/trait1.EUR.txt
+  grep 'V(G)/Vp_tr2' result/${gene}.hsq >> result/trait2.Yoruba.txt
+  grep 'rG' result/${gene}.hsq >> result/rG.txt
+
+done
+
+
+csvfile=finemapped.location.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} | cut -d ',' -f 1`
+
+  ls result/${gene}.hsq >> list.txt
+done
+
+```
+
+
