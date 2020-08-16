@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="mariesaitou" />
+
+<meta name="date" content="2020-08-13" />
+
+<title>varLD</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myproject</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/mariesaitou/myproject">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">varLD</h1>
+<h4 class="author">mariesaitou</h4>
+<h4 class="date">2020-08-13</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-08-16
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>myproject/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200813code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200813)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200813code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200813)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree8a5d7d1951d4898e3afcb639e88f9b4abb117594targetblank8a5d7d1a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/mariesaitou/myproject/tree/8a5d7d1951d4898e3afcb639e88f9b4abb117594" target="_blank">8a5d7d1</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree8a5d7d1951d4898e3afcb639e88f9b4abb117594targetblank8a5d7d1a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/mariesaitou/myproject/tree/8a5d7d1951d4898e3afcb639e88f9b4abb117594" target="_blank">8a5d7d1</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    analysis/.DS_Store
+    Ignored:    genotype/
+
+Untracked files:
+    Untracked:  ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
+    Untracked:  ALL.chr2.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
+    Untracked:  analysis/susie.Rmd
+    Untracked:  getfastqtest2.csv
+
+Unstaged changes:
+    Deleted:    analysis/first-analysis.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/varLD.Rmd</code>) and HTML (<code>docs/varLD.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/mariesaitou/myproject/blob/8a5d7d1951d4898e3afcb639e88f9b4abb117594/analysis/varLD.Rmd" target="_blank">8a5d7d1</a>
+</td>
+<td>
+mariesaitou
+</td>
+<td>
+2020-08-16
+</td>
+<td>
+wflow_publish(c(“analysis/index.Rmd”, “analysis/correl.Rmd”,
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="section" class="section level26">
+<p></p>
+</div>
+<div id="varld-input-file-preparation" class="section level1">
+<h1>varLD input file preparation</h1>
+<pre class="python"><code>#######vcf to varLD genotype format
+
+import pandas as pd
+import numpy as np
+pd.set_option(&#39;display.max_colwidth&#39;, 9999)
+#### from all the genes
+### files from csv list
+genelist=pd.read_csv(&#39;/project2/xuanyao/marie/E-GEUV-1/finemap/finemapped.location.csv&#39;)
+## for 0 to len(genelist)
+genes=genelist.iloc[:,0]
+
+dfYRI = []
+for gene in genes:
+    df = pd.read_table(f&#39;{gene}.Yoruba.genotype.recode.vcf&#39;,header=252)
+    df = df.replace(&#39;0|0&#39;, &#39;1&#39;).replace(&#39;0|1&#39;, &#39;2&#39;).replace(&#39;1|0&#39;, &#39;2&#39;).replace(&#39;1|1&#39;, &#39;3&#39;)
+    df = df.iloc[:, [2,1] + list(range(10, len(df.columns)))]
+    df.to_csv(f&#39;{gene}.varLDgenotype.Yoruba.csv&#39;,index=0,header=False,sep=&quot;\t&quot;)
+
+dfEUR = []
+for gene in genes:
+    df = pd.read_table(f&#39;{gene}.EUR.genotype.recode.vcf&#39;,header=252)
+    df = df.replace(&#39;0|0&#39;, &#39;1&#39;).replace(&#39;0|1&#39;, &#39;2&#39;).replace(&#39;1|0&#39;, &#39;2&#39;).replace(&#39;1|1&#39;, &#39;3&#39;)
+    df = df.iloc[:, [2,1] + list(range(10, len(df.columns)))]
+    df.to_csv(f&#39;{gene}.varLDgenotype.EUR.csv&#39;,index=0,header=False,sep=&quot;\t&quot;)
+############</code></pre>
+</div>
+<div id="run-varld" class="section level1">
+<h1>run varLD</h1>
+<pre class="bash"><code>csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/finemapped.location.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} |cut -d &#39;,&#39; -f 1`
+  java -jar rgenetics-1.0.jar -p VarLD /project2/xuanyao/marie/E-GEUV-1/finemap/YRI/${gene}.varLDgenotype.Yoruba.csv /project2/xuanyao/marie/E-GEUV-1/finemap/EUR/${gene}.varLDgenotype.EUR.csv -o varLD${gene}.txt
+done
+</code></pre>
+</div>
+<div id="make-ld-matrix-for-one-gene" class="section level1">
+<h1>make LD matrix for one gene</h1>
+<pre class="bash"><code>
+module load plink
+plink --vcf ENSG00000267733.Yoruba.genotype.recode.vcf --r --matrix --out ENSG00000267733.Yoruba.LD.matrix
+plink --vcf ENSG00000267733.Yoruba.genotype.recode.vcf --recode --out ENSG00000267733.Yoruba.ped
+</code></pre>
+</div>
+<div id="pesca-and-paintor-preparation---ongoing-and-for-one-gene-aug-2020-" class="section level1">
+<h1>PESCA and PAINTOR preparation - ongoing and for one gene; Aug 2020-</h1>
+<pre class="r"><code>####### matix for trans-pop-finemapping analysis
+setwd(&quot;/Users/saitoumarie/Dropbox/Chicago/RCC/eQTL.practice/LDSC/PESCA&quot;)
+
+EURgeno&lt;-read.table(&quot;ENSG00000160284.EUR.genotype.recode.vcf&quot;, header = FALSE, sep = &quot;\t&quot;, skip = 252)
+#head(EURgeno)
+EURLD&lt;-read.table(&quot;ENSG00000160284.EUR.LD.matrix.ld&quot;, header = FALSE, sep = &quot; &quot;)
+#head(EURLD)
+
+rownames(EURLD) &lt;- EURgeno$V3
+colnames(EURLD) &lt;- EURgeno$V3
+
+#####
+YRIgeno&lt;-read.table(&quot;ENSG00000160284.Yoruba.genotype.recode.vcf&quot;, header = FALSE, sep = &quot;\t&quot;, skip = 252)
+YRILD&lt;-read.table(&quot;ENSG00000160284.Yoruba.LD.matrix.ld&quot;, header = FALSE, sep = &quot; &quot;)
+
+
+rownames(YRILD) &lt;- YRIgeno$V3
+colnames(YRILD) &lt;- YRIgeno$V3
+
+###
+EURz&lt;-read.table(&quot;ENSG00000160284.zscore.EUR.txt&quot;, header = FALSE, sep = &quot; &quot;)
+YRIz&lt;-read.table(&quot;ENSG00000160284.zscore.Yoruba.txt&quot;, header = FALSE, sep = &quot; &quot;)
+
+
+#(1) Extract the shared genes from EURLD and YRILD 
+#(2) Extract the shared genes of (1) from EURz and YRIz 
+#(3) make a new matrix by pasting EURgeno$V1, EURgeno$V2, EURgeno$V3, EURz$V5, YRIz$V5
+#(4) make two new matrices by pasting EURgeno$V3, EURgeno$V2,  (EURgeno$V4 and  EURgeno$V5) , EURz$V5, 
+
+#(1) LD file
+dat &lt;- YRILD[!apply(is.na(YRILD), 1, all),]
+YRILD2&lt;-dat[ ,!apply(is.na(dat), 2, all) ]
+
+dat1 &lt;- EURLD[!apply(is.na(EURLD), 1, all),]
+EURLD2&lt;-dat1[,!apply(is.na(dat1), 2, all) ]
+
+YRILD3 &lt;- YRILD2[ intersect(names(YRILD2), names(EURLD2)),intersect(names(YRILD2), names(EURLD2))]
+EURLD3 &lt;- EURLD2[ intersect(names(YRILD2), names(EURLD2)),intersect(names(YRILD2), names(EURLD2))]
+
+#(2) shared gene extraction
+EURz2&lt;-subset(EURz,EURz$V2 %in% intersect(names(YRILD2), names(EURLD2)))
+YRIz2&lt;-subset(YRIz,YRIz$V2 %in% intersect(names(YRILD2), names(EURLD2)))
+
+#(3) PAINTOR z-score
+
+EURgeno2&lt;-subset(EURgeno,EURgeno$V3 %in% intersect(names(YRILD2), names(EURLD2)))
+YRIgeno2&lt;-subset(YRIgeno,YRIgeno$V3 %in% intersect(names(YRILD2), names(EURLD2)))
+
+z.2pop&lt;-data.frame(EURgeno2$V1, EURgeno2$V2, EURgeno2$V3, EURz2$V5, YRIz2$V5)
+names(z.2pop) &lt;- c(&quot;CHR&quot;,&quot;POS&quot;,&quot;RSID&quot;,&quot;ZSCORE.EUR&quot;,&quot;ZSCORE.YRI&quot;)
+
+
+head(z.2pop)
+plot(z.2pop$ZSCORE.EUR,z.2pop$ZSCORE.YRI)
+
+hist(z.2pop$POS, breaks=20)
+
+plot(z.2pop$POS,z.2pop$ZSCORE.EUR)
+
+
+## output PAINTOR
+write.table(z.2pop, file = &quot;ENSG00000160284.Paintor.z.txt&quot;, sep = &quot; &quot;,quote=FALSE,
+            row.names = FALSE,col.names = TRUE)
+write.table(EURLD3, file = &quot;ENSG00000160284.EUR.LD&quot;, sep = &quot; &quot;,quote=FALSE,
+            row.names = FALSE,col.names = FALSE)
+write.table(YRILD3, file = &quot;ENSG00000160284.YRI.LD&quot;, sep = &quot; &quot;,quote=FALSE,
+            row.names = FALSE,col.names = FALSE)
+write.table(anno, file = &quot;ENSG00000160284.anno&quot;, sep = &quot; &quot;,quote=FALSE,
+            row.names = FALSE,col.names = TRUE)
+
+
+#(4) PESCA z-score
+# N= 358, 87
+# SNP         BP         A2      A1      Z           N 
+#(4) make two new matrices by pasting EURgeno$V3, EURgeno$V2,  (EURgeno$V4 and  EURgeno$V5) , EURz$V5, 
+# if EURz2$V5 &lt; 0, take EURgeno2$V4. If EURz2$V5 &gt;= 0, take EURgeno2$V5)
+# A2: Effect allele (i.e. trait increasing allele) of the SNP. The sign of Z-score is with respect to this allele.
+
+z.EUR.pesca&lt;-data.frame(EURgeno2$V3, EURgeno2$V2, EURgeno2$V4, EURgeno2$V5, EURz2$V5)
+z.EUR.pesca$V6&lt;-c(358)
+names(z.EUR.pesca) &lt;- c(&quot;SNP&quot;,&quot;BP&quot;,&quot;A2&quot;,&quot;A1&quot;,&quot;Z&quot;,&quot;N&quot;)
+#z.EUR.pesca&lt;-data.frame(EURgeno2$V3, EURgeno2$V2, EURgeno2$V4 or EURgeno2$V5, EURz2$V5, abs(EURz2$V5))
+### 8/6
+z.EUR.pesca$V6 &lt;- NA
+z.EUR.pesca$V7 &lt;- NA
+
+for(i in 1:nrow(z.EUR.pesca)){
+  if (EURz2[i,5] &lt; 0){
+    z.EUR.pesca$V6[i] &lt;- EURgeno2[i,4]
+    z.EUR.pesca$V7[i] &lt;- EURgeno2[i,5]
+  } else {   
+    z.EUR.pesca$V6[i] &lt;- EURgeno2[i,5]
+    z.EUR.pesca$V7[i] &lt;- EURgeno2[i,4]
+  }
+}
+
+z.EUR.pesca2&lt;-data.frame(z.EUR.pesca$SNP, z.EUR.pesca$BP, z.EUR.pesca$V6, z.EUR.pesca$V7, z.EUR.pesca$Z,z.EUR.pesca$N)
+names(z.EUR.pesca2) &lt;- c(&quot;SNP&quot;,&quot;BP&quot;,&quot;A2&quot;,&quot;A1&quot;,&quot;Z&quot;,&quot;N&quot;)
+
+write.table(z.EUR.pesca2, file = &quot;ENSG00000160284.PESCA.EUR.z.txt&quot;, sep = &quot; &quot;,quote=FALSE,
+            row.names = FALSE,col.names = TRUE)
+
+
+write.table(z.YRI.pesca2, file = &quot;ENSG00000160284.PESCA.YRI.z.txt&quot;, sep = &quot; &quot;,quote=FALSE,
+            row.names = FALSE,col.names = TRUE)
+
+###
+
+
+z.YRI.pesca&lt;-data.frame(YRIgeno2$V3, YRIgeno2$V2, YRIgeno2$V4, YRIgeno2$V5, YRIz2$V5)
+z.YRI.pesca$V6&lt;-c(87)
+names(z.YRI.pesca) &lt;- c(&quot;SNP&quot;,&quot;BP&quot;,&quot;A2&quot;,&quot;A1&quot;,&quot;Z&quot;,&quot;N&quot;)
+
+z.YRI.pesca$V6 &lt;- NA
+z.YRI.pesca$V7 &lt;- NA
+
+for(i in 1:nrow(z.YRI.pesca)){
+  if (YRIz2[i,5] &lt; 0){
+    z.YRI.pesca$V6[i] &lt;- YRIgeno2[i,4]
+    z.YRI.pesca$V7[i] &lt;- YRIgeno2[i,5]
+  } else {   
+    z.YRI.pesca$V6[i] &lt;- YRIgeno2[i,5]
+    z.YRI.pesca$V7[i] &lt;- YRIgeno2[i,4]
+  }
+}
+
+z.YRI.pesca2&lt;-data.frame(z.YRI.pesca$SNP, z.YRI.pesca$BP, z.YRI.pesca$V6, z.YRI.pesca$V7, z.YRI.pesca$Z,z.YRI.pesca$N)
+names(z.YRI.pesca2) &lt;- c(&quot;SNP&quot;,&quot;BP&quot;,&quot;A2&quot;,&quot;A1&quot;,&quot;Z&quot;,&quot;N&quot;)
+
+
+
+
+########### for
+for(i in 1:nrow(z.EUR.pesca)){
+  if (EURz2[i,5] &lt; 0){
+    EURz2$V6 &lt;- EURgeno2[i,4]
+    EURz2$V7 &lt;- EURgeno2[i,5]
+  } else {   
+    EURz2$V6 &lt;- EURgeno2[i,5]
+    EURz2$V7 &lt;- EURgeno2[i,4]
+  }
+}
+############## ikkai
+if (EURz2[1,5] &lt; 0){
+  print(EURgeno2[1,4])
+}else{
+  print(EURgeno2[1,5])
+}
+##############
+matches &lt;- list(c(2,1),c(5,2),c(6,3))
+for (match in matches){
+  if (match[1] &gt; match[2]){
+    print(&quot;Win&quot;)
+  } else {
+    print (&quot;Lose&quot;)
+  }
+}
+
+
+i==1
+answer[1,3]
+z.EUR.pesca[1,3] 
+z.EUR.pesca[[i],3] 
+
+
+matches &lt;- list(c(2,1),c(5,2),c(6,3))
+for (match in matches){
+  if (match[1] &gt; match[2]){
+    print(&quot;Win&quot;)
+  } else {
+    print (&quot;Lose&quot;)
+  }
+}
+
+for(i in 1:nrow(z.EUR.pesca)){
+  hako &lt;- data.frame(cbind(c(names(EURlist), names(Yorubalist)), c(names(EURlist), names(Yorubalist))))
+  hako$EUR &lt;- c(as.numeric(EURlist[EURlist$gene==comlist[i],]), rep(NA, length(Yorubalist)))
+  hako$Yoruba &lt;-  c(rep(NA, length(EURlist)), as.numeric(Yorubalist[Yorubalist$X==comlist[i],]))
+  hako&lt;-subset(hako,hako$X1!=&quot;gene&quot;)
+  hako&lt;-subset(hako,hako$X1!=&quot;X&quot;)
+  colnames(hako) &lt;- c(&#39;ID&#39;, &#39;ID&#39;, &#39;EUR&#39;, &#39;Yoruba&#39;)
+
+}
+
+
+
+#(5) make a dummy annotation file (1 * SNP number)
+anno&lt;-data.frame(rep(1,length(EURgeno2$V1)))
+names(anno) &lt;- c(&quot;dummy&quot;)</code></pre>
+</div>
+<div id="run-pesca" class="section level1">
+<h1>run PESCA</h1>
+<pre class="bash"><code>module load boost/1.55
+/home/maries1/pesca/src/pesca \
+    --mode fit \
+    --zscore1 input.EUR.z.ENSG00000160284.txt \
+    --zscore2 input.YRI.z.ENSG00000160284.txt \
+    --ld1 input.EUR.LD.ENSG00000160284.txt\
+    --ld2 input.YRI.LD.ENSG00000160284.txt \
+    --nburn 5000 \
+    --nsample 5000 \
+    --lambda 0.0001 \
+    --sigmasq1 105.89 \
+    --sigmasq2 44.75 \
+    --totnsnp 837 \
+    --max_iter 200 \
+    --out ENSG00000160284.PESCA.step1</code></pre>
+</div>
+<div id="run-paintor" class="section level1">
+<h1>run PAINTOR</h1>
+<pre class="bash"><code>./PAINTOR -input input.files.ENSG00000160284.txt -in -Zhead ZSCORE.EUR,ZSCORE.YRI -LDname EUR.LD,YRI.LD -in /ENSG00000160284/ -out /ENSG00000160284/ -enumerate 3 -annotations dummy</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.0 (2020-04-24)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Catalina 10.15.6
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.4.6    rprojroot_1.3-2 digest_0.6.25   later_1.1.0.1  
+ [5] R6_2.4.1        backports_1.1.8 git2r_0.27.1    magrittr_1.5   
+ [9] evaluate_0.14   stringi_1.4.6   rlang_0.4.7     fs_1.4.1       
+[13] promises_1.1.1  whisker_0.4     rmarkdown_2.3   tools_4.0.0    
+[17] stringr_1.4.0   glue_1.4.1      httpuv_1.5.4    xfun_0.14      
+[21] yaml_2.2.1      compiler_4.0.0  htmltools_0.4.0 knitr_1.28     </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
