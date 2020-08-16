@@ -27,6 +27,6 @@ I put the scripts just for desplaying and sharing purpose. I did not bring actur
 Obtain genotype and gene expression data, clean them and convert them to the fastQTL format and run the program on UChicago RCC system.
 * [2. Fine-mapping with SuSiE](susie.html)
 * [3. Downstream analysis]
-* [4. Genetic correlation analysis]
-* [5. (ongoing) LD-based fine-mapping]
+* [4. Genetic correlation analysis](correl.html)
+* [5. (ongoing) LD-based fine-mapping](varLD.html)
 
