@@ -1,5 +1,5 @@
 ---
-title: "Home"
+title: "trans-ethnic eQTL project"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
@@ -8,4 +8,25 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+### **Trans-ethnic eQTL project**
+To understand the trans-ethnic genetic architectures of gene expression of a single cell type, which serves as a simplified model to understand trans-ethnic genetic architecture of complex traits.
+
+- eQTL mapping with fastQTL and fine-mapping with SuSiE
+- Downstream analysis with allele frequency, differencially expressed genes
+- Genetic correlation analysis
+- (ongoing) LD-based fine-mapping
+
+
+
+### **Note**
+I put the scripts just for desplaying and sharing purpose. I did not bring actural datasets and software on this page, so the commands are not executable on-demand here.
+
+
+### **Procedure**
+* [1. Data Cleatning and fastQTL](prep.html)
+Obtain genotype and gene expression data, clean them and convert them to the fastQTL format and run the program on UChicago RCC system.
+* [2. Fine-mapping with SuSiE](susie.html)
+* [3. Downstream analysis]
+* [4. Genetic correlation analysis]
+* [5. (ongoing) LD-based fine-mapping]
+
