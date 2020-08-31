@@ -1,0 +1,105 @@
+---
+title: "SuSiE"
+author: "mariesaitou"
+date: "2020-08-13"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+##########################
+
+# Cut the 100 up/downstream regions from the genotype file
+```{bash, eval = FALSE}
+module load vcftools
+module load htslib 
+csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/genelist.location1.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} | cut -d ',' -f 1`
+  chr=`echo ${line} | cut -d ',' -f 3`
+  up=`echo ${line} | cut -d ',' -f 6`
+  down=`echo ${line} | cut -d ',' -f 7`
+  vcftools --gzvcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr${chr}.1000gphase3.EUR.0.01.biallelic.recode.vcf.gz --chr ${chr} --from-bp ${up} --to-bp ${down} --recode --out ${gene}.EUR.genotype
+
+done
+
+```
+
+
+# run SuSiE
+```{r, eval = FALSE}
+# 12419 genes are too many to run at once. Separate the gene list into small lists.
+
+library(susieR)
+library(data.table)
+## read the gene list
+#genelist=read.csv("genelist.test.csv", stringsAsFactors = F)
+genelist=read.csv("gene.Yoruba.csv", stringsAsFactors = F)
+#gene.expression.Africa = read.table("Yoruba.TPM.scaled.gene.bed")
+gene.expression.Yoruba = fread("Yoruba.TPM.scaled.gene.bed.gz")
+
+## read a gene from the list
+filenameYoruba<-paste(genelist[,"gene"], ".Yoruba.genotype.recode.vcf", sep="")
+genotype.Yoruba<- lapply(filenameYoruba, FUN=read.table, header = FALSE, stringsAsFactors = F)
+names(genotype.Yoruba) <- genelist[,"gene"]
+genotype.Yoruba.df <- rbindlist(genotype.Yoruba, fill=T, idcol = T)
+genotype.Yoruba.df<-genotype.Yoruba.df[!duplicated(genotype.Yoruba.df[,c(".id","V3" )])&!duplicated(genotype.Yoruba.df[,c(".id","V3" )], fromLast = T),]
+
+
+## convert vcf format as input dataset
+
+genotype.Yoruba.data <- genotype.Yoruba.df[,11:length(genotype.Yoruba.df[1,])] 
+
+genotype.Yoruba.data[genotype.Yoruba.data=="0|0"]<- 0L
+genotype.Yoruba.data[genotype.Yoruba.data=="0|1"]<- 1L
+genotype.Yoruba.data[genotype.Yoruba.data=="1|0"]<- 1L
+genotype.Yoruba.data[genotype.Yoruba.data=="1|1"]<- 2L
+genotype.Yoruba.data1<- as.matrix(genotype.Yoruba.data)
+genotype.Yoruba.data<- matrix(as.numeric(genotype.Yoruba.data1), nrow = nrow(genotype.Yoruba.data))
+
+## scale the genotypes
+scale.gen.Yoruba <- scale(t(genotype.Yoruba.data))
+#hist(scale.gen.Yoruba[,20])
+
+## extract genes from the gene expression list
+test.expression.Yoruba <- gene.expression.Yoruba[unlist(lapply(genelist$gene, grep, gene.expression.Yoruba$ID)),]
+expression.Yoruba <- t(test.expression.Yoruba[,-(1:4)])
+
+## susieR
+fitted.test.Yoruba <- as.list(NULL)
+for(i in 1:12419){
+  fitted.test.Yoruba[[i]] <-   susie(scale.gen.Yoruba[,(genotype.Yoruba.df$.id==genelist$gene[i])], expression.Yoruba[,i],
+                                     L = 10,
+                                     estimate_residual_variance = TRUE, 
+                                     estimate_prior_variance = FALSE,
+                                     scaled_prior_variance = 0.95,
+                                     verbose = TRUE)
+}
+
+fitted.test.Yoruba[[4]]$sets$cs
+## attach gene names to the result
+fitted.Yoruba <-  as.list(NULL)
+for(i in 1:12419){
+  if(length(fitted.test.Yoruba[[i]]$sets$cs)!=0){
+    fitted.Yoruba[[i]] <- stack(fitted.test.Yoruba[[i]]$sets$cs)
+  }
+}
+check.Yoruba <- rbindlist(fitted.Yoruba, idcol=T)
+check.Yoruba$name <- genelist[check.Yoruba$.id,"gene"]
+result.temp <- as.list(NULL)
+for(i in 1:length(check.Yoruba$.id)){result.temp[i] <- lapply(genotype.Yoruba[check.Yoruba$name[i]], "[", check.Yoruba$values[i],1:3)}
+result.Yoruba <- data.frame(check.Yoruba$name, check.Yoruba$ind, check.Yoruba$values, rbindlist(result.temp))
+
+names(result.Yoruba)<-c("gene","L","SNP","chr","loc","rs")
+
+library(dplyr)
+result.Yoruba<-result.Yoruba %>% as.data.frame() %>% mutate(gene.SNP = paste(!!!rlang::syms(c("gene", "rs")), sep="."))
+write.csv(result.Yoruba, file = "result.Yoruba.csv")
+```
+
+
+
+
+
