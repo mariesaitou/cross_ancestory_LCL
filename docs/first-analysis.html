@@ -395,7 +395,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -404,7 +404,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -416,7 +416,7 @@ div.tocify {
 <strong>Last updated:</strong> 2020-08-13
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>myproject/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -432,12 +432,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree3710ffb0b339640a1cec4f9a6030ac59b66d8b4btargetblank3710ffba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/mariesaitou/myproject/tree/3710ffb0b339640a1cec4f9a6030ac59b66d8b4b" target="_blank">3710ffb</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree51c2d46ad1a7c207ee809123162e09512a604049targetblank51c2d46a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/mariesaitou/myproject/tree/51c2d46ad1a7c207ee809123162e09512a604049" target="_blank">51c2d46</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree3710ffb0b339640a1cec4f9a6030ac59b66d8b4btargetblank3710ffba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree51c2d46ad1a7c207ee809123162e09512a604049targetblank51c2d46a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/mariesaitou/myproject/tree/3710ffb0b339640a1cec4f9a6030ac59b66d8b4b" target="_blank">3710ffb</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/mariesaitou/myproject/tree/51c2d46ad1a7c207ee809123162e09512a604049" target="_blank">51c2d46</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -528,6 +528,9 @@ Untracked files:
     Untracked:  ALL.chr2.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
     Untracked:  analysis/data.prep.Rmd
     Untracked:  getfastqtest2.csv
+
+Unstaged changes:
+    Modified:   analysis/first-analysis.Rmd
 
 </code></pre>
 <p>
@@ -571,6 +574,23 @@ Message
 html
 </td>
 <td>
+<a href="https://rawcdn.githack.com/mariesaitou/myproject/51c2d46ad1a7c207ee809123162e09512a604049/docs/first-analysis.html" target="_blank">51c2d46</a>
+</td>
+<td>
+mariesaitou
+</td>
+<td>
+2020-08-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
 <a href="https://rawcdn.githack.com/mariesaitou/myproject/3710ffb0b339640a1cec4f9a6030ac59b66d8b4b/docs/first-analysis.html" target="_blank">3710ffb</a>
 </td>
 <td>
@@ -609,22 +629,18 @@ Add my first analysis
 </div>
 <div id="section" class="section level26">
 <p></p>
-<p>master working directory</p>
+<p>The master working directory on UChicago RCC</p>
 <pre class="bash"><code>
 cd /project2/xuanyao/marie/E-GEUV-1</code></pre>
 </div>
-<div id="downlord-the-gene-expression-data-fastq-and-genotype-vcf-files" class="section level2">
-<h2>Downlord the gene expression data (fastq) and genotype (vcf) files</h2>
-</div>
-<div id="download-the-fastq-dataset-from-the-geuvadis-project" class="section level2">
-<h2>Download the fastq dataset from the Geuvadis project</h2>
-</div>
-<div id="sample-information-httpswww.ebi.ac.ukarrayexpressfilese-geuv-1" class="section level2">
-<h2>sample information <a href="https://www.ebi.ac.uk/arrayexpress/files/E-GEUV-1/" class="uri">https://www.ebi.ac.uk/arrayexpress/files/E-GEUV-1/</a></h2>
-</div>
-<div id="fastq-files-ftpftp.sra.ebi.ac.ukvol1fastq" class="section level2">
-<h2>fastq files <a href="ftp://ftp.sra.ebi.ac.uk/vol1/fastq/" class="uri">ftp://ftp.sra.ebi.ac.uk/vol1/fastq/</a></h2>
-<pre class="bash"><code>cat getfastq.csv | awk &#39;NR==21,NR==90&#39; &gt; getfastqtest2.csv
+<div id="download-the-gene-expression-data-and-genotype-files" class="section level1">
+<h1>Download the gene expression data and genotype files</h1>
+<pre class="bash"><code>
+ # Download the fastq dataset from the Geuvadis project
+ # sample information https://www.ebi.ac.uk/arrayexpress/files/E-GEUV-1/
+ # fastq files ftp://ftp.sra.ebi.ac.uk/vol1/fastq/
+ 
+cat getfastq.csv | awk &#39;NR==21,NR==90&#39; &gt; getfastqtest2.csv
 csvfile=getfastqtest2.csv
 for line in `cat ${csvfile} | grep -v ^#`
 do
@@ -632,17 +648,13 @@ do
   file=`echo ${line} | cut -d &#39;,&#39; -f 4`
   wget ${url} -O fastq2/${file}.fastq.gz
 done</code></pre>
-<div id="download-the-genotype-dataset-from-the-1000-genomes-project-phase-3" class="section level3">
-<h3>Download the genotype dataset from the 1000 Genomes project phase 3</h3>
+<p>Download the genotype dataset from the 1000 Genomes project phase 3</p>
 <pre class="bash"><code>mkdir genotype
 wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr{1..22}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz</code></pre>
 </div>
-</div>
-<div id="gene-expression-quantification-with-kallisto" class="section level2">
-<h2>Gene expression quantification with Kallisto</h2>
-</div>
-<div id="kallisto---make-index-files" class="section level2">
-<h2>Kallisto - make index files</h2>
+<div id="gene-expression-quantification-with-kallisto" class="section level1">
+<h1>Gene expression quantification with Kallisto</h1>
+<p>Kallisto - make index files</p>
 <pre class="bash"><code>module load kallisto
 wget ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.cdna.all.fa.gz
 gunzip Homo_sapiens.GRCh37.cdna.all.fa.gz
@@ -651,8 +663,7 @@ kallisto index -i human.GRCh37.cdna.all.idx Homo_sapiens.GRCh37.cdna.all.fa
 wget https://github.com/pachterlab/kallisto-transcriptome-indices/releases/download/ensembl-96/homo_sapiens.tar.gz
 gunzip Homo_sapiens
 homo_sapiens/transcriptome.idx</code></pre>
-<div id="gene-expression-quantification-for-all-samples-with-kallisto" class="section level3">
-<h3>Gene expression quantification for all samples with Kallisto</h3>
+<p>Gene expression quantification for all samples with Kallisto</p>
 <pre class="bash"><code>module load kallisto
 csvfile=sample.filelist.csv
 for line in `cat ${csvfile} | grep -v ^#`
@@ -661,41 +672,214 @@ do
   kallisto quant -i human.GRCh37.cdna.all.idx -o kallisto/${file}.kallistoOut -n 100 -t 32 fastq/${file}.1.fastq fastq/${file}.2.fastq
 done
 </code></pre>
-<p>*test test ## Kallisto index</p>
-<pre class="bash"><code>module load kallisto
-wget ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.cdna.all.fa.gz
-gunzip Homo_sapiens.GRCh37.cdna.all.fa.gz
-kallisto index -i human.GRCh37.cdna.all.idx Homo_sapiens.GRCh37.cdna.all.fa
-
-wget https://github.com/pachterlab/kallisto-transcriptome-indices/releases/download/ensembl-96/homo_sapiens.tar.gz
-gunzip Homo_sapiens
-homo_sapiens/transcriptome.idx</code></pre>
+<pre class="r"><code># summarize TPM (gene expression) data from each individual
+samples &lt;-read.csv(&quot;1000g.EUR.sample.csv&quot;,header=TRUE)
+files &lt;- file.path(dir, &quot;kallisto&quot;, samples$kallisto, &quot;abundance.tsv&quot;)
+names(files) &lt;- paste0(samples$X) 
+all(file.exists(files))
+txi &lt;- tximport(files, type = &quot;kallisto&quot;, tx2gene = tx2gene, txOut = FALSE, ignoreAfterBar = TRUE)
+write.table(txi$abundance,sep=&quot;\t&quot;, file = &quot;EUR.TPM.tsv&quot;)</code></pre>
+<pre class="r"><code># add gene annotations to the TPM file
+library(&#39;biomaRt&#39;)
+mart &lt;- useDataset(&quot;hsapiens_gene_ensembl&quot;, useMart(&quot;ensembl&quot;, host=&quot;grch37.ensembl.org&quot;))
+df &lt;- read.csv(file.choose(), header = T, sep = &quot;,&quot;) 
+gene &lt;- df$gene
+G_list &lt;- getBM(filters= &quot;ensembl_gene_id&quot;, attributes=c(&#39;ensembl_gene_id&#39;, &#39;hgnc_symbol&#39;,&#39;description&#39;,&#39;chromosome_name&#39;,&#39;start_position&#39;,&#39;end_position&#39;),mart= mart,values=gene)
+G_list2&lt;-merge(df,G_list,by.x=&quot;gene&quot;,by.y=&quot;ensembl_gene_id&quot;,all.x=T)
+write.csv(G_list2, file = &quot;British.gene.TPM.csv&quot;)</code></pre>
 </div>
-<div id="all-samples-kallisto" class="section level3">
-<h3>all samples kallisto</h3>
-<pre class="bash"><code>module load kallisto
-csvfile=sample.filelist.csv
-for line in `cat ${csvfile} | grep -v ^#`
-do
-  file=`echo ${line} | cut -d &#39;,&#39; -f 5`
-  kallisto quant -i human.GRCh37.cdna.all.idx -o kallisto/${file}.kallistoOut -n 100 -t 32 fastq/${file}.1.fastq fastq/${file}.2.fastq
-done</code></pre>
-</div>
-</div>
-<div id="filter-the-genotype-files-with-vcftools" class="section level2">
-<h2>Filter the genotype files with vcftools</h2>
-<pre class="bash"><code>## keep the individuals who are reported in both the 1000 Genome Project and Geuvadis
+<div id="clean-the-genotype-files-with-vcftools" class="section level1">
+<h1>Clean the genotype files with vcftools</h1>
+<pre class="bash"><code># keep the individuals who are reported in both the 1000 Genome Project and Geuvadis
 module load vcftools
 for i in `seq 1 22`
 do
    vcftools --gzvcf /genotype/phase3/ALL.chr$i.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz --keep 1000g.ind.sample.txt --recode --out /genotype/phase3/chr$i.1000gphase3.455 
 done
 
-## exclude rare variants 
+# exclude rare variants 
 vcftools --vcf /genotype/phase3/chr$i.1000gphase3.455.recode.vcf --maf 0.01 --max-maf 0.99 --recode --out /genotype/phase3/chr$i.1000gphase3.455.0.01
 
-## keep only bi-allelic variants
+# keep only bi-allelic variants
 vcftools --vcf /genotype/phase3/chr$i.1000gphase3.455.0.01.recode.vcf --min-alleles 2 --max-alleles 2 --recode --out /genotype/phase3/chr$i.1000gphase3.455.0.01.biallelic</code></pre>
+</div>
+<div id="identify-covariates-genetic-and-non-genetic" class="section level1">
+<h1>Identify covariates (genetic and non-genetic)</h1>
+<pre class="bash"><code># Convert vcf file to plink format
+plink --vcf chr22.1000gphase3.455.0.01.recode.vcf --make-bed --out chr22.1000gphase3.455.0.01.recode.bed
+
+# Run pca
+plink --bfile chr22.1000gphase3.455.0.01.recode.bed --pca --out
+
+# Plot pca
+library(ggplot2)
+ggplot(data=pca, aes(V3,V4)) + geom_point()
+</code></pre>
+<pre class="r"><code>#  surrogate variable analysis
+library(sva)
+mm &lt;- model.matrix(~ population, colData(ddsTxi))
+mm0 &lt;- model.matrix(~ 1, colData(ddsTxi))
+norm.cts &lt;- norm.cts[rowSums(norm.cts) &gt; 10,]
+fit &lt;- svaseq(norm.cts, mod=mm, mod0=mm0)
+# 50 SVs are found. I use 7 SVs
+sva7 = sva(norm.cts , mm, mm0, n.sv=7)
+write.csv(sva7$sv[,1:7], file = &quot;sva7.csv&quot;)</code></pre>
+</div>
+<div id="differentially-expressed-gene-analysis" class="section level1">
+<h1>Differentially Expressed Gene Analysis</h1>
+<pre class="r"><code>library(&quot;DESeq2&quot;)
+colData &lt;-read.csv(&quot;1000g.sample.csv&quot;,header = T,row.names=1)
+class(colData$date)
+colData$date1&lt;-factor(colData$date)
+
+
+ddsTxi &lt;- DESeqDataSetFromTximport(txi,
+                                   colData = colData,
+                                   design = ~ sex+population+performer)
+
+colData &lt;-read.csv(&quot;1000g.EUR.YRI.csv&quot;,header = T,row.names=1)
+
+ddsEurYri &lt;- DESeqDataSetFromTximport(txi,
+                                   colData = colData,
+                                   design = ~ sex+population+V1+V2+V3+V4+V5+V6+V7)
+
+keep &lt;- rowsume(counds(ddsEurYri)) &gt;=455
+ddsEurYri &lt;- ddsEurYri[keep,]
+ddsEY&lt;-DESeq(ddsEurYri)
+deg &lt;- results(ddsEY, contrast=c(&quot;population&quot;,&quot;EUR&quot;,&quot;Yoruba&quot;))
+write.csv(deg, file = &quot;E-GEUV_EUR_Yoruba.csv&quot;)</code></pre>
+</div>
+<div id="for-fastqtl" class="section level1">
+<h1>for fastQTL</h1>
+<p>preparation</p>
+<pre class="bash"><code># prepare input bed.gz and index files
+module load bedtools
+bedtools sort -i British.gene.TPM.bed -header &gt; British.gene.TPM.sorted.bed
+bgzip British.gene.TPM.sorted.bed &amp;&amp; tabix -p bed British.gene.TPM.sorted.bed.gz
+
+
+# prepare input vcf.gz and index files
+module load htslib 
+module load tabix
+for i in `seq 1 22`
+do
+    bgzip genotype/phase3/chr$i.1000gphase3.Yoruba.0.01.biallelic.recode.vcf  &amp;&amp; tabix -p vcf genotype/phase3/chr$i.1000gphase3.Yoruba.0.01.biallelic.recode.vcf.gz
+done
+
+for i in `seq 1 22`
+do
+    bgzip genotype/phase3/chr$i.1000gphase3.EUR.0.01.biallelic.recode.vcf  &amp;&amp; tabix -p vcf genotype/phase3/chr$i.1000gphase3.EUR.0.01.biallelic.recode.vcf.gz
+done
+</code></pre>
+<p>run fastQTL</p>
+<pre class="bash"><code>## https://github.com/francois-a/fastqtl
+
+for i in `seq 1 22`
+do
+  ./bin/fastQTL.static fastQTL --vcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr$i.1000gphase3.Yoruba.0.01.biallelic.recode.vcf.gz --bed GEUV/Yoruba.gene.TPM.sorted.bed.gz --region $i:1-249250621  --threshold 0.01 --out GEUV/Yoruba.chr$i.nominals.0.01.txt --cov GEUV/Yoruba.cov.txt --normal
+done
+cat Yoruba.chr*.nominals.0.01.txt &gt; Yoruba.auto.nominals.0.01.txt
+</code></pre>
+</div>
+<div id="cleaning-and-formatting-the-eqtl-result" class="section level1">
+<h1>cleaning and formatting the eQTL result</h1>
+<pre class="r"><code>setwd(&quot;/project2/xuanyao/marie/E-GEUV-1&quot;)
+library(ggplot2)
+library(&quot;ggrepel&quot;)
+library(&quot;plyr&quot;)
+library(gplots)
+library(reshape2)
+
+
+## remove multi-allelic SNPs reported as bi-allelic SNPs which confuse the result
+EUR1&lt;-subset(EUR2, 
+               EUR2$gene.SNP!=&quot;ENSG00000188659.rs542232278&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000255769.rs145926341&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000255769.rs371891811&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000259328.rs145926341&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000259323.rs145926341&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000259472.rs145926341&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000103942.rs1610794&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000103342.rs140839133&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000159202.rs77094622&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000189050.rs112549034&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000108592.rs138776605&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000256771.rs10650867&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000134330.rs139337028&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000125991.rs139252705&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000214078.rs142898689&quot;&amp;               
+               EUR2$gene.SNP!=&quot;ENSG00000087586.rs5842156&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000171522.rs139036988&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000196284.rs112143344&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000135316.rs71553453&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000232559.rs377632592&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000131558.rs141161799&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000162441.rs36126617&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000162441.rs151178549&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000142794.rs35506192&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000142794.rs145038894&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000116128.rs10657777&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000117280.rs149256505&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000107719.rs138584752&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000198561.rs142865693&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000087365.rs5792377&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000162341.rs111786372&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000110092.rs59333593&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000111215.rs61604574&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000165502.rs141634854&quot;&amp;
+               EUR2$gene.SNP!=&quot;ENSG00000104093.rs138911097&quot;)
+
+
+YRI1&lt;-subset(YRI2, YRI2$gene.SNP!=&quot;ENSG00000143106.rs545041240&quot;&amp;
+               YRI2$gene.SNP!=&quot;ENSG00000078403.rs528760884&quot;&amp;
+               YRI2$gene.SNP!=&quot;ENSG00000167996.rs150035626&quot;&amp;
+               YRI2$gene.SNP!=&quot;ENSG00000111252.rs367797687&quot;&amp;
+               YRI2$gene.SNP!=&quot;ENSG00000172458.rs112879834&quot;&amp;
+               YRI2$gene.SNP!=&quot;ENSG00000183044.rs367630500&quot;&amp; 
+               YRI2$gene.SNP!=&quot;ENSG00000154874.rs138555657&quot;&amp;
+               YRI2$gene.SNP!=&quot;ENSG00000011132.rs71166969&quot;&amp;
+               YRI2$gene.SNP!=&quot;ENSG00000125991.rs142898689&quot;&amp;
+               YRI2$gene.SNP!=&quot;ENSG00000198832.rs35065681&quot;&amp;
+               YRI2$gene.SNP!=&quot;ENSG00000128268.rs142897975&quot;&amp;
+               YRI2$gene.SNP!=&quot;ENSG00000161013.rs71591436&quot;&amp;
+               YRI2$gene.SNP!=&quot;ENSG00000170727.rs60257564&quot;)</code></pre>
+<p>Manhattan plot example</p>
+<pre class="r"><code>x&lt;-read.csv(&quot;YRI.EUR.DEG.for.manhattan.csv&quot;, header = TRUE)
+x&lt;- x[order(x$Chromosome),]
+nCHR &lt;- length(unique(x$Chromosome))
+x$BPcum &lt;- NA
+s &lt;- 0
+nbp &lt;- c()
+
+for (i in unique(x$Chromosome)){
+  nbp[i] &lt;- max(x[x$Chromosome == i,]$start)
+  x[x$Chromosome == i,&quot;BPcum&quot;] &lt;- x[x$Chromosome == i,&quot;start&quot;] + s
+  s &lt;- s + nbp[i]
+}
+
+
+axis.set &lt;- x %&gt;% 
+  group_by(Chromosome) %&gt;% 
+  summarize(center = (max(BPcum) + min(BPcum)) / 2)
+
+x1 &lt;- subset (x, -log10(padj)&gt;40 )
+
+
+manhplot &lt;- ggplot(x, aes(x = BPcum, y = sign(log2FoldChange)*(-log10(padj)), 
+                          color = as.factor(Chromosome))) +
+  geom_point(alpha = 0.85)  + 
+  scale_x_continuous(label = axis.set$Chromosome, breaks = axis.set$center)  +
+  scale_color_manual(values = rep(c(&quot;gray&quot;, &quot;black&quot;), nCHR)) +
+  scale_size_continuous(range = c(0.5,3))  + 
+  theme_minimal() +theme_bw(base_size = 12)+
+  theme( 
+    legend.position = &quot;none&quot;,
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    axis.text.x = element_text(angle = 90, size = 8, vjust = 0.5)
+  )+geom_label_repel(data=x1,aes(label = gene.name), color = &#39;blue&#39;,
+                     size = 3) </code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -718,16 +902,14 @@ locale:
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
-other attached packages:
-[1] workflowr_1.6.2
-
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.4.6    rprojroot_1.3-2 digest_0.6.25   later_1.1.0.1  
- [5] R6_2.4.1        backports_1.1.8 git2r_0.27.1    magrittr_1.5   
- [9] evaluate_0.14   stringi_1.4.6   rlang_0.4.7     fs_1.4.1       
-[13] promises_1.1.1  whisker_0.4     rmarkdown_2.3   tools_4.0.0    
-[17] stringr_1.4.0   glue_1.4.1      httpuv_1.5.4    xfun_0.14      
-[21] yaml_2.2.1      compiler_4.0.0  htmltools_0.4.0 knitr_1.28     </code></pre>
+ [1] workflowr_1.6.2 Rcpp_1.0.4.6    rprojroot_1.3-2 digest_0.6.25  
+ [5] later_1.1.0.1   R6_2.4.1        backports_1.1.8 git2r_0.27.1   
+ [9] magrittr_1.5    evaluate_0.14   stringi_1.4.6   rlang_0.4.7    
+[13] fs_1.4.1        promises_1.1.1  whisker_0.4     rmarkdown_2.3  
+[17] tools_4.0.0     stringr_1.4.0   glue_1.4.1      httpuv_1.5.4   
+[21] xfun_0.14       yaml_2.2.1      compiler_4.0.0  htmltools_0.4.0
+[25] knitr_1.28     </code></pre>
 </div>
 </div>
 
