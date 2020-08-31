@@ -283,4 +283,4 @@ module load boost/1.55
 
 # results
 
-![Image Title](paintor.822.test.pdf){width=80% height=600}
+![Image Title](/Users/saitoumarie/Dropbox/Chicago/RCC/eQTL.practice/myproject/analysis/paintor.822.test.pdf){width=100% height=600}
