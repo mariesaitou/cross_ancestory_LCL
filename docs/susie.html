@@ -13,7 +13,7 @@
 
 <meta name="date" content="2020-08-13" />
 
-<title>first-analysis</title>
+<title>SuSiE</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -386,7 +386,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">first-analysis</h1>
+<h1 class="title toc-ignore">SuSiE</h1>
 <h4 class="author">mariesaitou</h4>
 <h4 class="date">2020-08-13</h4>
 
@@ -546,7 +546,7 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/eQTL.Rmd</code>) and HTML (<code>docs/eQTL.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/susie.Rmd</code>) and HTML (<code>docs/susie.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -572,118 +572,16 @@ Message
 <tbody>
 <tr>
 <td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/d55436d8ec7c90e6c2c3d233ee1fe3d81e22c723/docs/eQTL.html" target="_blank">d55436d</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-30
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/d81e9a368b82ff59532766d6c1b9da41be524729/docs/eQTL.html" target="_blank">d81e9a3</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-30
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/7c2b7b46cd403e6d48051c00e15f2349176ca720/docs/eQTL.html" target="_blank">7c2b7b4</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-30
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/898542f5689a6975218e52512e2ed7f8145e122f/docs/eQTL.html" target="_blank">898542f</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-30
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/1c78096f0c8dddd1809b15f78514045e227de7ad/docs/eQTL.html" target="_blank">1c78096</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-30
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/3a2eead3edfc3e5cc4107c525c3914b89267d7a6/docs/eQTL.html" target="_blank">3a2eead</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-16
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
 Rmd
 </td>
 <td>
-<a href="https://github.com/mariesaitou/myproject/blob/8a5d7d1951d4898e3afcb639e88f9b4abb117594/analysis/eQTL.Rmd" target="_blank">8a5d7d1</a>
+<a href="https://github.com/mariesaitou/myproject/blob/bf3a8b69ae0a47dca4969cd41d46e529099052dc/analysis/susie.Rmd" target="_blank">bf3a8b6</a>
 </td>
 <td>
 mariesaitou
 </td>
 <td>
-2020-08-16
+2020-08-30
 </td>
 <td>
 wflow_publish(c(“analysis/index.Rmd”, “analysis/correl.Rmd”,
@@ -698,256 +596,92 @@ wflow_publish(c(“analysis/index.Rmd”, “analysis/correl.Rmd”,
 </div>
 <div id="section" class="section level26">
 <p></p>
-<p>The master working directory on UChicago RCC</p>
-<pre class="bash"><code>cd /project2/xuanyao/marie/E-GEUV-1</code></pre>
 </div>
-<div id="download-the-gene-expression-data-and-genotype-files" class="section level1">
-<h1>Download the gene expression data and genotype files</h1>
-<pre class="bash"><code>
- # Download the fastq dataset from the Geuvadis project
- # sample information https://www.ebi.ac.uk/arrayexpress/files/E-GEUV-1/
- # fastq files ftp://ftp.sra.ebi.ac.uk/vol1/fastq/
- 
-cat getfastq.csv | awk &#39;NR==21,NR==90&#39; &gt; getfastqtest2.csv
-csvfile=getfastqtest2.csv
-for line in `cat ${csvfile} | grep -v ^#`
-do
-  url=`echo ${line} | cut -d &#39;,&#39; -f 2`
-  file=`echo ${line} | cut -d &#39;,&#39; -f 4`
-  wget ${url} -O fastq2/${file}.fastq.gz
-done</code></pre>
-<p>Download the genotype dataset from the 1000 Genomes project phase 3</p>
-<pre class="bash"><code>mkdir genotype
-wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr{1..22}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz</code></pre>
-</div>
-<div id="gene-expression-quantification-with-kallisto" class="section level1">
-<h1>Gene expression quantification with Kallisto</h1>
-<p>Kallisto - make index files</p>
-<pre class="bash"><code>module load kallisto
-wget ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.cdna.all.fa.gz
-gunzip Homo_sapiens.GRCh37.cdna.all.fa.gz
-kallisto index -i human.GRCh37.cdna.all.idx Homo_sapiens.GRCh37.cdna.all.fa
-
-wget https://github.com/pachterlab/kallisto-transcriptome-indices/releases/download/ensembl-96/homo_sapiens.tar.gz
-gunzip Homo_sapiens
-homo_sapiens/transcriptome.idx</code></pre>
-<p>Gene expression quantification for all samples with Kallisto</p>
-<pre class="bash"><code>module load kallisto
-csvfile=sample.filelist.csv
-for line in `cat ${csvfile} | grep -v ^#`
-do
-  file=`echo ${line} | cut -d &#39;,&#39; -f 5`
-  kallisto quant -i human.GRCh37.cdna.all.idx -o kallisto/${file}.kallistoOut -n 100 -t 32 fastq/${file}.1.fastq fastq/${file}.2.fastq
-done
-</code></pre>
-<pre class="r"><code># summarize TPM (gene expression) data from each individual
-samples &lt;-read.csv(&quot;1000g.EUR.sample.csv&quot;,header=TRUE)
-files &lt;- file.path(dir, &quot;kallisto&quot;, samples$kallisto, &quot;abundance.tsv&quot;)
-names(files) &lt;- paste0(samples$X) 
-all(file.exists(files))
-txi &lt;- tximport(files, type = &quot;kallisto&quot;, tx2gene = tx2gene, txOut = FALSE, ignoreAfterBar = TRUE)
-write.table(txi$abundance,sep=&quot;\t&quot;, file = &quot;EUR.TPM.tsv&quot;)</code></pre>
-<pre class="r"><code># add gene annotations to the TPM file
-library(&#39;biomaRt&#39;)
-mart &lt;- useDataset(&quot;hsapiens_gene_ensembl&quot;, useMart(&quot;ensembl&quot;, host=&quot;grch37.ensembl.org&quot;))
-df &lt;- read.csv(file.choose(), header = T, sep = &quot;,&quot;) 
-gene &lt;- df$gene
-G_list &lt;- getBM(filters= &quot;ensembl_gene_id&quot;, attributes=c(&#39;ensembl_gene_id&#39;, &#39;hgnc_symbol&#39;,&#39;description&#39;,&#39;chromosome_name&#39;,&#39;start_position&#39;,&#39;end_position&#39;),mart= mart,values=gene)
-G_list2&lt;-merge(df,G_list,by.x=&quot;gene&quot;,by.y=&quot;ensembl_gene_id&quot;,all.x=T)
-write.csv(G_list2, file = &quot;British.gene.TPM.csv&quot;)</code></pre>
-</div>
-<div id="clean-the-genotype-files-with-vcftools" class="section level1">
-<h1>Clean the genotype files with vcftools</h1>
-<pre class="bash"><code># keep the individuals who are reported in both the 1000 Genome Project and Geuvadis
-module load vcftools
-for i in `seq 1 22`
-do
-   vcftools --gzvcf /genotype/phase3/ALL.chr$i.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz --keep 1000g.ind.sample.txt --recode --out /genotype/phase3/chr$i.1000gphase3.455 
-done
-
-# exclude rare variants 
-vcftools --vcf /genotype/phase3/chr$i.1000gphase3.455.recode.vcf --maf 0.01 --max-maf 0.99 --recode --out /genotype/phase3/chr$i.1000gphase3.455.0.01
-
-# keep only bi-allelic variants
-vcftools --vcf /genotype/phase3/chr$i.1000gphase3.455.0.01.recode.vcf --min-alleles 2 --max-alleles 2 --recode --out /genotype/phase3/chr$i.1000gphase3.455.0.01.biallelic</code></pre>
-</div>
-<div id="identify-covariates-genetic-and-non-genetic" class="section level1">
-<h1>Identify covariates (genetic and non-genetic)</h1>
-<pre class="bash"><code># Convert vcf file to plink format
-plink --vcf chr22.1000gphase3.455.0.01.recode.vcf --make-bed --out chr22.1000gphase3.455.0.01.recode.bed
-
-# Run pca
-plink --bfile chr22.1000gphase3.455.0.01.recode.bed --pca --out
-
-# Plot pca
-library(ggplot2)
-ggplot(data=pca, aes(V3,V4)) + geom_point()
-</code></pre>
-<pre class="r"><code>#  surrogate variable analysis
-library(sva)
-mm &lt;- model.matrix(~ population, colData(ddsTxi))
-mm0 &lt;- model.matrix(~ 1, colData(ddsTxi))
-norm.cts &lt;- norm.cts[rowSums(norm.cts) &gt; 10,]
-fit &lt;- svaseq(norm.cts, mod=mm, mod0=mm0)
-# 50 SVs are found. I use 7 SVs
-sva7 = sva(norm.cts , mm, mm0, n.sv=7)
-write.csv(sva7$sv[,1:7], file = &quot;sva7.csv&quot;)</code></pre>
-</div>
-<div id="differentially-expressed-gene-analysis" class="section level1">
-<h1>Differentially Expressed Gene Analysis</h1>
-<pre class="r"><code>library(&quot;DESeq2&quot;)
-colData &lt;-read.csv(&quot;1000g.sample.csv&quot;,header = T,row.names=1)
-class(colData$date)
-colData$date1&lt;-factor(colData$date)
-
-
-ddsTxi &lt;- DESeqDataSetFromTximport(txi,
-                                   colData = colData,
-                                   design = ~ sex+population+performer)
-
-colData &lt;-read.csv(&quot;1000g.EUR.YRI.csv&quot;,header = T,row.names=1)
-
-ddsEurYri &lt;- DESeqDataSetFromTximport(txi,
-                                   colData = colData,
-                                   design = ~ sex+population+V1+V2+V3+V4+V5+V6+V7)
-
-keep &lt;- rowsume(counds(ddsEurYri)) &gt;=455
-ddsEurYri &lt;- ddsEurYri[keep,]
-ddsEY&lt;-DESeq(ddsEurYri)
-deg &lt;- results(ddsEY, contrast=c(&quot;population&quot;,&quot;EUR&quot;,&quot;Yoruba&quot;))
-write.csv(deg, file = &quot;E-GEUV_EUR_Yoruba.csv&quot;)</code></pre>
-</div>
-<div id="for-fastqtl" class="section level1">
-<h1>for fastQTL</h1>
-<p>preparation</p>
-<pre class="bash"><code># prepare input bed.gz and index files
-module load bedtools
-bedtools sort -i British.gene.TPM.bed -header &gt; British.gene.TPM.sorted.bed
-bgzip British.gene.TPM.sorted.bed &amp;&amp; tabix -p bed British.gene.TPM.sorted.bed.gz
-
-
-# prepare input vcf.gz and index files
+<div id="cut-the-100-updownstream-regions-from-the-genotype-file" class="section level1">
+<h1>Cut the 100 up/downstream regions from the genotype file</h1>
+<pre class="bash"><code>module load vcftools
 module load htslib 
-module load tabix
-for i in `seq 1 22`
+csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/genelist.location1.csv
+for line in `cat ${csvfile} | grep -v ^#`
 do
-    bgzip genotype/phase3/chr$i.1000gphase3.Yoruba.0.01.biallelic.recode.vcf  &amp;&amp; tabix -p vcf genotype/phase3/chr$i.1000gphase3.Yoruba.0.01.biallelic.recode.vcf.gz
-done
+  gene=`echo ${line} | cut -d &#39;,&#39; -f 1`
+  chr=`echo ${line} | cut -d &#39;,&#39; -f 3`
+  up=`echo ${line} | cut -d &#39;,&#39; -f 6`
+  down=`echo ${line} | cut -d &#39;,&#39; -f 7`
+  vcftools --gzvcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr${chr}.1000gphase3.EUR.0.01.biallelic.recode.vcf.gz --chr ${chr} --from-bp ${up} --to-bp ${down} --recode --out ${gene}.EUR.genotype
 
-for i in `seq 1 22`
-do
-    bgzip genotype/phase3/chr$i.1000gphase3.EUR.0.01.biallelic.recode.vcf  &amp;&amp; tabix -p vcf genotype/phase3/chr$i.1000gphase3.EUR.0.01.biallelic.recode.vcf.gz
 done
-</code></pre>
-<p>run fastQTL</p>
-<pre class="bash"><code>## https://github.com/francois-a/fastqtl
-
-for i in `seq 1 22`
-do
-  ./bin/fastQTL.static fastQTL --vcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr$i.1000gphase3.Yoruba.0.01.biallelic.recode.vcf.gz --bed GEUV/Yoruba.gene.TPM.sorted.bed.gz --region $i:1-249250621  --threshold 0.01 --out GEUV/Yoruba.chr$i.nominals.0.01.txt --cov GEUV/Yoruba.cov.txt --normal
-done
-cat Yoruba.chr*.nominals.0.01.txt &gt; Yoruba.auto.nominals.0.01.txt
 </code></pre>
 </div>
-<div id="cleaning-and-formatting-the-eqtl-result" class="section level1">
-<h1>cleaning and formatting the eQTL result</h1>
-<pre class="r"><code>setwd(&quot;/project2/xuanyao/marie/E-GEUV-1&quot;)
-library(ggplot2)
-library(&quot;ggrepel&quot;)
-library(&quot;plyr&quot;)
-library(gplots)
-library(reshape2)
+<div id="run-susie" class="section level1">
+<h1>run SuSiE</h1>
+<pre class="r"><code># 12419 genes are too many to run at once. Separate the gene list into small lists.
+
+library(susieR)
+library(data.table)
+## read the gene list
+#genelist=read.csv(&quot;genelist.test.csv&quot;, stringsAsFactors = F)
+genelist=read.csv(&quot;gene.Yoruba.csv&quot;, stringsAsFactors = F)
+#gene.expression.Africa = read.table(&quot;Yoruba.TPM.scaled.gene.bed&quot;)
+gene.expression.Yoruba = fread(&quot;Yoruba.TPM.scaled.gene.bed.gz&quot;)
+
+## read a gene from the list
+filenameYoruba&lt;-paste(genelist[,&quot;gene&quot;], &quot;.Yoruba.genotype.recode.vcf&quot;, sep=&quot;&quot;)
+genotype.Yoruba&lt;- lapply(filenameYoruba, FUN=read.table, header = FALSE, stringsAsFactors = F)
+names(genotype.Yoruba) &lt;- genelist[,&quot;gene&quot;]
+genotype.Yoruba.df &lt;- rbindlist(genotype.Yoruba, fill=T, idcol = T)
+genotype.Yoruba.df&lt;-genotype.Yoruba.df[!duplicated(genotype.Yoruba.df[,c(&quot;.id&quot;,&quot;V3&quot; )])&amp;!duplicated(genotype.Yoruba.df[,c(&quot;.id&quot;,&quot;V3&quot; )], fromLast = T),]
 
 
-## remove multi-allelic SNPs reported as bi-allelic SNPs which confuse the result
-EUR1&lt;-subset(EUR2, 
-               EUR2$gene.SNP!=&quot;ENSG00000188659.rs542232278&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000255769.rs145926341&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000255769.rs371891811&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000259328.rs145926341&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000259323.rs145926341&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000259472.rs145926341&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000103942.rs1610794&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000103342.rs140839133&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000159202.rs77094622&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000189050.rs112549034&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000108592.rs138776605&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000256771.rs10650867&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000134330.rs139337028&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000125991.rs139252705&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000214078.rs142898689&quot;&amp;               
-               EUR2$gene.SNP!=&quot;ENSG00000087586.rs5842156&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000171522.rs139036988&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000196284.rs112143344&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000135316.rs71553453&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000232559.rs377632592&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000131558.rs141161799&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000162441.rs36126617&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000162441.rs151178549&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000142794.rs35506192&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000142794.rs145038894&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000116128.rs10657777&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000117280.rs149256505&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000107719.rs138584752&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000198561.rs142865693&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000087365.rs5792377&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000162341.rs111786372&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000110092.rs59333593&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000111215.rs61604574&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000165502.rs141634854&quot;&amp;
-               EUR2$gene.SNP!=&quot;ENSG00000104093.rs138911097&quot;)
+## convert vcf format as input dataset
 
+genotype.Yoruba.data &lt;- genotype.Yoruba.df[,11:length(genotype.Yoruba.df[1,])] 
 
-YRI1&lt;-subset(YRI2, YRI2$gene.SNP!=&quot;ENSG00000143106.rs545041240&quot;&amp;
-               YRI2$gene.SNP!=&quot;ENSG00000078403.rs528760884&quot;&amp;
-               YRI2$gene.SNP!=&quot;ENSG00000167996.rs150035626&quot;&amp;
-               YRI2$gene.SNP!=&quot;ENSG00000111252.rs367797687&quot;&amp;
-               YRI2$gene.SNP!=&quot;ENSG00000172458.rs112879834&quot;&amp;
-               YRI2$gene.SNP!=&quot;ENSG00000183044.rs367630500&quot;&amp; 
-               YRI2$gene.SNP!=&quot;ENSG00000154874.rs138555657&quot;&amp;
-               YRI2$gene.SNP!=&quot;ENSG00000011132.rs71166969&quot;&amp;
-               YRI2$gene.SNP!=&quot;ENSG00000125991.rs142898689&quot;&amp;
-               YRI2$gene.SNP!=&quot;ENSG00000198832.rs35065681&quot;&amp;
-               YRI2$gene.SNP!=&quot;ENSG00000128268.rs142897975&quot;&amp;
-               YRI2$gene.SNP!=&quot;ENSG00000161013.rs71591436&quot;&amp;
-               YRI2$gene.SNP!=&quot;ENSG00000170727.rs60257564&quot;)</code></pre>
-<p>Manhattan plot example</p>
-<pre class="r"><code>x&lt;-read.csv(&quot;YRI.EUR.DEG.for.manhattan.csv&quot;, header = TRUE)
-x&lt;- x[order(x$Chromosome),]
-nCHR &lt;- length(unique(x$Chromosome))
-x$BPcum &lt;- NA
-s &lt;- 0
-nbp &lt;- c()
+genotype.Yoruba.data[genotype.Yoruba.data==&quot;0|0&quot;]&lt;- 0L
+genotype.Yoruba.data[genotype.Yoruba.data==&quot;0|1&quot;]&lt;- 1L
+genotype.Yoruba.data[genotype.Yoruba.data==&quot;1|0&quot;]&lt;- 1L
+genotype.Yoruba.data[genotype.Yoruba.data==&quot;1|1&quot;]&lt;- 2L
+genotype.Yoruba.data1&lt;- as.matrix(genotype.Yoruba.data)
+genotype.Yoruba.data&lt;- matrix(as.numeric(genotype.Yoruba.data1), nrow = nrow(genotype.Yoruba.data))
 
-for (i in unique(x$Chromosome)){
-  nbp[i] &lt;- max(x[x$Chromosome == i,]$start)
-  x[x$Chromosome == i,&quot;BPcum&quot;] &lt;- x[x$Chromosome == i,&quot;start&quot;] + s
-  s &lt;- s + nbp[i]
+## scale the genotypes
+scale.gen.Yoruba &lt;- scale(t(genotype.Yoruba.data))
+#hist(scale.gen.Yoruba[,20])
+
+## extract genes from the gene expression list
+test.expression.Yoruba &lt;- gene.expression.Yoruba[unlist(lapply(genelist$gene, grep, gene.expression.Yoruba$ID)),]
+expression.Yoruba &lt;- t(test.expression.Yoruba[,-(1:4)])
+
+## susieR
+fitted.test.Yoruba &lt;- as.list(NULL)
+for(i in 1:12419){
+  fitted.test.Yoruba[[i]] &lt;-   susie(scale.gen.Yoruba[,(genotype.Yoruba.df$.id==genelist$gene[i])], expression.Yoruba[,i],
+                                     L = 10,
+                                     estimate_residual_variance = TRUE, 
+                                     estimate_prior_variance = FALSE,
+                                     scaled_prior_variance = 0.95,
+                                     verbose = TRUE)
 }
 
+fitted.test.Yoruba[[4]]$sets$cs
+## attach gene names to the result
+fitted.Yoruba &lt;-  as.list(NULL)
+for(i in 1:12419){
+  if(length(fitted.test.Yoruba[[i]]$sets$cs)!=0){
+    fitted.Yoruba[[i]] &lt;- stack(fitted.test.Yoruba[[i]]$sets$cs)
+  }
+}
+check.Yoruba &lt;- rbindlist(fitted.Yoruba, idcol=T)
+check.Yoruba$name &lt;- genelist[check.Yoruba$.id,&quot;gene&quot;]
+result.temp &lt;- as.list(NULL)
+for(i in 1:length(check.Yoruba$.id)){result.temp[i] &lt;- lapply(genotype.Yoruba[check.Yoruba$name[i]], &quot;[&quot;, check.Yoruba$values[i],1:3)}
+result.Yoruba &lt;- data.frame(check.Yoruba$name, check.Yoruba$ind, check.Yoruba$values, rbindlist(result.temp))
 
-axis.set &lt;- x %&gt;% 
-  group_by(Chromosome) %&gt;% 
-  summarize(center = (max(BPcum) + min(BPcum)) / 2)
+names(result.Yoruba)&lt;-c(&quot;gene&quot;,&quot;L&quot;,&quot;SNP&quot;,&quot;chr&quot;,&quot;loc&quot;,&quot;rs&quot;)
 
-x1 &lt;- subset (x, -log10(padj)&gt;40 )
-
-
-manhplot &lt;- ggplot(x, aes(x = BPcum, y = sign(log2FoldChange)*(-log10(padj)), 
-                          color = as.factor(Chromosome))) +
-  geom_point(alpha = 0.85)  + 
-  scale_x_continuous(label = axis.set$Chromosome, breaks = axis.set$center)  +
-  scale_color_manual(values = rep(c(&quot;gray&quot;, &quot;black&quot;), nCHR)) +
-  scale_size_continuous(range = c(0.5,3))  + 
-  theme_minimal() +theme_bw(base_size = 12)+
-  theme( 
-    legend.position = &quot;none&quot;,
-    panel.border = element_blank(),
-    panel.grid.major.x = element_blank(),
-    panel.grid.minor.x = element_blank(),
-    axis.text.x = element_text(angle = 90, size = 8, vjust = 0.5)
-  )+geom_label_repel(data=x1,aes(label = gene.name), color = &#39;blue&#39;,
-                     size = 3) </code></pre>
+library(dplyr)
+result.Yoruba&lt;-result.Yoruba %&gt;% as.data.frame() %&gt;% mutate(gene.SNP = paste(!!!rlang::syms(c(&quot;gene&quot;, &quot;rs&quot;)), sep=&quot;.&quot;))
+write.csv(result.Yoruba, file = &quot;result.Yoruba.csv&quot;)</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
