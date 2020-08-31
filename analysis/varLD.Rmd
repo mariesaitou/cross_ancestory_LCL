@@ -282,4 +282,4 @@ module load boost/1.55
 
 
 # results
-![Image Title](./analysis/paintor.822.test.pdf){width=100% height=600}
+![Image Title](../analysis/paintor.822.test.pdf){width=100% height=600}
