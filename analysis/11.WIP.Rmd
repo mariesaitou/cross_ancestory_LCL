@@ -88,7 +88,7 @@ get_pairwise_sharing2(new_m_pm, new_m_lfsr, factor = 0.5, lfsr_thresh = 0.1, FUN
 get_pairwise_sharing2(new_m_pm, new_m_lfsr, factor = 0.5, lfsr_thresh = 0.05, FUN = identity)
 
 ```
-![result](11.24.2020.2.png)
+![result](assets/11.24.2020.2.png)
 
 # 2. susieR result summary
 ```{r, eval = FALSE}
@@ -98,7 +98,7 @@ df2<-subset(df, df$EUR.YRI.BH!="FALSE.FALSE")
 ## colored by susieR results (NA = FDR<0.1 in fastQTL but not fine-mapped in susieR)
 ggplot(df2, aes(x="", fill=susie.BH))+ geom_bar(position="fill")+theme_bw()
 ```
-![result](11.24.2020.3.png)
+![result](assets/11.24.2020.3.png)
 
 # 3. Minor allele frequency spectrum of the fine-mapped SNPs in only one population
 ```{r, eval = FALSE}
@@ -108,7 +108,7 @@ ggplot(d2diff, aes(x=Yoruba.minor, fill=SNP.status)) +
   geom_histogram(aes(y=..density..), position="dodge",bins = 10)+
   theme(legend.position="top")
 ```
-![result](11.24.2020.4.png)
+![result](assets/11.24.2020.4.png)
 
 # 4. Paintor x SusieR
 ```{r, eval = FALSE}
@@ -152,8 +152,8 @@ ggplot(Paintor, aes(x=ZSCORE.EUR, y=ZSCORE.YRI, shape=SNP.SusieR, color=SNP.Susi
   scale_color_manual(values=c('#E69F00', '#999999','#56B4E9'))+
   geom_point()+theme_bw()
 ```
-![result](11.24.2020.5.png)
-![result](11.24.2020.6.png)
+![result](assets/11.24.2020.5.png)
+![result](assets/11.24.2020.6.png)
 
 
 # 5.credible set analysis
@@ -195,7 +195,7 @@ EUR %>% group_by(gene.CS) %>% summarize(count=n())
 Yoruba$gene.CS <- paste(Yoruba$gene, ".", Yoruba$L)
 Yoruba %>% group_by(gene.CS) %>% summarize(count=n())
 ```
-![result](11.24.2020.7.png)
+![result](assets/11.24.2020.7.png)
 
 
 ```{r, eval = FALSE}
@@ -209,7 +209,7 @@ maxlistnondup<-maxlist1[!duplicated(maxlist1$gene), ]
 hist(maxlistnondup$PIP)
 
 ```
-![result](11.24.2020.8.png)
+![result](assets/11.24.2020.8.png)
 
 # 6. susieR 2-pop merged 
 ```{r, eval = FALSE}
@@ -283,7 +283,7 @@ library(dplyr)
 result<-result %>% as.data.frame() %>% mutate(gene.SNP = paste(!!!rlang::syms(c("gene", "rs")), sep="."))
 write.csv(result, file = "susieR.bothpopsPIP.csv", append = T)
 ```
-![result](11.24.2020.9.png)
+![result](assets/11.24.2020.9.png)
 
 
 
