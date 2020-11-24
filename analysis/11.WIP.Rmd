@@ -1,0 +1,289 @@
+---
+title: "WIP"
+author: "Marie Saitou"
+date: "11/17/2020"
+output: html_document
+---
+
+
+# 1. mashR sharing
+```{r, eval = FALSE}
+library(mashr)
+library(tidyverse)
+
+data <- readRDS("fastqtl_to_mash_output/input.file.mash.rds")
+
+data.temp = mash_set_data(data$random.b,data$random.s,zero_Shat_reset = 1)
+Vhat = estimate_null_correlation_simple(data.temp)
+rm(data.temp)
+
+data.random = mash_set_data(data$random.b,data$random.s,V=Vhat,zero_Shat_reset = 1)
+data.strong = mash_set_data(data$strong.b,data$strong.s, V=Vhat,zero_Shat_reset = 1)
+
+U.pca = cov_pca(data.strong,2)
+U.ed = cov_ed(data.strong, U.pca)
+U.c = cov_canonical(data.random)
+m = mash(data.random, Ulist = c(U.ed,U.c))
+
+BH  <- read.csv("DEG.susie.1025.BH.csv", header = T, sep = ",")
+
+## extract genes based on susieR results
+TF <- BH$susie.BH=="EUR"
+#TF <- BH$susie.BH!="dummy"
+TF[is.na(TF)] <- F
+core <-  BH[TF,]
+#mashr:::get_ncond(m)
+#kore$gene
+
+#save.image(file = "mashr.space.RData")
+#load(file = "mashr.space.RData")
+
+
+m_genes <- sapply(str_split(rownames(m[["result"]][["PosteriorMean"]]), "_"), `[`,1)
+new_m_pm <- m[["result"]][["PosteriorMean"]][m_genes %in% core$gene,]
+new_m_lfsr <- m[["result"]][["lfsr"]][m_genes %in% core$gene,]
+
+get_significant_results2 = function(new_m_pm, new_m_lfsr, thresh = 0.05, conditions = NULL) {
+  if (is.null(conditions)) {
+    conditions = 1:ncol(new_m_pm)
+  }
+  top = apply(new_m_lfsr[,conditions,drop=FALSE],1,min) # find top effect in each condition
+  sig = which(top < thresh)
+  ord = order(top[sig],decreasing=FALSE)
+  sig[ord]
+}
+get_pairwise_sharing2= function(new_m_pm, new_m_lfsr, factor=0.5, lfsr_thresh=0.05, FUN= identity){
+  R = ncol(new_m_pm)
+  lfsr = new_m_lfsr
+  S=matrix(NA,nrow = R, ncol=R)
+  SD=matrix(NA,nrow = R, ncol=R)
+  N=matrix(NA,nrow = R, ncol=R)
+  for(i in 1:R){
+    for(j in i:R){
+      sig_i=get_significant_results2(new_m_pm, new_m_lfsr,thresh=lfsr_thresh,conditions = i)
+      sig_j=get_significant_results2(new_m_pm, new_m_lfsr,thresh=lfsr_thresh,conditions = j)
+      a=union(sig_i,sig_j)
+      ratio=FUN(new_m_pm[a,i])/FUN(new_m_pm[a,j])##divide effect sizes
+      S[i,j]=mean(ratio>factor & ratio<(1/factor))
+      SD[i,j]=sd(ratio>factor & ratio<(1/factor))
+      N[i,j]=length(ratio>factor & ratio<(1/factor))
+    }
+  }
+  S[lower.tri(S, diag = FALSE)] = t(S)[lower.tri(S, diag = FALSE)]
+  colnames(S) = row.names(S) = colnames(new_m_pm)
+  
+  SD[lower.tri(SD, diag = FALSE)] = t(SD)[lower.tri(SD, diag = FALSE)]
+  colnames(SD) = row.names(SD) = colnames(new_m_pm)
+  
+  N[lower.tri( N, diag = FALSE)] = t( N)[lower.tri( N, diag = FALSE)]
+  colnames( N) = row.names( N) = colnames(m$result$PosteriorMean)
+  
+  return(list(S,SD, N))
+}
+
+## calculate the sharing based on different local false sign rate cut-off
+get_pairwise_sharing2(new_m_pm, new_m_lfsr, factor = 0.5, lfsr_thresh = 1, FUN = identity)
+get_pairwise_sharing2(new_m_pm, new_m_lfsr, factor = 0.5, lfsr_thresh = 0.5, FUN = identity)
+get_pairwise_sharing2(new_m_pm, new_m_lfsr, factor = 0.5, lfsr_thresh = 0.1, FUN = identity)
+get_pairwise_sharing2(new_m_pm, new_m_lfsr, factor = 0.5, lfsr_thresh = 0.05, FUN = identity)
+
+```
+![result](11.24.2020.2.png)
+
+# 2. susieR result summary
+```{r, eval = FALSE}
+df <- read.csv( "DEG.susie.1025.BH.csv",header = T, sep = ",",)
+## remove FDR>0.1 genes in fast QTL
+df2<-subset(df, df$EUR.YRI.BH!="FALSE.FALSE")
+## colored by susieR results (NA = FDR<0.1 in fastQTL but not fine-mapped in susieR)
+ggplot(df2, aes(x="", fill=susie.BH))+ geom_bar(position="fill")+theme_bw()
+```
+![result](11.24.2020.3.png)
+
+# 3. Minor allele frequency spectrum of the fine-mapped SNPs in only one population
+```{r, eval = FALSE}
+d2  <- read.csv("egene.freq.DEG.beta.1025.BH.csv", header = T, sep = ",")
+d2diff<-subset(d2,d2$susie.BH=="both.diffSNP")
+ggplot(d2diff, aes(x=Yoruba.minor, fill=SNP.status)) +
+  geom_histogram(aes(y=..density..), position="dodge",bins = 10)+
+  theme(legend.position="top")
+```
+![result](11.24.2020.4.png)
+
+# 4. Paintor x SusieR
+```{r, eval = FALSE}
+genelist=read.csv("susieR.gene.diff.csv", stringsAsFactors = F)
+file <-paste("/Users/saitoumarie/Dropbox/Chicago/RCC/eQTL.practice/LDSC/PESCA/",genelist[,"gene"], ".Paintor.results",sep="")
+
+paintor<- lapply(file, FUN=read.table, header = TRUE, stringsAsFactors = F)
+names(paintor) <- genelist[,"gene"]
+# get list of posterior probabilities
+posterior <- lapply(paintor, '[[',"Posterior_Prob")
+
+# define functions for convenience
+larger <- function(x,y){
+  x > y
+}
+getlist <- function(x,y){
+  x[y,]
+}
+put_name <- function(x,y){
+  if(nrow(x)!=0){
+    x['gene'] <- y
+    x
+  }
+}
+
+# subset elements with posterior probability > 0.8
+result <- mapply(getlist, paintor, lapply(posterior,larger, 0.8), SIMPLIFY=F) 
+result <- mapply(put_name, result, names(result), SIMPLIFY = F) # put gene name in dataframe
+
+#merge data frames
+result.dataframe = data.frame()
+for(i in 1:length(result)){
+  result.dataframe <- rbind(result.dataframe, result[[i]])
+}
+
+result.dataframe
+write.csv(result.dataframe, file = "Paintor.diffSNP.PIP80.csv")
+
+Paintor = read.csv("Paintor.susie.80.csv", header=T)
+ggplot(Paintor, aes(x=ZSCORE.EUR, y=ZSCORE.YRI, shape=SNP.SusieR, color=SNP.SusieR, size = 5, alpha=0.9)) +
+  scale_color_manual(values=c('#E69F00', '#999999','#56B4E9'))+
+  geom_point()+theme_bw()
+```
+![result](11.24.2020.5.png)
+![result](11.24.2020.6.png)
+
+
+# 5.credible set analysis
+```{r, eval = FALSE}
+Yoruba = read.csv("/Users/saitoumarie/Dropbox/Chicago/RCC/eQTL.practice/finemap/YRI.susieR.425.csv", header=T)
+Yoruba.CS<-as.data.frame(cbind(unique(Yoruba$gene),lapply(unique(Yoruba$gene),eachgene, Yoruba)))
+Yoruba.CS$V1<-unlist(Yoruba.CS$V1)
+Yoruba.CS$V2<-unlist(Yoruba.CS$V2)
+# hist(Yoruba.CS$V2) ## containes non-BH genes
+length(unique(lapply(unique(Yoruba$gene),eachgene, Yoruba)))
+genes <- unique(Yoruba$gene)
+
+EUR = read.csv("/Users/saitoumarie/Dropbox/Chicago/RCC/eQTL.practice/finemap/EUR.susieR.425.csv", header=T)
+EUR.CS<-as.data.frame(cbind(unique(EUR$gene),lapply(unique(EUR$gene),eachgene, EUR)))
+EUR.CS$V2<-unlist(EUR.CS$V2)
+EUR.CS$V1<-unlist(EUR.CS$V1)
+hist(EUR.CS$V2)
+
+length(unique(lapply(unique(EUR$gene),eachgene, EUR)))
+genes <- unique(EUR$gene)
+
+df = read.csv("/Users/saitoumarie/Dropbox/Chicago/RCC/eQTL.practice/DEG.susie.1025.BH.csv", header=T)
+
+YRI.BH<-subset(df, df$in_YRI.BH=="TRUE")
+YRI.CSBH<-merge(Yoruba.CS,YRI.BH,by.x="V1",by.y="gene")
+hist(YRI.CSBH$V2)
+
+
+EUR.BH<-subset(df, df$in_EUR.BH=="TRUE")
+EUR.CSBH<-merge(EUR.CS,EUR.BH,by.x="V1",by.y="gene")
+hist(EUR.CSBH$V2)
+
+### compare PIP in SNPs 
+library(dplyr)
+
+EUR$gene.CS <- paste(EUR$gene, ".", EUR$L)
+EUR %>% group_by(gene.CS) %>% summarize(count=n())
+
+Yoruba$gene.CS <- paste(Yoruba$gene, ".", Yoruba$L)
+Yoruba %>% group_by(gene.CS) %>% summarize(count=n())
+```
+![result](11.24.2020.7.png)
+
+
+```{r, eval = FALSE}
+maxlist1  <- data.frame()
+for (i in 1:length(unique(Yoruba$gene.CS))){
+  uni_list = Yoruba[Yoruba$gene.CS==unique(Yoruba$gene.CS)[i],]
+  temp <- uni_list[uni_list$PIP==max(uni_list$PIP),]
+  maxlist1 <- rbind(maxlist1, temp)
+}
+maxlistnondup<-maxlist1[!duplicated(maxlist1$gene), ]
+hist(maxlistnondup$PIP)
+
+```
+![result](11.24.2020.8.png)
+
+# 6. susieR 2-pop merged 
+```{r, eval = FALSE}
+
+library(susieR)
+library(data.table)
+## read the gene list
+
+genelist=read.csv("BHloc.bothpop.ex.csv", stringsAsFactors = F)
+#gene.expression.Africa = read.table("Yoruba.TPM.scaled.gene.bed")
+gene.expression = read.csv("scaled.bothpops.TPM.csv", stringsAsFactors = F)
+
+## read a gene from the list
+filename<-paste("both/",genelist[,"gene"], ".455.genotype.recode.vcf", sep="")
+genotype<- lapply(both/filename, FUN=read.table, header = FALSE, stringsAsFactors = F)
+names(genotype) <- genelist[,"gene"]
+genotype.df <- rbindlist(genotype, fill=T, idcol = T)
+genotype.df<-genotype.df[!duplicated(genotype.df[,c(".id","V3" )])&!duplicated(genotype.df[,c(".id","V3" )], fromLast = T),]
+
+
+## convert vcf format as input dataset
+
+genotype.data <- genotype.df[,11:length(genotype.df[1,])] 
+
+genotype.data[genotype.data=="0|0"]<- 0L
+genotype.data[genotype.data=="0|1"]<- 1L
+genotype.data[genotype.data=="1|0"]<- 1L
+genotype.data[genotype.data=="1|1"]<- 2L
+genotype.data1<- as.matrix(genotype.data)
+genotype.data<- matrix(as.numeric(genotype.data1), nrow = nrow(genotype.data))
+
+## scale the genotypes
+scale.gen <- scale(t(genotype.data))
+#hist(scale.gen.Yoruba[,20])
+
+## extract genes from the gene expression list
+test.expression <- gene.expression[unlist(lapply(genelist$gene, grep, gene.expression$gene)),]
+expression <- t(test.expression[,-(1:4)])
+
+## susieR
+fitted.test<- as.list(NULL)
+for(i in 1:2998){
+  fitted.test[[i]] <-   susie(scale.gen[,(genotype.df$.id==genelist$gene[i])], expression[,i],
+                                     L = 10,
+                                     estimate_residual_variance = TRUE, 
+                                     estimate_prior_variance = FALSE,
+                                     scaled_prior_variance = 0.95,
+                                     verbose = TRUE)
+}
+
+
+## attach gene names to the result
+fitted<-  as.list(NULL)
+for(i in 1:2998){
+  if(length(fitted.test[[i]]$sets$cs)!=0){
+    fitted[[i]] <- cbind(stack(fitted.test[[i]]$sets$cs),fitted.test[[i]][["pip"]][unlist(fitted.test[[i]]$sets$cs)])
+  }
+}
+
+check<- rbindlist(fitted, idcol=T)
+check$name <- genelist[check$.id,"gene"]
+
+names(check)
+names(check)[4] <- "PIP"
+result.temp <- as.list(NULL)
+for(i in 1:length(check$.id)){result.temp[i] <- lapply(genotype[check$name[i]], "[", check$values[i],1:3,)}
+result<- data.frame(check$name, check$ind, check$values,check$PIP, rbindlist(result.temp))
+names(result)<-c("gene","L","SNP","PIP","chr","loc","rs")
+
+library(dplyr)
+result<-result %>% as.data.frame() %>% mutate(gene.SNP = paste(!!!rlang::syms(c("gene", "rs")), sep="."))
+write.csv(result, file = "susieR.bothpopsPIP.csv", append = T)
+```
+![result](11.24.2020.9.png)
+
+
+
