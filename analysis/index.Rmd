@@ -28,5 +28,7 @@ Obtain genotype and gene expression data, clean them and convert them to the fas
 * [2. Fine-mapping with SuSiE](susie.html)
 * [3. Downstream analysis]
 * [4. Genetic correlation analysis](correl.html)
-* [5. (ongoing) LD-based fine-mapping](varLD.html)
+* [5. LD-based fine-mapping](varLD.html)
+
+* [6. (ongoing) 11.WIP](11.WIP.html)
 
