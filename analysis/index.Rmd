@@ -29,5 +29,5 @@ Obtain genotype and gene expression data, clean them and convert them to the fas
 * [3. Downstream analysis]
 * [4. Genetic correlation analysis](correl.html)
 * [5. LD-based fine-mapping](varLD.html)
-* [6. (ongoing) 11.WIP](11.WIP.html)
-
+* [6.  11.WIP](11.WIP.html)
+* [7. (ongoing) 12.WIP](12.20.WIP.html)
