@@ -99,7 +99,118 @@ result.Yoruba<-result.Yoruba %>% as.data.frame() %>% mutate(gene.SNP = paste(!!!
 write.csv(result.Yoruba, file = "result.Yoruba.csv")
 ```
 
+# 2 populations merged analysis
+# Cut the 100 up/downstream regions from the genotype file
+```{bash, eval = FALSE}
+module load vcftools
+module load htslib 
+csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/BHloc.bothpop.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} | cut -d ',' -f 1`
+  chr=`echo ${line} | cut -d ',' -f 2`
+  up=`echo ${line} | cut -d ',' -f 10`
+  down=`echo ${line} | cut -d ',' -f 11`
+  vcftools --gzvcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr${chr}.1000gphase3.455.0.01.biallelic.recode.vcf --chr ${chr} --from-bp ${up} --to-bp ${down} --recode --out ${gene}.455.genotype
+
+done
+
+```
+
+# run SuSiE
+```{r, eval = FALSE}
+# 12419 genes are too many to run at once. Separate the gene list into small lists.
+
+library(susieR)
+library(data.table)
+## read the gene list
+
+genelist=read.csv("BHloc.bothpop.ex.csv", stringsAsFactors = F)
+#gene.expression.Africa = read.table("Yoruba.TPM.scaled.gene.bed")
+gene.expression = read.csv("scaled.bothpops.TPM.csv", stringsAsFactors = F)
+
+## read a gene from the list
+filename<-paste("both/",genelist[,"gene"], ".455.genotype.recode.vcf", sep="")
+genotype<- lapply(both/filename, FUN=read.table, header = FALSE, stringsAsFactors = F)
+names(genotype) <- genelist[,"gene"]
+genotype.df <- rbindlist(genotype, fill=T, idcol = T)
+genotype.df<-genotype.df[!duplicated(genotype.df[,c(".id","V3" )])&!duplicated(genotype.df[,c(".id","V3" )], fromLast = T),]
 
 
+## convert vcf format as input dataset
+
+genotype.data <- genotype.df[,11:length(genotype.df[1,])] 
+
+genotype.data[genotype.data=="0|0"]<- 0L
+genotype.data[genotype.data=="0|1"]<- 1L
+genotype.data[genotype.data=="1|0"]<- 1L
+genotype.data[genotype.data=="1|1"]<- 2L
+genotype.data1<- as.matrix(genotype.data)
+genotype.data<- matrix(as.numeric(genotype.data1), nrow = nrow(genotype.data))
+
+## scale the genotypes
+scale.gen <- scale(t(genotype.data))
+#hist(scale.gen.Yoruba[,20])
+
+## extract genes from the gene expression list
+test.expression <- gene.expression[unlist(lapply(genelist$gene, grep, gene.expression$gene)),]
+expression <- t(test.expression[,-(1:4)])
+
+## susieR
+fitted.test<- as.list(NULL)
+for(i in 1:2998){
+  fitted.test[[i]] <-   susie(scale.gen[,(genotype.df$.id==genelist$gene[i])], expression[,i],
+                                     L = 10,
+                                     estimate_residual_variance = TRUE, 
+                                     estimate_prior_variance = FALSE,
+                                     scaled_prior_variance = 0.95,
+                                     verbose = TRUE)
+}
+
+fitted.test[[4]]$sets$cs
+## attach gene names to the result
+fitted <-  as.list(NULL)
+for(i in 1:2998){
+  if(length(fitted.test[[i]]$sets$cs)!=0){
+    fitted[[i]] <- stack(fitted.test[[i]]$sets$cs)
+  }
+}
+check <- rbindlist(fitted, idcol=T)
+check$name <- genelist[check$.id,"gene"]
+result.temp <- as.list(NULL)
+for(i in 1:length(check$.id)){result.temp[i] <- lapply(genotype[check$name[i]], "[", check$values[i],1:3)}
+result <- data.frame(check$name, check$ind, check$values, rbindlist(result.temp))
+
+names(result)<-c("gene","L","SNP","chr","loc","rs")
+
+library(dplyr)
+result<-result %>% as.data.frame() %>% mutate(gene.SNP = paste(!!!rlang::syms(c("gene", "rs")), sep="."))
+write.csv(result, file = "susieR.bothpops.csv")
+```
+
+fitted<-  as.list(NULL)
+for(i in 1:1365){
+  if(length(fitted.test[[i]]$sets$cs)!=0){
+    fitted[[i]] <- cbind(stack(fitted.test[[i]]$sets$cs),fitted.test[[i]][["pip"]][unlist(fitted.test[[i]]$sets$cs)])
+  }
+}
+
+check<- rbindlist(fitted, idcol=T)
+check$name <- genelist[check$.id,"gene"]
+
+names(check)
+names(check)[4] <- "PIP"
+result.temp <- as.list(NULL)
+for(i in 1:length(check$.id)){result.temp[i] <- lapply(genotype[check$name[i]], "[", check$values[i],1:3,)}
+result<- data.frame(check$name, check$ind, check$values,check$PIP, rbindlist(result.temp))
+names(result)<-c("gene","L","SNP","PIP","chr","loc","rs")
+
+library(dplyr)
+result<-result %>% as.data.frame() %>% mutate(gene.SNP = paste(!!!rlang::syms(c("gene", "rs")), sep="."))
+write.csv(result, file = "susieR.bothpopsPIP.csv", append = T)
 
 
+###########
+## TARO
+
+gene.expression = read.csv("scaled.bothpops..csv", stringsAsFactors = F)

@@ -27,6 +27,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -37,6 +39,15 @@ div.section {
   padding-top: 12px;
 }
 </style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -395,7 +406,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -404,7 +415,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -413,10 +424,10 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-06
+<strong>Last updated:</strong> 2020-11-24
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>myproject/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -432,12 +443,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -504,16 +515,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree683fcc21b82df6cf2e571e7f1e1046a5a804e0e8targetblank683fcc2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/mariesaitou/myproject/tree/683fcc21b82df6cf2e571e7f1e1046a5a804e0e8" target="_blank">683fcc2</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree594a5693ab86b521412289b217d85eb7e13f6325targetblank594a569a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/mariesaitou/myproject/tree/594a5693ab86b521412289b217d85eb7e13f6325" target="_blank">594a569</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree683fcc21b82df6cf2e571e7f1e1046a5a804e0e8targetblank683fcc2a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree594a5693ab86b521412289b217d85eb7e13f6325targetblank594a569a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/mariesaitou/myproject/tree/683fcc21b82df6cf2e571e7f1e1046a5a804e0e8" target="_blank">683fcc2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/mariesaitou/myproject/tree/594a5693ab86b521412289b217d85eb7e13f6325" target="_blank">594a569</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,14 +532,29 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    .DS_Store
+    Ignored:    .RData
     Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
+    Ignored:    analysis/11.24.2020.2.png
+    Ignored:    analysis/11.24.2020.3.png
+    Ignored:    analysis/11.24.2020.4.png
+    Ignored:    analysis/11.24.2020.5.png
+    Ignored:    analysis/11.24.2020.6.png
+    Ignored:    analysis/11.24.2020.7.png
+    Ignored:    analysis/11.24.2020.8.png
+    Ignored:    analysis/11.24.2020.9.png
     Ignored:    genotype/
 
 Untracked files:
     Untracked:  ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
     Untracked:  ALL.chr2.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
     Untracked:  getfastqtest2.csv
+
+Unstaged changes:
+    Modified:   analysis/prep.Rmd
+    Modified:   analysis/susie.Rmd
+    Modified:   analysis/varLD.Rmd
 
 </code></pre>
 <p>
@@ -572,13 +598,30 @@ Message
 html
 </td>
 <td>
+<a href="https://rawcdn.githack.com/mariesaitou/myproject/fc30af3cab217004a57a08c3089c7a1076d0ffdd/docs/varLD.html" target="_blank">fc30af3</a>
+</td>
+<td>
+mariesaitou
+</td>
+<td>
+2020-09-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
 <a href="https://rawcdn.githack.com/mariesaitou/myproject/f0b76bfd914ecedfc96ec3bbe61650e499889a70/docs/varLD.html" target="_blank">f0b76bf</a>
 </td>
 <td>
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -595,7 +638,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -612,7 +655,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 wflow_git_commit(all = T)
@@ -629,7 +672,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -646,7 +689,7 @@ Rmd
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 wflow_publish(c(“analysis/index.Rmd”, “analysis/correl.Rmd”,
@@ -663,7 +706,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -680,7 +723,7 @@ Rmd
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 wflow_publish(c(“analysis/index.Rmd”, “analysis/correl.Rmd”,
@@ -697,7 +740,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -714,7 +757,7 @@ Rmd
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 wflow_publish(c(“analysis/index.Rmd”, “analysis/correl.Rmd”,
@@ -731,7 +774,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -748,7 +791,7 @@ Rmd
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 wflow_publish(c(“analysis/index.Rmd”, “analysis/correl.Rmd”,
@@ -765,7 +808,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -782,7 +825,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -799,7 +842,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -816,7 +859,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -833,7 +876,7 @@ Rmd
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 wflow_publish(c(“analysis/index.Rmd”, “analysis/correl.Rmd”,
@@ -850,7 +893,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -867,7 +910,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -884,7 +927,7 @@ Rmd
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 wflow_publish(c(“analysis/index.Rmd”, “analysis/correl.Rmd”,
@@ -901,7 +944,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-16
+2020-08-17
 </td>
 <td>
 Build site.
@@ -918,7 +961,7 @@ Rmd
 mariesaitou
 </td>
 <td>
-2020-08-16
+2020-08-17
 </td>
 <td>
 wflow_publish(c(“analysis/index.Rmd”, “analysis/correl.Rmd”,
@@ -1194,6 +1237,50 @@ names(anno) &lt;- c(&quot;dummy&quot;)</code></pre>
 <h1>run PAINTOR</h1>
 <pre class="bash"><code>./PAINTOR -input input.files.ENSG00000160284.txt -in -Zhead ZSCORE.EUR,ZSCORE.YRI -LDname EUR.LD,YRI.LD -in /ENSG00000160284/ -out /ENSG00000160284/ -enumerate 3 -annotations dummy</code></pre>
 </div>
+<div id="nov.15.2020" class="section level1">
+<h1>Nov.15.2020</h1>
+</div>
+<div id="extract-paintor-result-more-than-pip-0.8-and-genes-with-population-specific-susier-snps" class="section level1">
+<h1>Extract PAINTOR result more than PIP 0.8 and genes with population-specific SUSIER SNPs</h1>
+<pre class="bash"><code>
+
+
+setwd(&quot;/project2/xuanyao/marie/E-GEUV-1/LDSC/PAINTOR_V3.0/&quot;)
+genelist=read.csv(&quot;/project2/xuanyao/marie/E-GEUV-1/LDSC/PAINTOR_V3.0/susieR.gene.diff.csv&quot;, stringsAsFactors = F)
+file &lt;-paste(&quot;/project2/xuanyao/marie/E-GEUV-1/LDSC/PAINTOR_V3.0/files/&quot;,genelist[,&quot;gene&quot;], &quot;.Paintor.results&quot;,sep=&quot;&quot;)
+
+
+paintor&lt;- lapply(file, FUN=read.table, header = TRUE, stringsAsFactors = F)
+names(paintor) &lt;- genelist[,&quot;gene&quot;]
+# get list of posterior probabilities
+posterior &lt;- lapply(paintor, &#39;[[&#39;,&quot;Posterior_Prob&quot;)
+
+# define functions for convenience
+larger &lt;- function(x,y){
+  x &gt; y
+}
+getlist &lt;- function(x,y){
+  x[y,]
+}
+put_name &lt;- function(x,y){
+  if(nrow(x)!=0){
+    x[&#39;gene&#39;] &lt;- y
+    x
+  }
+}
+
+# subset elements with posterior probability &gt; 0.95
+result &lt;- mapply(getlist, paintor, lapply(posterior,larger, 0.8), SIMPLIFY=F) 
+result &lt;- mapply(put_name, result, names(result), SIMPLIFY = F) # put gene name in dataframe
+
+#merge data frames
+result.dataframe = data.frame()
+for(i in 1:length(result)){
+  result.dataframe &lt;- rbind(result.dataframe, result[[i]])
+}
+write.csv(result.dataframe, file = &quot; Paintor.diffSNP.PIP80.csv&quot;)
+</code></pre>
+</div>
 <div id="results" class="section level1">
 <h1>results</h1>
 <div class="figure">
@@ -1208,9 +1295,9 @@ names(anno) &lt;- c(&quot;dummy&quot;)</code></pre>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.0 (2020-04-24)
+<pre><code>R version 4.0.2 (2020-06-22)
 Platform: x86_64-apple-darwin17.0 (64-bit)
-Running under: macOS Catalina 10.15.6
+Running under: macOS  10.16
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
@@ -1226,12 +1313,14 @@ other attached packages:
 [1] workflowr_1.6.2
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.4.6    rprojroot_1.3-2 digest_0.6.25   later_1.1.0.1  
- [5] R6_2.4.1        backports_1.1.8 git2r_0.27.1    magrittr_1.5   
- [9] evaluate_0.14   stringi_1.4.6   rlang_0.4.7     fs_1.4.1       
-[13] promises_1.1.1  whisker_0.4     rmarkdown_2.3   tools_4.0.0    
-[17] stringr_1.4.0   glue_1.4.1      httpuv_1.5.4    xfun_0.14      
-[21] yaml_2.2.1      compiler_4.0.0  htmltools_0.4.0 knitr_1.28     </code></pre>
+ [1] Rcpp_1.0.5       rstudioapi_0.11  whisker_0.4      knitr_1.30      
+ [5] magrittr_1.5     R6_2.4.1         rlang_0.4.8      stringr_1.4.0   
+ [9] tools_4.0.2      xfun_0.18        git2r_0.27.1     htmltools_0.5.0 
+[13] ellipsis_0.3.1   rprojroot_1.3-2  yaml_2.2.1       digest_0.6.27   
+[17] tibble_3.0.4     lifecycle_0.2.0  crayon_1.3.4     later_1.1.0.1   
+[21] vctrs_0.3.4      promises_1.1.1   fs_1.5.0         glue_1.4.2      
+[25] evaluate_0.14    rmarkdown_2.5    stringi_1.5.3    compiler_4.0.2  
+[29] pillar_1.4.6     backports_1.1.10 httpuv_1.5.4     pkgconfig_2.0.3 </code></pre>
 </div>
 </div>
 
@@ -1258,7 +1347,7 @@ footer is added to webpages before the MathJax javascript. -->
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

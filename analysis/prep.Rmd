@@ -63,9 +63,27 @@ done
 
 ```
 
-
 ```{r, eval = FALSE}
 # summarize TPM (gene expression) data from each individual
+samples <-read.csv("1000g.EUR.sample.csv",header=TRUE)
+files <- file.path(dir, "kallisto", samples$kallisto, "abundance.tsv")
+names(files) <- paste0(samples$X) 
+all(file.exists(files))
+txi <- tximport(files, type = "kallisto", tx2gene = tx2gene, txOut = FALSE, ignoreAfterBar = TRUE)
+write.table(txi$abundance,sep="\t", file = "EUR.TPM.tsv")
+
+## 
+```
+
+
+
+```{r, eval = FALSE}
+library(tximport)
+library(biomaRt)
+update.packages()
+install.packages("rlang")
+# summarize TPM (gene expression) data from each individual
+tx2gene <- read.csv("/project2/xuanyao/marie/E-GEUV-1/transcripts.to.genes2.csv")
 samples <-read.csv("1000g.EUR.sample.csv",header=TRUE)
 files <- file.path(dir, "kallisto", samples$kallisto, "abundance.tsv")
 names(files) <- paste0(samples$X) 
@@ -83,7 +101,7 @@ df <- read.csv(file.choose(), header = T, sep = ",")
 gene <- df$gene
 G_list <- getBM(filters= "ensembl_gene_id", attributes=c('ensembl_gene_id', 'hgnc_symbol','description','chromosome_name','start_position','end_position'),mart= mart,values=gene)
 G_list2<-merge(df,G_list,by.x="gene",by.y="ensembl_gene_id",all.x=T)
-write.csv(G_list2, file = "British.gene.TPM.csv")
+write.csv(G_list2, file = "EUR.gene.TPM.csv")
 ```
 
 

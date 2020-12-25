@@ -27,6 +27,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -37,6 +39,15 @@ div.section {
   padding-top: 12px;
 }
 </style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -395,7 +406,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -404,7 +415,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -413,10 +424,10 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-06
+<strong>Last updated:</strong> 2020-11-24
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>myproject/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -432,12 +443,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -504,16 +515,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree683fcc21b82df6cf2e571e7f1e1046a5a804e0e8targetblank683fcc2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/mariesaitou/myproject/tree/683fcc21b82df6cf2e571e7f1e1046a5a804e0e8" target="_blank">683fcc2</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree594a5693ab86b521412289b217d85eb7e13f6325targetblank594a569a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/mariesaitou/myproject/tree/594a5693ab86b521412289b217d85eb7e13f6325" target="_blank">594a569</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree683fcc21b82df6cf2e571e7f1e1046a5a804e0e8targetblank683fcc2a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree594a5693ab86b521412289b217d85eb7e13f6325targetblank594a569a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/mariesaitou/myproject/tree/683fcc21b82df6cf2e571e7f1e1046a5a804e0e8" target="_blank">683fcc2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/mariesaitou/myproject/tree/594a5693ab86b521412289b217d85eb7e13f6325" target="_blank">594a569</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,14 +532,29 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    .DS_Store
+    Ignored:    .RData
     Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
+    Ignored:    analysis/11.24.2020.2.png
+    Ignored:    analysis/11.24.2020.3.png
+    Ignored:    analysis/11.24.2020.4.png
+    Ignored:    analysis/11.24.2020.5.png
+    Ignored:    analysis/11.24.2020.6.png
+    Ignored:    analysis/11.24.2020.7.png
+    Ignored:    analysis/11.24.2020.8.png
+    Ignored:    analysis/11.24.2020.9.png
     Ignored:    genotype/
 
 Untracked files:
     Untracked:  ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
     Untracked:  ALL.chr2.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
     Untracked:  getfastqtest2.csv
+
+Unstaged changes:
+    Modified:   analysis/prep.Rmd
+    Modified:   analysis/susie.Rmd
+    Modified:   analysis/varLD.Rmd
 
 </code></pre>
 <p>
@@ -572,13 +598,30 @@ Message
 html
 </td>
 <td>
+<a href="https://rawcdn.githack.com/mariesaitou/myproject/fc30af3cab217004a57a08c3089c7a1076d0ffdd/docs/susie.html" target="_blank">fc30af3</a>
+</td>
+<td>
+mariesaitou
+</td>
+<td>
+2020-09-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
 <a href="https://rawcdn.githack.com/mariesaitou/myproject/f0b76bfd914ecedfc96ec3bbe61650e499889a70/docs/susie.html" target="_blank">f0b76bf</a>
 </td>
 <td>
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -595,7 +638,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -612,7 +655,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -629,7 +672,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -646,7 +689,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -663,7 +706,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -680,7 +723,7 @@ html
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 Build site.
@@ -697,7 +740,7 @@ Rmd
 mariesaitou
 </td>
 <td>
-2020-08-30
+2020-08-31
 </td>
 <td>
 wflow_publish(c(“analysis/index.Rmd”, “analysis/correl.Rmd”,
@@ -798,6 +841,105 @@ names(result.Yoruba)&lt;-c(&quot;gene&quot;,&quot;L&quot;,&quot;SNP&quot;,&quot;
 library(dplyr)
 result.Yoruba&lt;-result.Yoruba %&gt;% as.data.frame() %&gt;% mutate(gene.SNP = paste(!!!rlang::syms(c(&quot;gene&quot;, &quot;rs&quot;)), sep=&quot;.&quot;))
 write.csv(result.Yoruba, file = &quot;result.Yoruba.csv&quot;)</code></pre>
+</div>
+<div id="populations-merged-analysis" class="section level1">
+<h1>2 populations merged analysis</h1>
+</div>
+<div id="cut-the-100-updownstream-regions-from-the-genotype-file-1" class="section level1">
+<h1>Cut the 100 up/downstream regions from the genotype file</h1>
+<pre class="bash"><code>module load vcftools
+module load htslib 
+csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/BHloc.bothpop.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} | cut -d &#39;,&#39; -f 1`
+  chr=`echo ${line} | cut -d &#39;,&#39; -f 2`
+  up=`echo ${line} | cut -d &#39;,&#39; -f 10`
+  down=`echo ${line} | cut -d &#39;,&#39; -f 11`
+  vcftools --gzvcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr${chr}.1000gphase3.455.0.01.biallelic.recode.vcf --chr ${chr} --from-bp ${up} --to-bp ${down} --recode --out ${gene}.455.genotype
+
+done
+</code></pre>
+</div>
+<div id="run-susie-1" class="section level1">
+<h1>run SuSiE</h1>
+<pre class="r"><code># 12419 genes are too many to run at once. Separate the gene list into small lists.
+
+library(susieR)
+library(data.table)
+## read the gene list
+
+genelist=read.csv(&quot;BHloc.bothpop.ex.csv&quot;, stringsAsFactors = F)
+#gene.expression.Africa = read.table(&quot;Yoruba.TPM.scaled.gene.bed&quot;)
+gene.expression = read.csv(&quot;scaled.bothpops.TPM.csv&quot;, stringsAsFactors = F)
+
+## read a gene from the list
+filename&lt;-paste(&quot;both/&quot;,genelist[,&quot;gene&quot;], &quot;.455.genotype.recode.vcf&quot;, sep=&quot;&quot;)
+genotype&lt;- lapply(both/filename, FUN=read.table, header = FALSE, stringsAsFactors = F)
+names(genotype) &lt;- genelist[,&quot;gene&quot;]
+genotype.df &lt;- rbindlist(genotype, fill=T, idcol = T)
+genotype.df&lt;-genotype.df[!duplicated(genotype.df[,c(&quot;.id&quot;,&quot;V3&quot; )])&amp;!duplicated(genotype.df[,c(&quot;.id&quot;,&quot;V3&quot; )], fromLast = T),]
+
+
+## convert vcf format as input dataset
+
+genotype.data &lt;- genotype.df[,11:length(genotype.df[1,])] 
+
+genotype.data[genotype.data==&quot;0|0&quot;]&lt;- 0L
+genotype.data[genotype.data==&quot;0|1&quot;]&lt;- 1L
+genotype.data[genotype.data==&quot;1|0&quot;]&lt;- 1L
+genotype.data[genotype.data==&quot;1|1&quot;]&lt;- 2L
+genotype.data1&lt;- as.matrix(genotype.data)
+genotype.data&lt;- matrix(as.numeric(genotype.data1), nrow = nrow(genotype.data))
+
+## scale the genotypes
+scale.gen &lt;- scale(t(genotype.data))
+#hist(scale.gen.Yoruba[,20])
+
+## extract genes from the gene expression list
+test.expression &lt;- gene.expression[unlist(lapply(genelist$gene, grep, gene.expression$gene)),]
+expression &lt;- t(test.expression[,-(1:4)])
+
+## susieR
+fitted.test&lt;- as.list(NULL)
+for(i in 1:2998){
+  fitted.test[[i]] &lt;-   susie(scale.gen[,(genotype.df$.id==genelist$gene[i])], expression[,i],
+                                     L = 10,
+                                     estimate_residual_variance = TRUE, 
+                                     estimate_prior_variance = FALSE,
+                                     scaled_prior_variance = 0.95,
+                                     verbose = TRUE)
+}
+
+fitted.test[[4]]$sets$cs
+## attach gene names to the result
+fitted &lt;-  as.list(NULL)
+for(i in 1:2998){
+  if(length(fitted.test[[i]]$sets$cs)!=0){
+    fitted[[i]] &lt;- stack(fitted.test[[i]]$sets$cs)
+  }
+}
+check &lt;- rbindlist(fitted, idcol=T)
+check$name &lt;- genelist[check$.id,&quot;gene&quot;]
+result.temp &lt;- as.list(NULL)
+for(i in 1:length(check$.id)){result.temp[i] &lt;- lapply(genotype[check$name[i]], &quot;[&quot;, check$values[i],1:3)}
+result &lt;- data.frame(check$name, check$ind, check$values, rbindlist(result.temp))
+
+names(result)&lt;-c(&quot;gene&quot;,&quot;L&quot;,&quot;SNP&quot;,&quot;chr&quot;,&quot;loc&quot;,&quot;rs&quot;)
+
+library(dplyr)
+result&lt;-result %&gt;% as.data.frame() %&gt;% mutate(gene.SNP = paste(!!!rlang::syms(c(&quot;gene&quot;, &quot;rs&quot;)), sep=&quot;.&quot;))
+write.csv(result, file = &quot;susieR.bothpops.csv&quot;)</code></pre>
+<p>fitted&lt;- as.list(NULL) for(i in 1:1365){ if(length(fitted.test[[i]]<span class="math inline">\(sets\)</span>cs)!=0){ fitted[[i]] &lt;- cbind(stack(fitted.test[[i]]<span class="math inline">\(sets\)</span>cs),fitted.test[[i]][[“pip”]][unlist(fitted.test[[i]]<span class="math inline">\(sets\)</span>cs)]) } }</p>
+<p>check&lt;- rbindlist(fitted, idcol=T) check<span class="math inline">\(name &lt;- genelist[check\)</span>.id,“gene”]</p>
+<p>names(check) names(check)[4] &lt;- “PIP” result.temp &lt;- as.list(NULL) for(i in 1:length(check<span class="math inline">\(.id)){result.temp[i] &lt;- lapply(genotype[check\)</span>name[i]], “[”, check<span class="math inline">\(values[i],1:3,)} result&lt;- data.frame(check\)</span>name, check<span class="math inline">\(ind, check\)</span>values,check$PIP, rbindlist(result.temp)) names(result)&lt;-c(“gene”,“L”,“SNP”,“PIP”,“chr”,“loc”,“rs”)</p>
+<p>library(dplyr) result&lt;-result %&gt;% as.data.frame() %&gt;% mutate(gene.SNP = paste(!!!rlang::syms(c(“gene”, “rs”)), sep=“.”)) write.csv(result, file = “susieR.bothpopsPIP.csv”, append = T)</p>
+<div id="section-1" class="section level11">
+<p></p>
+</div>
+<div id="taro" class="section level2">
+<h2>TARO</h2>
+<p>gene.expression = read.csv(“scaled.bothpops..csv”, stringsAsFactors = F)</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -806,9 +948,9 @@ write.csv(result.Yoruba, file = &quot;result.Yoruba.csv&quot;)</code></pre>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.0 (2020-04-24)
+<pre><code>R version 4.0.2 (2020-06-22)
 Platform: x86_64-apple-darwin17.0 (64-bit)
-Running under: macOS Catalina 10.15.6
+Running under: macOS  10.16
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
@@ -824,12 +966,15 @@ other attached packages:
 [1] workflowr_1.6.2
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.4.6    rprojroot_1.3-2 digest_0.6.25   later_1.1.0.1  
- [5] R6_2.4.1        backports_1.1.8 git2r_0.27.1    magrittr_1.5   
- [9] evaluate_0.14   stringi_1.4.6   rlang_0.4.7     fs_1.4.1       
-[13] promises_1.1.1  whisker_0.4     rmarkdown_2.3   tools_4.0.0    
-[17] stringr_1.4.0   glue_1.4.1      httpuv_1.5.4    xfun_0.14      
-[21] yaml_2.2.1      compiler_4.0.0  htmltools_0.4.0 knitr_1.28     </code></pre>
+ [1] Rcpp_1.0.5       rstudioapi_0.11  whisker_0.4      knitr_1.30      
+ [5] magrittr_1.5     R6_2.4.1         rlang_0.4.8      stringr_1.4.0   
+ [9] tools_4.0.2      xfun_0.18        git2r_0.27.1     htmltools_0.5.0 
+[13] ellipsis_0.3.1   rprojroot_1.3-2  yaml_2.2.1       digest_0.6.27   
+[17] tibble_3.0.4     lifecycle_0.2.0  crayon_1.3.4     later_1.1.0.1   
+[21] vctrs_0.3.4      promises_1.1.1   fs_1.5.0         glue_1.4.2      
+[25] evaluate_0.14    rmarkdown_2.5    stringi_1.5.3    compiler_4.0.2  
+[29] pillar_1.4.6     backports_1.1.10 httpuv_1.5.4     pkgconfig_2.0.3 </code></pre>
+</div>
 </div>
 </div>
 
@@ -856,7 +1001,7 @@ footer is added to webpages before the MathJax javascript. -->
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

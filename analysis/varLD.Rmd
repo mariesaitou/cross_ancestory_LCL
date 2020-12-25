@@ -44,7 +44,6 @@ csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/finemapped.location.csv
 for line in `cat ${csvfile} | grep -v ^#`
 do
   gene=`echo ${line} |cut -d ',' -f 1`
-  java -jar rgenetics-1.0.jar -p VarLD /project2/xuanyao/marie/E-GEUV-1/finemap/YRI/${gene}.varLDgenotype.Yoruba.csv /project2/xuanyao/marie/E-GEUV-1/finemap/EUR/${gene}.varLDgenotype.EUR.csv -o varLD${gene}.txt
 done
 
 ```
@@ -279,6 +278,54 @@ module load boost/1.55
 ```{bash, eval = FALSE}
 ./PAINTOR -input input.files.ENSG00000160284.txt -in -Zhead ZSCORE.EUR,ZSCORE.YRI -LDname EUR.LD,YRI.LD -in /ENSG00000160284/ -out /ENSG00000160284/ -enumerate 3 -annotations dummy
 ```
+
+
+
+# Nov.15.2020
+# Extract PAINTOR result more than PIP 0.8 and genes with population-specific SUSIER SNPs
+
+```{bash, eval = FALSE}
+
+
+
+setwd("/project2/xuanyao/marie/E-GEUV-1/LDSC/PAINTOR_V3.0/")
+genelist=read.csv("/project2/xuanyao/marie/E-GEUV-1/LDSC/PAINTOR_V3.0/susieR.gene.diff.csv", stringsAsFactors = F)
+file <-paste("/project2/xuanyao/marie/E-GEUV-1/LDSC/PAINTOR_V3.0/files/",genelist[,"gene"], ".Paintor.results",sep="")
+
+
+paintor<- lapply(file, FUN=read.table, header = TRUE, stringsAsFactors = F)
+names(paintor) <- genelist[,"gene"]
+# get list of posterior probabilities
+posterior <- lapply(paintor, '[[',"Posterior_Prob")
+
+# define functions for convenience
+larger <- function(x,y){
+  x > y
+}
+getlist <- function(x,y){
+  x[y,]
+}
+put_name <- function(x,y){
+  if(nrow(x)!=0){
+    x['gene'] <- y
+    x
+  }
+}
+
+# subset elements with posterior probability > 0.8
+result <- mapply(getlist, paintor, lapply(posterior,larger, 0.8), SIMPLIFY=F) 
+result <- mapply(put_name, result, names(result), SIMPLIFY = F) # put gene name in dataframe
+
+#merge data frames
+result.dataframe = data.frame()
+for(i in 1:length(result)){
+  result.dataframe <- rbind(result.dataframe, result[[i]])
+}
+write.csv(result.dataframe, file = " Paintor.diffSNP.PIP80.csv")
+
+```
+
+
 
 
 # results
