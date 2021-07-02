@@ -22,7 +22,16 @@ To understand the trans-ethnic genetic architectures of gene expression of a sin
 I put the scripts just for desplaying and sharing purpose. I did not bring actural datasets and software on this page, so the commands are not executable on-demand here.
 
 
-### **Procedure**
+
+
+### **For the manuscript**
+*  [1. Data Cleatning and fastQTL](manuscript1.html)
+*  [2. Fine-mapping with SuSiE](manuscript2.html)
+ 
+ 
+ 
+ 
+### **Draft Procedure**
 * [1. Data Cleatning and fastQTL](prep.html)
 Obtain genotype and gene expression data, clean them and convert them to the fastQTL format and run the program on UChicago RCC system.
 * [2. Fine-mapping with SuSiE](susie.html)
