@@ -354,7 +354,7 @@ Alternatively, I will get permission of Yoav and will talk with IT team to give 
 
 
 # GCTA cvblup
-# https://cnsgenomics.com/software/gcta/#BLUP
+https://cnsgenomics.com/software/gcta/#BLUP
 ```{bash,eval = FALSE}
 module load plink
 export PATH="$PATH:/home/maries1/gcta_1.93.2beta"
@@ -383,4 +383,33 @@ plink --bfile test --score test.snp.blp 1 2 3
 # Comments
 - I am not sure how to interpret the output files. Can we go over the columns together?
 - In the previous GCTA analysis (genetic correletion), I userd a merged file of two populations' gene expression as two phenotypes. But in this time, there seem to be no results for two traits (it seems to be a result for one trait). Should I separate the input file into EUR and YRI?
+
+# MsCAVIAR on array
+```{bash,eval = FALSE}
+#!/bin/bash
+#SBATCH --job-name=MsCAVIAR_array.sbatch
+#SBATCH --output=arrayMsCAVIAR-%j-%a.out
+#SBATCH --error=MsCAVIAR_sbatch.err
+#SBATCH --time=36:00:00
+#SBATCH --partition=broadwl
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=2
+#SBATCH --mem-per-cpu=2000
+
+# 12.26.2020
+# sbatch --array=1-222 MsCAVIAR.array.slurm
+echo This is array job number $SLURM_ARRAY_TASK_ID
+
+# Read line number $SLURM_ARRAY_TASK_ID from an input file:
+gene=$(awk ' NR=='$SLURM_ARRAY_TASK_ID'' /project2/xuanyao/marie/E-GEUV-1/LDSC/PAINTOR_V3.0/files/both.and.diff.genes.csv | awk -F","  '{print $1}')
+echo Line number $SLURM_ARRAY_TASK_ID contains the gene ${gene}.
+/project2/xuanyao/marie/E-GEUV-1/MsCAVIAR/MsCAVIAR -l ${gene}.pruned.LD.txt -z ${gene}.pruned.zscores.txt -n 358,87 -o mscaviar/mscaviar_results_${gene}  -c 3 -f 1
+
+```
+
+```{bash,eval = FALSE}
+# summarize results
+
+
+```
 
