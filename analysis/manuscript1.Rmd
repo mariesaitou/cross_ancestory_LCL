@@ -1,0 +1,239 @@
+---
+title: "For the manuscript (1) Data Preparation"
+author: "Marie Saitou"
+date: "7/1/2021"
+output: html_document
+---
+
+![data preparation](assets/PR.7.2021/Slide2.png)
+
+
+# Prepare genotype data
+## Download the genotype dataset from the 1000 Genomes project phase 3
+```{bash, eval = FALSE}
+
+mkdir genotype
+wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr{1..22}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
+
+```
+
+
+## Clean the genotype files with vcftools
+```{bash, eval = FALSE}
+
+# keep the 455 individuals who are reported in both the 1000 Genome Project and Geuvadis
+module load vcftools
+for i in `seq 1 22`
+do
+   vcftools --gzvcf /genotype/phase3/ALL.chr$i.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz --keep 1000g.ind.sample.txt --recode --out /genotype/phase3/chr$i.1000gphase3.455 
+done
+
+# exclude rare (less than 0.01 frequency) variants 
+vcftools --vcf /genotype/phase3/chr$i.1000gphase3.455.recode.vcf --maf 0.01 --max-maf 0.99 --recode --out /genotype/phase3/chr$i.1000gphase3.455.0.01
+
+# keep only bi-allelic variants
+vcftools --vcf /genotype/phase3/chr$i.1000gphase3.455.0.01.recode.vcf --min-alleles 2 --max-alleles 2 --recode --out /genotype/phase3/chr$i.1000gphase3.455.0.01.biallelic
+Identify covariates (genetic and non-genetic)
+
+# Convert vcf file to plink format
+plink --vcf chr22.1000gphase3.455.0.01.recode.vcf --make-bed --out chr22.1000gphase3.455.0.01.recode.bed
+
+# Run pca
+plink --bfile chr22.1000gphase3.455.0.01.recode.bed --pca --out
+
+# Plot pca
+library(ggplot2)
+ggplot(data=pca, aes(V3,V4)) + geom_point()
+
+```
+
+
+
+
+# Gene expression data
+## Gene expression quantification with Kallisto
+```{r, eval = FALSE}
+
+
+# Download the fastq dataset from the Geuvadis project
+# sample information https://www.ebi.ac.uk/arrayexpress/files/E-GEUV-1/
+# fastq files ftp://ftp.sra.ebi.ac.uk/vol1/fastq/
+ 
+
+#Kallisto - make index files
+
+module load kallisto
+wget ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.cdna.all.fa.gz
+gunzip Homo_sapiens.GRCh37.cdna.all.fa.gz
+kallisto index -i human.GRCh37.cdna.all.idx Homo_sapiens.GRCh37.cdna.all.fa
+
+wget https://github.com/pachterlab/kallisto-transcriptome-indices/releases/download/ensembl-96/homo_sapiens.tar.gz
+gunzip Homo_sapiens
+homo_sapiens/transcriptome.idx
+Gene expression quantification for all samples with Kallisto
+
+module load kallisto
+csvfile=sample.filelist.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  file=`echo ${line} | cut -d ',' -f 5`
+  kallisto quant -i human.GRCh37.cdna.all.idx -o kallisto/${file}.kallistoOut -n 100 -t 32 fastq/${file}.1.fastq fastq/${file}.2.fastq
+done
+
+```
+
+## Generate "sample - gene expression" matrix file
+```{r, eval = FALSE}
+
+library(tximport)
+library(biomaRt)
+update.packages()
+install.packages("rlang")
+
+## convert transcripts into genes
+mart <- useDataset("hsapiens_gene_ensembl", useMart("ensembl", host="grch37.ensembl.org"))
+df <- read.table("kallisto/HG00096.kallisto/abundance.tsv", header = TRUE,sep = "\t")
+genes <- df$target_id
+
+G_list <- getBM(filters= "ensembl_transcript_id_version", attributes=c('ensembl_transcript_id_version','ensembl_gene_id'),mart= mart,values=genes)
+head(G_list)
+write.csv(G_list, file = "transcripts.to.genes2.csv", append = FALSE, quote = FALSE, sep = ",",
+          eol = "\n", na = "NA", dec = ".", row.names = FALSE,
+          col.names = FALSE, qmethod = "double",
+          fileEncoding = "")
+
+
+
+# summarize (gene expression) data from each individual
+samples <-read.csv("1000g.EUR.sample.csv",header=TRUE)
+files <- file.path(dir, "kallisto", samples$kallisto, "abundance.tsv")
+names(files) <- paste0(samples$X)
+all(file.exists(files))
+txi <- tximport(files, type = "kallisto", tx2gene = tx2gene, txOut = FALSE, ignoreAfterBar = TRUE)
+
+write.table(txi$counts,sep="\t", file = "EUR.counts.tsv")
+write.table(txi$abundance,sep="\t", file = "EUR.CPM.tsv")
+```
+
+## Add gene annotations to the gene expression matrix file
+```{r, eval = FALSE}
+
+library('biomaRt')
+mart <- useDataset("hsapiens_gene_ensembl", useMart("ensembl", host="grch37.ensembl.org"))
+df <- read.csv(file.choose(), header = T, sep = ",") 
+gene <- df$gene
+G_list <- getBM(filters= "ensembl_gene_id", attributes=c('ensembl_gene_id', 'hgnc_symbol','description','chromosome_name','start_position','end_position'),mart= mart,values=gene)
+G_list2<-merge(df,G_list,by.x="gene",by.y="ensembl_gene_id",all.x=T)
+write.csv(G_list2, file = "EUR.gene.TPM.csv")
+
+
+```
+
+
+![fastQTL](assets/PR.7.2021/Slide3.png)
+
+# fastQTL
+```{r, eval = FALSE}
+# prepare input bed.gz and index files
+module load bedtools
+bedtools sort -i British.gene.TPM.bed -header > British.gene.TPM.sorted.bed
+bgzip British.gene.TPM.sorted.bed && tabix -p bed British.gene.TPM.sorted.bed.gz
+
+
+# prepare input vcf.gz and index files
+module load htslib 
+module load tabix
+for i in `seq 1 22`
+do
+    bgzip genotype/phase3/chr$i.1000gphase3.Yoruba.0.01.biallelic.recode.vcf  && tabix -p vcf genotype/phase3/chr$i.1000gphase3.Yoruba.0.01.biallelic.recode.vcf.gz
+done
+
+for i in `seq 1 22`
+do
+    bgzip genotype/phase3/chr$i.1000gphase3.EUR.0.01.biallelic.recode.vcf  && tabix -p vcf genotype/phase3/chr$i.1000gphase3.EUR.0.01.biallelic.recode.vcf.gz
+done
+
+# run fastQTL
+## https://github.com/francois-a/fastqtl
+
+
+for i in `seq 1 22`
+do
+  ./bin/fastQTL.static fastQTL --vcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr$i.1000gphase3.EUR.0.01.biallelic.recode.vcf.gz --bed GEUV/EUR.gene.TPM.sorted.bed.gz --region $i:1-249250621  --threshold 0.001 --permute 1000 --out GEUV/EUR.chr$i.permute.0.001.txt --cov GEUV/EUR.cov.txt --normal
+done
+
+
+for i in `seq 1 22`
+do
+  ./bin/fastQTL.static fastQTL --vcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr$i.1000gphase3.Yoruba.0.01.biallelic.recode.vcf.gz --bed GEUV/Yoruba.gene.TPM.sorted.bed.gz --region $i:1-249250621  --threshold 0.001 --permute 1000 --out GEUV/Yoruba.chr$i.permute.0.001.txt --cov GEUV/Yoruba.cov.txt --normal
+done
+
+
+```
+
+## cleaning and formatting the eQTL result
+```{r, eval = FALSE}
+setwd("/project2/xuanyao/marie/E-GEUV-1")
+library(ggplot2)
+library("ggrepel")
+library("plyr")
+library(gplots)
+library(reshape2)
+
+
+## remove multi-allelic SNPs reported as bi-allelic SNPs which confuse the result
+EUR1<-subset(EUR2, 
+               EUR2$gene.SNP!="ENSG00000188659.rs542232278"&
+               EUR2$gene.SNP!="ENSG00000255769.rs145926341"&
+               EUR2$gene.SNP!="ENSG00000255769.rs371891811"&
+               EUR2$gene.SNP!="ENSG00000259328.rs145926341"&
+               EUR2$gene.SNP!="ENSG00000259323.rs145926341"&
+               EUR2$gene.SNP!="ENSG00000259472.rs145926341"&
+               EUR2$gene.SNP!="ENSG00000103942.rs1610794"&
+               EUR2$gene.SNP!="ENSG00000103342.rs140839133"&
+               EUR2$gene.SNP!="ENSG00000159202.rs77094622"&
+               EUR2$gene.SNP!="ENSG00000189050.rs112549034"&
+               EUR2$gene.SNP!="ENSG00000108592.rs138776605"&
+               EUR2$gene.SNP!="ENSG00000256771.rs10650867"&
+               EUR2$gene.SNP!="ENSG00000134330.rs139337028"&
+               EUR2$gene.SNP!="ENSG00000125991.rs139252705"&
+               EUR2$gene.SNP!="ENSG00000214078.rs142898689"&               
+               EUR2$gene.SNP!="ENSG00000087586.rs5842156"&
+               EUR2$gene.SNP!="ENSG00000171522.rs139036988"&
+               EUR2$gene.SNP!="ENSG00000196284.rs112143344"&
+               EUR2$gene.SNP!="ENSG00000135316.rs71553453"&
+               EUR2$gene.SNP!="ENSG00000232559.rs377632592"&
+               EUR2$gene.SNP!="ENSG00000131558.rs141161799"&
+               EUR2$gene.SNP!="ENSG00000162441.rs36126617"&
+               EUR2$gene.SNP!="ENSG00000162441.rs151178549"&
+               EUR2$gene.SNP!="ENSG00000142794.rs35506192"&
+               EUR2$gene.SNP!="ENSG00000142794.rs145038894"&
+               EUR2$gene.SNP!="ENSG00000116128.rs10657777"&
+               EUR2$gene.SNP!="ENSG00000117280.rs149256505"&
+               EUR2$gene.SNP!="ENSG00000107719.rs138584752"&
+               EUR2$gene.SNP!="ENSG00000198561.rs142865693"&
+               EUR2$gene.SNP!="ENSG00000087365.rs5792377"&
+               EUR2$gene.SNP!="ENSG00000162341.rs111786372"&
+               EUR2$gene.SNP!="ENSG00000110092.rs59333593"&
+               EUR2$gene.SNP!="ENSG00000111215.rs61604574"&
+               EUR2$gene.SNP!="ENSG00000165502.rs141634854"&
+               EUR2$gene.SNP!="ENSG00000104093.rs138911097")
+
+
+YRI1<-subset(YRI2, YRI2$gene.SNP!="ENSG00000143106.rs545041240"&
+               YRI2$gene.SNP!="ENSG00000078403.rs528760884"&
+               YRI2$gene.SNP!="ENSG00000167996.rs150035626"&
+               YRI2$gene.SNP!="ENSG00000111252.rs367797687"&
+               YRI2$gene.SNP!="ENSG00000172458.rs112879834"&
+               YRI2$gene.SNP!="ENSG00000183044.rs367630500"& 
+               YRI2$gene.SNP!="ENSG00000154874.rs138555657"&
+               YRI2$gene.SNP!="ENSG00000011132.rs71166969"&
+               YRI2$gene.SNP!="ENSG00000125991.rs142898689"&
+               YRI2$gene.SNP!="ENSG00000198832.rs35065681"&
+               YRI2$gene.SNP!="ENSG00000128268.rs142897975"&
+               YRI2$gene.SNP!="ENSG00000161013.rs71591436"&
+               YRI2$gene.SNP!="ENSG00000170727.rs60257564")
+```
+
+
+

@@ -1,7 +1,7 @@
 ---
-title: "SuSiE"
+title: "For the manuscript (2) Fine-mapping"
 author: "mariesaitou"
-date: "2020-08-13"
+date: "2021-07-02"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
@@ -10,7 +10,12 @@ editor_options:
 
 ##########################
 
-# Cut the 100 up/downstream regions from the genotype file
+![Fine-mapping with SuSiER](assets/PR.7.2021/Slide4.png)
+
+#  population separated analysis
+
+## Cut the 100k up/downstream regions from the genotype file
+
 ```{bash, eval = FALSE}
 module load vcftools
 module load htslib 
@@ -28,9 +33,9 @@ done
 ```
 
 
-# run SuSiE
+## run SuSiE
+
 ```{r, eval = FALSE}
-# 12419 genes are too many to run at once. Separate the gene list into small lists.
 
 library(susieR)
 library(data.table)
@@ -99,8 +104,18 @@ result.Yoruba<-result.Yoruba %>% as.data.frame() %>% mutate(gene.SNP = paste(!!!
 write.csv(result.Yoruba, file = "result.Yoruba.csv")
 ```
 
-# 2 populations merged analysis
-# Cut the 100 up/downstream regions from the genotype file
+
+## Result
+
+![population-separated analysis](assets/PR.7.2021/Slide5.png)
+![population-separated analysis](assets/PR.7.2021/Slide6.png)
+![population-separated analysis](assets/PR.7.2021/Slide7.png)
+
+
+# population merged analysis
+
+## Cut the 100k up/downstream regions from the genotype file
+
 ```{bash, eval = FALSE}
 module load vcftools
 module load htslib 
@@ -117,9 +132,9 @@ done
 
 ```
 
-# run SuSiE
+## run SuSiE
+
 ```{r, eval = FALSE}
-# 12419 genes are too many to run at once. Separate the gene list into small lists.
 
 library(susieR)
 library(data.table)
@@ -210,4 +225,7 @@ result<-result %>% as.data.frame() %>% mutate(gene.SNP = paste(!!!rlang::syms(c(
 write.csv(result, file = "susieR.bothpopsPIP.csv", append = T)
 
 ```
-########
+
+
+## Result
+![population-merged analysis](assets/PR.7.2021/Slide8.png)
