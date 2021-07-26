@@ -1,0 +1,141 @@
+---
+title: "For the manuscript (3) varLD"
+author: "mariesaitou"
+date: "2021-07-26"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+##########################
+
+![varLD](assets/PR.7.2021/Slide10.png)
+
+
+## Cut the 100k up/downstream regions from the genotype file (same as the SusieR preparation)
+
+```{bash, eval = FALSE}
+module load vcftools
+module load htslib 
+csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/genelist.location1.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} | cut -d ',' -f 1`
+  chr=`echo ${line} | cut -d ',' -f 3`
+  up=`echo ${line} | cut -d ',' -f 6`
+  down=`echo ${line} | cut -d ',' -f 7`
+  vcftools --gzvcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr${chr}.1000gphase3.EUR.0.01.biallelic.recode.vcf.gz --chr ${chr} --from-bp ${up} --to-bp ${down} --recode --out ${gene}.EUR.genotype
+
+done
+
+```
+
+
+## run varLD (slurm)
+
+```{bash, eval = FALSE}
+#!/bin/bash
+#SBATCH --job-name=varLD_sbatch
+#SBATCH --output=varLD.%A_%a.out
+#SBATCH --error=varLD.%A_%a.err
+#SBATCH --time=12:00:00
+#SBATCH --partition=broadwl
+#SBATCH --ntasks=50
+#SBATCH --mem=3G
+
+module load vcftools
+module load htslib
+module load python
+module load java
+
+#sbatch varLD.slurm
+#cd /project2/xuanyao/marie/E-GEUV-1/LDSC/varLD
+
+#csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/genelist.location1.csv
+csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/varLD/result720/genelist.location2.csv
+for line in `cat ${csvfile} | grep -v ^#`
+
+do
+gene=`echo ${line} | cut -d ',' -f 1`
+srun --exclusive -N1 -n1 java -jar /project2/xuanyao/marie/E-GEUV-1/LDSC/varLD/rgenetics-1.0.jar -p VarLD /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.Yoruba.csv /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.EUR.csv -o /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/result720/varLD${gene}.L50.txt
+srun --exclusive -N1 -n1 java -jar /project2/xuanyao/marie/E-GEUV-1/LDSC/varLD/rgenetics-1.0.jar -p VarLD /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.Yoruba.csv /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.EUR.csv -n 200 -o /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/result720/varLD${gene}.L200.txt
+srun --exclusive -N1 -n1 java -jar /project2/xuanyao/marie/E-GEUV-1/LDSC/varLD/rgenetics-1.0.jar -p VarLD /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.Yoruba.csv /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.EUR.csv -n 1000 -o /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/result720/varLD${gene}.L1000.txt &
+
+done
+wait
+```
+
+
+
+
+## Number of genes 
+```{bash,, eval = FALSE}
+
+ ls *.L50.txt | wc -l
+12507
+ ls *.L200.txt | wc -l
+10742
+ls *.L1000.txt | wc -l
+80
+```
+
+
+## Visualization
+```{r, eval = FALSE}
+library(data.table)
+library(ggplot2)
+## read the gene list
+
+genelist <- read.csv("genelistsusie.csv", stringsAsFactors = F)
+
+## read a gene from the list
+filename50 <- paste("result720/varLD", genelist[,"gene"], ".L50.txt", sep="")
+varLD50 <- vector("list", length(filename50))
+for (i in 1:length(filename50)){
+  if (file.exists(filename50[i])){
+    # print("exist")
+    varLD50[[i]] <- read.table(filename50[i], header = T, stringsAsFactors = F)
+    varLD50[[i]]$category <- genelist[,"category"][i]
+    varLD50[[i]]$TSS <- genelist[,"TSS"][i]
+  }
+  names(varLD50)[i] <- genelist[, "gene"][i]
+}
+
+
+
+varLD50.df <- rbindlist(varLD50, fill=T, idcol = T) 
+
+# standardize
+varLD50.df$normalized_score <- scale(varLD50.df$raw_score)
+##
+
+#(1) varLD score density plot
+ggplot(varLD50.df,aes(x=normalized_score,color=category))+ geom_density()+ theme_bw()
+ggplot(varLD50.df,aes(y=normalized_score,x=category))+ geom_boxplot()+ theme_bw()
+
+
+
+#(2) varLD score and discante from TSS
+ggplot(data = varLD50.df) +geom_line(mapping = aes(x = (position-TSS), y = normalized_score))
+varLD50.both <-subset(varLD50.df, varLD50.df$category=="both")
+varLD50.diff <-subset(varLD50.df, varLD50.df$category=="both.diffSNP")
+
+ggplot(varLD50.df, aes(x=(position-TSS), y=normalized_score)) +
+  stat_summary(aes(x=as.numeric(position-TSS)), fun=mean, geom='line',
+               size=2)
+
+#smoothScatter(varLD50.both$position-varLD50.both$TSS,varLD50.both$normalized_score)    
+#smoothScatter(varLD50.diff$position-varLD50.diff$TSS,varLD50.diff$normalized_score)                            
+
+```
+
+
+## Result
+![L=50](assets/PR.7.2021/Slide11.png)
+
+![L=50](assets/PR.7.2021/Slide12.png)
+![L=200,L=1000](assets/PR.7.2021/Slide13.png)
+
+
+
