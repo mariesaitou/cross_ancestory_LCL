@@ -9,9 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="mariesaitou" />
 
+<meta name="date" content="2021-07-26" />
 
-<title>trans-ethnic eQTL project</title>
+<title>For the manuscript (3) varLD</title>
 
 <script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -20,6 +22,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -271,6 +276,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -278,6 +346,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -321,7 +399,9 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">trans-ethnic eQTL project</h1>
+<h1 class="title toc-ignore">For the manuscript (3) varLD</h1>
+<h4 class="author">mariesaitou</h4>
+<h4 class="date">2021-07-26</h4>
 
 </div>
 
@@ -349,7 +429,7 @@ $(document).ready(function () {
 <strong>Last updated:</strong> 2021-07-26
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>myproject/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -371,6 +451,66 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
 <p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200813code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200813)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200813code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200813)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
@@ -429,7 +569,7 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML (<code>docs/index.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/manuscript3.Rmd</code>) and HTML (<code>docs/manuscript3.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -458,7 +598,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/mariesaitou/myproject/blob/e301ca806da1a6b80f26a769734f8dce69dffd02/analysis/index.Rmd" target="_blank">e301ca8</a>
+<a href="https://github.com/mariesaitou/myproject/blob/62e570b99d4d7d6978ff7d55780b311e6c25b924/analysis/manuscript3.Rmd" target="_blank">62e570b</a>
 </td>
 <td>
 mariesaitou
@@ -467,721 +607,7 @@ mariesaitou
 2021-07-26
 </td>
 <td>
-Start workflowr project.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/d23b1beb8e50a7d5566a2c1dd1f4064f9456a9c0/docs/index.html" target="_blank">d23b1be</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2021-07-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/64421f6195b9c9ee98f59a1cbeddb2f0b1cfdb55/docs/index.html" target="_blank">64421f6</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2021-07-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/d2e1bc0f1441b1f6f69108242e3d96968cd1de7c/docs/index.html" target="_blank">d2e1bc0</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2021-07-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/2abb7f5482b35b04662bc938e761cf9592b2eac5/docs/index.html" target="_blank">2abb7f5</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2021-07-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/mariesaitou/myproject/blob/9ba9b6c32c5c3192b7a1435087cce62d6f3d4381/analysis/index.Rmd" target="_blank">9ba9b6c</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2021-07-02
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/34bf8fb0b0709f3756698e09ff54f6a04c09f180/docs/index.html" target="_blank">34bf8fb</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-12-26
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/7f1d2f2b2fc2304f561245e6199dbe53b2b2187b/docs/index.html" target="_blank">7f1d2f2</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-12-26
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/0abb1337da03baf72e7de52ed366f58609a9f7df/docs/index.html" target="_blank">0abb133</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-12-26
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/9eb5658da3e4826bd16c94a84257d8bf14ccdaf5/docs/index.html" target="_blank">9eb5658</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-12-25
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/mariesaitou/myproject/blob/2d454c28fedb36c8183278927dbd86862567c913/analysis/index.Rmd" target="_blank">2d454c2</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-12-25
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/43f4dae3a8c35a636d5c83d22d940f744e24da6e/docs/index.html" target="_blank">43f4dae</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-11-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/b8ee2955460ffef714af8309b675e7e5e45707bd/docs/index.html" target="_blank">b8ee295</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-11-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/mariesaitou/myproject/blob/55f0aa4f35b075f38d75fc57478cefced688a1d2/analysis/index.Rmd" target="_blank">55f0aa4</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-11-24
-</td>
-<td>
-Add my first analysis
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/218140e853b2823e98385f966a921d90d58811de/docs/index.html" target="_blank">218140e</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-11-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/2a01241221df9a4155fb338e0a15d0f27e377489/docs/index.html" target="_blank">2a01241</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-11-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/594a5693ab86b521412289b217d85eb7e13f6325/docs/index.html" target="_blank">594a569</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-11-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/mariesaitou/myproject/blob/22d4c4c4854667aaaf1b385e3d95ac9fc644ce84/analysis/index.Rmd" target="_blank">22d4c4c</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-11-24
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/98724569e7e29fc8dc3dee98298b839f1a69a261/docs/index.html" target="_blank">9872456</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-09-06
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/fc30af3cab217004a57a08c3089c7a1076d0ffdd/docs/index.html" target="_blank">fc30af3</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-09-06
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/f0b76bfd914ecedfc96ec3bbe61650e499889a70/docs/index.html" target="_blank">f0b76bf</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/dc5d62365e4befc94bd862580923d912bc9bb6b1/docs/index.html" target="_blank">dc5d623</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/6ab347ac997cc5e70fc6e7cc4836046dfdf55003/docs/index.html" target="_blank">6ab347a</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-wflow_git_commit(all = T)
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/70f87552038a1871478544516d021642b071ecca/docs/index.html" target="_blank">70f8755</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/147ba3e8b4f467cdd642ae29122de3271eac4f42/docs/index.html" target="_blank">147ba3e</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/b1b285d57703ac7a01a59bcc44050372f2a015f7/docs/index.html" target="_blank">b1b285d</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/2ba9baf32724d03d8612df8e4bf47ebb923f4dd0/docs/index.html" target="_blank">2ba9baf</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/31bf3faf7745ef8af91c43249a3a732bdf0f0c92/docs/index.html" target="_blank">31bf3fa</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/d55436d8ec7c90e6c2c3d233ee1fe3d81e22c723/docs/index.html" target="_blank">d55436d</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/d81e9a368b82ff59532766d6c1b9da41be524729/docs/index.html" target="_blank">d81e9a3</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/7c2b7b46cd403e6d48051c00e15f2349176ca720/docs/index.html" target="_blank">7c2b7b4</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/898542f5689a6975218e52512e2ed7f8145e122f/docs/index.html" target="_blank">898542f</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/1c78096f0c8dddd1809b15f78514045e227de7ad/docs/index.html" target="_blank">1c78096</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/6827874acb44295808dd767d164b1947f0ba9842/docs/index.html" target="_blank">6827874</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/3a2eead3edfc3e5cc4107c525c3914b89267d7a6/docs/index.html" target="_blank">3a2eead</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-17
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/mariesaitou/myproject/blob/eacb61cceb14b218a7daf842675eb1123379813b/analysis/index.Rmd" target="_blank">eacb61c</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-17
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/mariesaitou/myproject/blob/bbb8679bda124be14759f24560c61116ef4eb27a/analysis/index.Rmd" target="_blank">bbb8679</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-16
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/51c2d46ad1a7c207ee809123162e09512a604049/docs/index.html" target="_blank">51c2d46</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-13
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/3710ffb0b339640a1cec4f9a6030ac59b66d8b4b/docs/index.html" target="_blank">3710ffb</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-13
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/87d9b3965493b7f550909d50f55b52da9fd14c96/docs/index.html" target="_blank">87d9b39</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-13
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/a890ab87e3a6c32ab358cc8a2fba359bd2a2d739/docs/index.html" target="_blank">a890ab8</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-13
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/mariesaitou/myproject/dd423d4eb15021c8d58c37b6a6c469decbe1c89e/docs/index.html" target="_blank">dd423d4</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-13
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/mariesaitou/myproject/blob/57da9f88df2f12e5a5527cbdb4cc4a8b0c161a6f/analysis/index.Rmd" target="_blank">57da9f8</a>
-</td>
-<td>
-mariesaitou
-</td>
-<td>
-2020-08-13
-</td>
-<td>
-Start workflowr project.
+Publish the files for myproject
 </td>
 </tr>
 </tbody>
@@ -1191,39 +617,160 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<div id="trans-ethnic-eqtl-project" class="section level3">
-<h3><strong>Trans-ethnic eQTL project</strong></h3>
-<p>To understand the trans-ethnic genetic architectures of gene expression of a single cell type, which serves as a simplified model to understand trans-ethnic genetic architecture of complex traits.</p>
-<ul>
-<li>eQTL mapping with fastQTL and fine-mapping with SuSiE</li>
-<li>Downstream analysis with allele frequency, differencially expressed genes</li>
-<li>Genetic correlation analysis</li>
-<li>(ongoing) LD-based fine-mapping</li>
-</ul>
+<div id="section" class="section level26">
+<p class="heading"></p>
+<div class="figure">
+<img src="assets/PR.7.2021/Slide10.png" alt="" />
+<p class="caption">varLD</p>
 </div>
-<div id="note" class="section level3">
-<h3><strong>Note</strong></h3>
-<p>I put the scripts just for desplaying and sharing purpose. I did not bring actural datasets and software on this page, so the commands are not executable on-demand here.</p>
 </div>
-<div id="for-the-manuscript" class="section level3">
-<h3><strong>For the manuscript</strong></h3>
-<ul>
-<li><a href="manuscript1.html">1. Data Cleatning and fastQTL</a></li>
-<li><a href="manuscript2.html">2. Fine-mapping with SuSiE</a></li>
-<li><a href="manuscript3.html">3. varLD</a></li>
-</ul>
+<div id="cut-the-100k-updownstream-regions-from-the-genotype-file-same-as-the-susier-preparation" class="section level2">
+<h2>Cut the 100k up/downstream regions from the genotype file (same as the SusieR preparation)</h2>
+<pre class="bash"><code>module load vcftools
+module load htslib 
+csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/genelist.location1.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} | cut -d &#39;,&#39; -f 1`
+  chr=`echo ${line} | cut -d &#39;,&#39; -f 3`
+  up=`echo ${line} | cut -d &#39;,&#39; -f 6`
+  down=`echo ${line} | cut -d &#39;,&#39; -f 7`
+  vcftools --gzvcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr${chr}.1000gphase3.EUR.0.01.biallelic.recode.vcf.gz --chr ${chr} --from-bp ${up} --to-bp ${down} --recode --out ${gene}.EUR.genotype
+
+done
+</code></pre>
 </div>
-<div id="draft-procedure" class="section level3">
-<h3><strong>Draft Procedure</strong></h3>
-<ul>
-<li><a href="prep.html">1. Data Cleatning and fastQTL</a> Obtain genotype and gene expression data, clean them and convert them to the fastQTL format and run the program on UChicago RCC system.</li>
-<li><a href="susie.html">2. Fine-mapping with SuSiE</a></li>
-<li>[3. Downstream analysis]</li>
-<li><a href="correl.html">4. Genetic correlation analysis</a></li>
-<li><a href="varLD.html">5. LD-based fine-mapping</a></li>
-<li><a href="11.WIP.html">6. 11.WIP</a></li>
-<li><a href="12.20.WIP.html">7. (ongoing) 12.WIP</a></li>
-</ul>
+<div id="run-varld-slurm" class="section level2">
+<h2>run varLD (slurm)</h2>
+<pre class="bash"><code>#!/bin/bash
+#SBATCH --job-name=varLD_sbatch
+#SBATCH --output=varLD.%A_%a.out
+#SBATCH --error=varLD.%A_%a.err
+#SBATCH --time=12:00:00
+#SBATCH --partition=broadwl
+#SBATCH --ntasks=50
+#SBATCH --mem=3G
+
+module load vcftools
+module load htslib
+module load python
+module load java
+
+#sbatch varLD.slurm
+#cd /project2/xuanyao/marie/E-GEUV-1/LDSC/varLD
+
+#csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/genelist.location1.csv
+csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/varLD/result720/genelist.location2.csv
+for line in `cat ${csvfile} | grep -v ^#`
+
+do
+gene=`echo ${line} | cut -d &#39;,&#39; -f 1`
+srun --exclusive -N1 -n1 java -jar /project2/xuanyao/marie/E-GEUV-1/LDSC/varLD/rgenetics-1.0.jar -p VarLD /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.Yoruba.csv /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.EUR.csv -o /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/result720/varLD${gene}.L50.txt
+srun --exclusive -N1 -n1 java -jar /project2/xuanyao/marie/E-GEUV-1/LDSC/varLD/rgenetics-1.0.jar -p VarLD /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.Yoruba.csv /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.EUR.csv -n 200 -o /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/result720/varLD${gene}.L200.txt
+srun --exclusive -N1 -n1 java -jar /project2/xuanyao/marie/E-GEUV-1/LDSC/varLD/rgenetics-1.0.jar -p VarLD /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.Yoruba.csv /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.EUR.csv -n 1000 -o /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/result720/varLD${gene}.L1000.txt &amp;
+
+done
+wait</code></pre>
+</div>
+<div id="number-of-genes" class="section level2">
+<h2>Number of genes</h2>
+<pre class="bash"><code>
+ ls *.L50.txt | wc -l
+12507
+ ls *.L200.txt | wc -l
+10742
+ls *.L1000.txt | wc -l
+80</code></pre>
+</div>
+<div id="visualization" class="section level2">
+<h2>Visualization</h2>
+<pre class="r"><code>library(data.table)
+library(ggplot2)
+## read the gene list
+
+genelist &lt;- read.csv(&quot;genelistsusie.csv&quot;, stringsAsFactors = F)
+
+## read a gene from the list
+filename50 &lt;- paste(&quot;result720/varLD&quot;, genelist[,&quot;gene&quot;], &quot;.L50.txt&quot;, sep=&quot;&quot;)
+varLD50 &lt;- vector(&quot;list&quot;, length(filename50))
+for (i in 1:length(filename50)){
+  if (file.exists(filename50[i])){
+    # print(&quot;exist&quot;)
+    varLD50[[i]] &lt;- read.table(filename50[i], header = T, stringsAsFactors = F)
+    varLD50[[i]]$category &lt;- genelist[,&quot;category&quot;][i]
+    varLD50[[i]]$TSS &lt;- genelist[,&quot;TSS&quot;][i]
+  }
+  names(varLD50)[i] &lt;- genelist[, &quot;gene&quot;][i]
+}
+
+
+
+varLD50.df &lt;- rbindlist(varLD50, fill=T, idcol = T) 
+
+# standardize
+varLD50.df$normalized_score &lt;- scale(varLD50.df$raw_score)
+##
+
+#(1) varLD score density plot
+ggplot(varLD50.df,aes(x=normalized_score,color=category))+ geom_density()+ theme_bw()
+ggplot(varLD50.df,aes(y=normalized_score,x=category))+ geom_boxplot()+ theme_bw()
+
+
+
+#(2) varLD score and discante from TSS
+ggplot(data = varLD50.df) +geom_line(mapping = aes(x = (position-TSS), y = normalized_score))
+varLD50.both &lt;-subset(varLD50.df, varLD50.df$category==&quot;both&quot;)
+varLD50.diff &lt;-subset(varLD50.df, varLD50.df$category==&quot;both.diffSNP&quot;)
+
+ggplot(varLD50.df, aes(x=(position-TSS), y=normalized_score)) +
+  stat_summary(aes(x=as.numeric(position-TSS)), fun=mean, geom=&#39;line&#39;,
+               size=2)
+
+#smoothScatter(varLD50.both$position-varLD50.both$TSS,varLD50.both$normalized_score)    
+#smoothScatter(varLD50.diff$position-varLD50.diff$TSS,varLD50.diff$normalized_score)                            </code></pre>
+</div>
+<div id="result" class="section level2">
+<h2>Result</h2>
+<div class="figure">
+<img src="assets/PR.7.2021/Slide11.png" alt="" />
+<p class="caption">L=50</p>
+</div>
+<p><img src="assets/PR.7.2021/Slide12.png" alt="L=50" /> <img src="assets/PR.7.2021/Slide13.png" alt="L=200,L=1000" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.2 (2020-06-22)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS  10.16
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.6        whisker_0.4       knitr_1.31        magrittr_2.0.1   
+ [5] R6_2.5.0          rlang_0.4.10      fansi_0.4.2       stringr_1.4.0    
+ [9] tools_4.0.2       xfun_0.21         utf8_1.2.1        git2r_0.28.0     
+[13] htmltools_0.5.1.1 ellipsis_0.3.1    rprojroot_2.0.2   yaml_2.2.1       
+[17] digest_0.6.27     tibble_3.1.1      lifecycle_1.0.0   crayon_1.4.1     
+[21] later_1.2.0       vctrs_0.3.7       promises_1.2.0.1  fs_1.5.0         
+[25] glue_1.4.2        evaluate_0.14     rmarkdown_2.6     stringi_1.5.3    
+[29] compiler_4.0.2    pillar_1.6.0      httpuv_1.6.0      pkgconfig_2.0.3  </code></pre>
+</div>
 </div>
 
 
@@ -1242,6 +789,8 @@ footer is added to webpages before the MathJax javascript. -->
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -1274,6 +823,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
