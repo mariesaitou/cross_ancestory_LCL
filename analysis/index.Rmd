@@ -27,7 +27,7 @@ I put the scripts just for desplaying and sharing purpose. I did not bring actur
 ### **For the manuscript**
 *  [1. Data Cleatning and fastQTL](manuscript1.html)
 *  [2. Fine-mapping with SuSiE](manuscript2.html)
- 
+*  [3. varLD](manuscript3.html)
  
  
  
