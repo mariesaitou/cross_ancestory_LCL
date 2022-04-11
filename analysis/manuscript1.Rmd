@@ -5,10 +5,8 @@ date: "7/1/2021"
 output: html_document
 ---
 
-![data preparation](assets/PR.7.2021/Slide2.png)
 
-
-# Prepare genotype data
+# Genotype Dataset
 ## Download the genotype dataset from the 1000 Genomes project phase 3
 ```{bash, eval = FALSE}
 
@@ -20,7 +18,6 @@ wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr{1..22}.ph
 
 ## Clean the genotype files with vcftools
 ```{bash, eval = FALSE}
-
 # keep the 455 individuals who are reported in both the 1000 Genome Project and Geuvadis
 module load vcftools
 for i in `seq 1 22`
@@ -40,28 +37,40 @@ plink --vcf chr22.1000gphase3.455.0.01.recode.vcf --make-bed --out chr22.1000gph
 
 # Run pca
 plink --bfile chr22.1000gphase3.455.0.01.recode.bed --pca --out
+```
 
+
+```{bash, eval = FALSE}
 # Plot pca
 library(ggplot2)
 ggplot(data=pca, aes(V3,V4)) + geom_point()
-
 ```
 
 
 
-
-# Gene expression data
+# Gene Expression Dataset
 ## Gene expression quantification with Kallisto
 ```{r, eval = FALSE}
-
-
 # Download the fastq dataset from the Geuvadis project
 # sample information https://www.ebi.ac.uk/arrayexpress/files/E-GEUV-1/
 # fastq files ftp://ftp.sra.ebi.ac.uk/vol1/fastq/
  
+csvfile=getfastq.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  url=`echo ${line} | cut -d ',' -f 2`
+  wget ${url}
+done
 
-#Kallisto - make index files
+#FastQC - quality check
 
+module load fastqc
+fastqc *.fastq.gz -o /fastqc_out/
+
+module load multiqc
+multiqc . -f
+
+#Kallisto - make index files - pseudomapping
 module load kallisto
 wget ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.cdna.all.fa.gz
 gunzip Homo_sapiens.GRCh37.cdna.all.fa.gz
@@ -69,20 +78,21 @@ kallisto index -i human.GRCh37.cdna.all.idx Homo_sapiens.GRCh37.cdna.all.fa
 
 wget https://github.com/pachterlab/kallisto-transcriptome-indices/releases/download/ensembl-96/homo_sapiens.tar.gz
 gunzip Homo_sapiens
-homo_sapiens/transcriptome.idx
-Gene expression quantification for all samples with Kallisto
+# homo_sapiens/transcriptome.idx
+# Gene expression quantification for all samples with Kallisto
 
 module load kallisto
-csvfile=sample.filelist.csv
+csvfile=1000g.sample.csv
 for line in `cat ${csvfile} | grep -v ^#`
 do
-  file=`echo ${line} | cut -d ',' -f 5`
-  kallisto quant -i human.GRCh37.cdna.all.idx -o kallisto/${file}.kallistoOut -n 100 -t 32 fastq/${file}.1.fastq fastq/${file}.2.fastq
+  file=`echo ${line} | cut -d ',' -f 1`
+  kallisto quant -i human.GRCh37.cdna.all.idx -o kallisto/${file}.kallisto -n 100 -t 32 fastq2/${file}.1.fastq.gz fastq2/${file}.2.fastq.gz
 done
+
 
 ```
 
-## Generate "sample - gene expression" matrix file
+## Generate "sample - gene expression" matrix file from the kallisto output
 ```{r, eval = FALSE}
 
 library(tximport)
@@ -103,7 +113,6 @@ write.csv(G_list, file = "transcripts.to.genes2.csv", append = FALSE, quote = FA
           fileEncoding = "")
 
 
-
 # summarize (gene expression) data from each individual
 samples <-read.csv("1000g.EUR.sample.csv",header=TRUE)
 files <- file.path(dir, "kallisto", samples$kallisto, "abundance.tsv")
@@ -111,8 +120,8 @@ names(files) <- paste0(samples$X)
 all(file.exists(files))
 txi <- tximport(files, type = "kallisto", tx2gene = tx2gene, txOut = FALSE, ignoreAfterBar = TRUE)
 
-write.table(txi$counts,sep="\t", file = "EUR.counts.tsv")
-write.table(txi$abundance,sep="\t", file = "EUR.CPM.tsv")
+write.table(txi$est_counts,sep="\t", file = "EUR.counts.tsv")
+write.table(txi$tpm,sep="\t", file = "EUR.TPM.tsv")
 ```
 
 ## Add gene annotations to the gene expression matrix file
@@ -127,12 +136,92 @@ G_list2<-merge(df,G_list,by.x="gene",by.y="ensembl_gene_id",all.x=T)
 write.csv(G_list2, file = "EUR.gene.TPM.csv")
 
 
+## only genes with CPM (counts per million)>0.5 in more than half of the total samples 
+## are kept for further analysis to avoid false positives in the eQTL
+d1  <- read.table("EUR.counts.tsv", header = T,row.names=1,sep = "\t")
+d1_scaled <- apply(d1, 2, function(x){x/sum(x)*1000000})
+d1_cleaned<-d1_scaled[rowSums(d1_scaled > 0.5) > length(d1[1,])/2, ]
+
+write.csv(d1_cleaned, file = "EUR.CPM.survived.csv")
+
+```
+
+## Scale the gene expression matrix
+```{r, eval = FALSE}
+matall<-read.table(file = 'Yoruba.TPM.filtered.tsv', sep = '\t', header = T,row.names=1)
+matall<-as.matrix(matall,row.names=1,header=T)
+head(matall)
+matfilter <- matall[rowSums(matall) > 90,]
+hist(mat[,1])
+hist(mat[1,],breaks=20)
+mat<-normalize.quantiles(matfilter)
+mat<-scale (mat)
+tmat<-t(mat)
+stmat<-scale (tmat)
+mat1<-t(stmat)
+head(mat1)
+hist(mat1[,1])
+hist(mat1[1,],breaks=40)
+class(mat)
+colnames(mat)<-matal
+write.csv(mat1, file = "Yoruba.TPM.scaled.csv")
 ```
 
 
-![fastQTL](assets/PR.7.2021/Slide3.png)
+## Identify genetic covariates
+```{bash, eval = FALSE}
+# Convert vcf file to plink format
+plink --vcf chr22.1000gphase3.455.0.01.recode.vcf --make-bed --out chr22.1000gphase3.455.0.01.recode.bed
 
-# fastQTL
+# Run pca
+plink --bfile chr22.1000gphase3.455.0.01.recode.bed --pca --out
+
+# Plot pca
+library(ggplot2)
+ggplot(data=pca, aes(V3,V4)) + geom_point()
+
+```
+
+## Identify sarrogate variales
+```{r, eval = FALSE}
+#  surrogate variable analysis
+library(sva)
+mm <- model.matrix(~ population, colData(ddsTxi))
+mm0 <- model.matrix(~ 1, colData(ddsTxi))
+norm.cts <- norm.cts[rowSums(norm.cts) > 10,]
+fit <- svaseq(norm.cts, mod=mm, mod0=mm0)
+# 50 SVs are found. I use 7 SVs
+sva7 = sva(norm.cts , mm, mm0, n.sv=7)
+write.csv(sva7$sv[,1:7], file = "sva7.csv")
+```
+
+# Differentially Expressed Gene Analysis
+```{r, eval = FALSE}
+library("DESeq2")
+colData <-read.csv("1000g.sample.csv",header = T,row.names=1)
+class(colData$date)
+colData$date1<-factor(colData$date)
+
+
+ddsTxi <- DESeqDataSetFromTximport(txi,
+                                   colData = colData,
+                                   design = ~ sex+population+performer)
+
+colData <-read.csv("1000g.EUR.YRI.csv",header = T,row.names=1)
+
+ddsEurYri <- DESeqDataSetFromTximport(txi,
+                                   colData = colData,
+                                   design = ~ sex+population+V1+V2+V3+V4+V5+V6+V7)
+
+keep <- rowsum(counds(ddsEurYri)) >=455
+ddsEurYri <- ddsEurYri[keep,]
+ddsEY<-DESeq(ddsEurYri)
+deg <- results(ddsEY, contrast=c("population","EUR","Yoruba"))
+write.csv(deg, file = "E-GEUV_EUR_Yoruba.csv")
+```
+
+
+# Cis-eQTL Mapping Analysis
 ```{r, eval = FALSE}
 # prepare input bed.gz and index files
 module load bedtools

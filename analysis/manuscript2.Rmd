@@ -10,12 +10,8 @@ editor_options:
 
 ##########################
 
-![Fine-mapping with SuSiER](assets/PR.7.2021/Slide4.png)
-
-#  population separated analysis
-
+# Fine Mapping
 ## Cut the 100k up/downstream regions from the genotype file
-
 ```{bash, eval = FALSE}
 module load vcftools
 module load htslib 
@@ -33,199 +29,249 @@ done
 ```
 
 
-## run SuSiE
-
+## run SuSiER
 ```{r, eval = FALSE}
 
+setwd("/project2/xuanyao/marie/E-GEUV-1/finemap")
 library(susieR)
 library(data.table)
-## read the gene list
-#genelist=read.csv("genelist.test.csv", stringsAsFactors = F)
-genelist=read.csv("gene.Yoruba.csv", stringsAsFactors = F)
-#gene.expression.Africa = read.table("Yoruba.TPM.scaled.gene.bed")
-gene.expression.Yoruba = fread("Yoruba.TPM.scaled.gene.bed.gz")
+genelist <- read.csv("YRI.eGenes.csv", stringsAsFactors = F)
+gene.expression.YRI <- fread("/project2/xuanyao/marie/E-GEUV-1/FastQTL/GEUV/Yoruba.TPM.scaled.gene.csv")
+
 
 ## read a gene from the list
-filenameYoruba<-paste(genelist[,"gene"], ".Yoruba.genotype.recode.vcf", sep="")
-genotype.Yoruba<- lapply(filenameYoruba, FUN=read.table, header = FALSE, stringsAsFactors = F)
-names(genotype.Yoruba) <- genelist[,"gene"]
-genotype.Yoruba.df <- rbindlist(genotype.Yoruba, fill=T, idcol = T)
-genotype.Yoruba.df<-genotype.Yoruba.df[!duplicated(genotype.Yoruba.df[,c(".id","V3" )])&!duplicated(genotype.Yoruba.df[,c(".id","V3" )], fromLast = T),]
+filenameYRI<-paste("YRI/",genelist[,"gene"], ".Yoruba.genotype.recode.vcf", sep="")
+genotype.YRI<- lapply(filenameYRI, FUN=read.table, header = FALSE, stringsAsFactors = F)
+names(genotype.YRI) <- genelist[,"gene"]
+genotype.YRI.df <- rbindlist(genotype.YRI, fill=T, idcol = T)
+genotype.YRI.df<-genotype.YRI.df[!duplicated(genotype.YRI.df[,c(".id","V3" )])&!duplicated(genotype.YRI.df[,c(".id","V3" )], fromLast = T),]
 
 
-## convert vcf format as input dataset
-
-genotype.Yoruba.data <- genotype.Yoruba.df[,11:length(genotype.Yoruba.df[1,])] 
-
-genotype.Yoruba.data[genotype.Yoruba.data=="0|0"]<- 0L
-genotype.Yoruba.data[genotype.Yoruba.data=="0|1"]<- 1L
-genotype.Yoruba.data[genotype.Yoruba.data=="1|0"]<- 1L
-genotype.Yoruba.data[genotype.Yoruba.data=="1|1"]<- 2L
-genotype.Yoruba.data1<- as.matrix(genotype.Yoruba.data)
-genotype.Yoruba.data<- matrix(as.numeric(genotype.Yoruba.data1), nrow = nrow(genotype.Yoruba.data))
-
-## scale the genotypes
-scale.gen.Yoruba <- scale(t(genotype.Yoruba.data))
-#hist(scale.gen.Yoruba[,20])
-
-## extract genes from the gene expression list
-test.expression.Yoruba <- gene.expression.Yoruba[unlist(lapply(genelist$gene, grep, gene.expression.Yoruba$ID)),]
-expression.Yoruba <- t(test.expression.Yoruba[,-(1:4)])
-
-## susieR
-fitted.test.Yoruba <- as.list(NULL)
-for(i in 1:12419){
-  fitted.test.Yoruba[[i]] <-   susie(scale.gen.Yoruba[,(genotype.Yoruba.df$.id==genelist$gene[i])], expression.Yoruba[,i],
-                                     L = 10,
-                                     estimate_residual_variance = TRUE, 
-                                     estimate_prior_variance = FALSE,
-                                     scaled_prior_variance = 0.95,
-                                     verbose = TRUE)
+## remove the rows with all 0|0 or 1|1 (V10:ncol(genotype.YRI.df))
+## remove the rows with all 0|1 or 1|0 (V10:ncol(genotype.YRI.df))
+allsame <- function(vector){
+  length(unique(unlist(vector[11:ncol(genotype.YRI.df)]))) == 1
+}
+all0110 <- function(vector){
+  len <- length(unlist(vector[11:ncol(genotype.YRI.df)]))
+  sum(unlist(vector[11:ncol(genotype.YRI.df)]) %in% c("0|1", "1|0")) == len
 }
 
-fitted.test.Yoruba[[4]]$sets$cs
-## attach gene names to the result
-fitted.Yoruba <-  as.list(NULL)
-for(i in 1:12419){
-  if(length(fitted.test.Yoruba[[i]]$sets$cs)!=0){
-    fitted.Yoruba[[i]] <- stack(fitted.test.Yoruba[[i]]$sets$cs)
+genotype.YRI.poly <- genotype.YRI.df[!(apply(genotype.YRI.df, 1, allsame) | apply(genotype.YRI.df, 1, all0110)), ]
+
+## convert the vcf format as input dataset for SuSIE
+genotype.YRI.data <- genotype.YRI.poly[,11:length(genotype.YRI.poly[1,])] 
+
+
+genotype.YRI.data[genotype.YRI.data=="0|0"]<- 0L
+genotype.YRI.data[genotype.YRI.data=="0|1"]<- 1L
+genotype.YRI.data[genotype.YRI.data=="1|0"]<- 1L
+genotype.YRI.data[genotype.YRI.data=="1|1"]<- 2L
+genotype.YRI.data1<- as.matrix(genotype.YRI.data)
+genotype.YRI.data<- matrix(as.numeric(genotype.YRI.data1), nrow = nrow(genotype.YRI.data))
+
+
+## Scale the genotypes
+scale.gen.YRI <- scale(t(genotype.YRI.data))
+scale.gen.YRI.matrix <- matrix(scale.gen.YRI, ncol = 87, byrow = TRUE)
+
+
+
+## Extract genes from the gene expression list
+test.expression.YRI <- gene.expression.YRI[unlist(lapply(genelist$gene, grep, gene.expression.YRI$ID)),]
+expression.YRI <- t(test.expression.YRI[,-(1:4)])
+
+## Covariates
+Zmat = read.table("Yoruba.cov.txt",stringsAsFactors = F)
+Zmat.t <- t(Zmat[-(1),-(1)])
+Zmat.t <-as.numeric(Zmat.t)
+Zmat1<-matrix(as.numeric(Zmat.t), nrow=87)
+
+covtest<-  as.list(NULL)
+for(i in 1:nrow(genelist)){
+  y=expression.YRI[,i]
+  y.res = residuals(lm(y~Zmat1, na.action=na.exclude))
+  covtest[[i]] <- stack(y.res)
+}
+
+
+## Make a list for susieR  
+fitted.test.YRI <- as.list(NULL)
+
+## Run SucieR ... Parameters are changeable
+  for(i in 1:nrow(genelist)){
+    fitted.test.YRI[[i]] <-   susie(scale.gen.YRI[,(genotype.YRI.poly$.id==genelist$gene[i]),drop=F], covtest[[i]][["values"]],
+                                    L = 10, 
+                                    estimate_residual_variance = TRUE, 
+                                    estimate_prior_variance = FALSE,
+                                    scaled_prior_variance = 0.95,
+                                    verbose = TRUE)
   }
+
+
+
+## Attach gene names to the result
+#### original PIP
+fitted.YRI <-  list(NULL)
+for(i in 1:nrow(genelist)){
+  if(length(fitted.test.YRI[[i]]$sets$cs) != 0){
+    fitted.YRI[[i]] <- cbind(stack(fitted.test.YRI[[i]]$sets$cs),
+                             fitted.test.YRI[[i]][["pip"]][unlist(fitted.test.YRI[[i]]$sets$cs)])
+   # print(fitted.YRI[[i]])
+  }
+  
 }
-check.Yoruba <- rbindlist(fitted.Yoruba, idcol=T)
-check.Yoruba$name <- genelist[check.Yoruba$.id,"gene"]
-result.temp <- as.list(NULL)
-for(i in 1:length(check.Yoruba$.id)){result.temp[i] <- lapply(genotype.Yoruba[check.Yoruba$name[i]], "[", check.Yoruba$values[i],1:3)}
-result.Yoruba <- data.frame(check.Yoruba$name, check.Yoruba$ind, check.Yoruba$values, rbindlist(result.temp))
 
-names(result.Yoruba)<-c("gene","L","SNP","chr","loc","rs")
+check.YRI <- rbindlist(fitted.YRI, idcol = T) 
+check.YRI$name <- genelist[check.YRI$.id, "gene"]
+names(check.YRI) <- c(".id", "values", "ind", "pip", "name")
 
+result.temp <- data.frame(row.names = c("V1", "V2", "V3"))
+for(i in 1:length(check.YRI$.id)){
+  result.temp <- rbind(result.temp, genotype.YRI.poly[genotype.YRI.poly$.id == check.YRI$name[i], ][check.YRI$values[i], 2:4])
+}
+result.YRI <- data.frame(check.YRI$name, check.YRI$ind, check.YRI$values, check.YRI$pip, result.temp)
+names(result.YRI)<-c("gene","L","SNP","PIP","chr","loc","rs")
+
+
+## Format the finemapped SNP file
 library(dplyr)
-result.Yoruba<-result.Yoruba %>% as.data.frame() %>% mutate(gene.SNP = paste(!!!rlang::syms(c("gene", "rs")), sep="."))
-write.csv(result.Yoruba, file = "result.Yoruba.csv")
+result.YRI<-result.YRI %>% as.data.frame() %>% mutate(gene.SNP = paste(!!!rlang::syms(c("gene", "rs")), sep="."))
+write.csv(result.YRI, file = "result.YRI.PIP.cov.02172022.csv")
+
+```
+
+## Classification of the finemapping results
+```{r, eval=FALSE}
+library(dplyr)
+grou12<-read.csv("result.EUR.cluster.csv")
+group2<-read.csv("result.YRI.cluster.csv")
+
+
+#(1) group1_only finemapped genes
+group1_only <- unique(group1$gene[!(group1$gene %in% group2$gene)])
+#(2) group2_onlyfinemapped genes
+group2_only <- unique(group2$gene[!(group2$gene %in% group1$gene)])
+#(3) both_overlapped
+#gene.SNP matched genes
+both_overlapped_SNP <- unique(group2$gene[(group2$gene.SNP %in% group1$gene.SNP)])
+#(4) both_non_overlapped
+#gene.SNP non-matched genes
+both_overlapped <- unique(group2$gene[(group2$gene %in% group1$gene)])
+both_non_overlapped <- unique(both_overlapped[!(both_overlapped %in% both_overlapped_SNP)])
+
+df1 <- data.frame(gene=both_overlapped_SNP, status = "both_overlapped")
+df2 <- data.frame(gene=both_non_overlapped, status = "both_non_overlapped")
+df3 <- data.frame(gene=group1_only, status = "EUR_only")
+df4 <- data.frame(gene=group2_only, status = "YRI_only")
+
+DF4<-rbind(df1,df2,df3,df4)
+write.csv(DF4, file = "geneclass.csv")
+
 ```
 
 
-## Result
-
-![population-separated analysis](assets/PR.7.2021/Slide5.png)
-![population-separated analysis](assets/PR.7.2021/Slide6.png)
-![population-separated analysis](assets/PR.7.2021/Slide7.png)
-
-
-# population merged analysis
-
-## Cut the 100k up/downstream regions from the genotype file
+## Obtain the frequency of the genetic variants 
 
 ```{bash, eval = FALSE}
 module load vcftools
-module load htslib 
-csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/BHloc.bothpop.csv
+module load bcftools
+module load htslib
+
+module load vcftools
+for i in `seq 1 22`
+do
+   vcftools --gzvcf chr$i.1000gphase3.EUR.0.01.biallelic.snp.recode.vcf.gz --snps SNPs.EURgroup.txt --keep group1_indivi.csv --recode --recode-INFO-all --out chr$i.specific_snp_group1
+done
+
+for i in `seq 1 22`
+do
+   vcftools --gzvcf chr$i.1000gphase3.EUR.0.01.biallelic.snp.recode.vcf.gz --snps SNPs.EURgroup.txt --remove group1_indivi.csv --recode --recode-INFO-all --out chr$i.specific_snp_group2
+done
+c
+
+bcftools concat chr{1..22}.specific_snp_group1.recode.vcf -o  specific_snp_group1.vcf
+bcftools concat chr{1..22}.specific_snp_group2.recode.vcf -o  specific_snp_group2.vcf
+
+
+vcftools --vcf specific_snp_group1.vcf --freq --out group1
+vcftools --vcf specific_snp_group2.vcf --freq --out group2
+done
+```
+
+
+
+
+## VarLD Analysis
+```{bash, eval = FALSE}
+module load vcftools
+module load htslib
+module load python
+module load java
+
+#sbatch varLD.slurm
+#cd /project2/xuanyao/marie/E-GEUV-1/LDSC/varLD
+
+#csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/genelist.location1.csv
+csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/varLD/result720/genelist.location2.csv
+for line in `cat ${csvfile} | grep -v ^#`
+
+do
+gene=`echo ${line} | cut -d ',' -f 1`
+srun --exclusive -N1 -n1 java -jar /project2/xuanyao/marie/E-GEUV-1/LDSC/varLD/rgenetics-1.0.jar -p VarLD /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.Yoruba.csv /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.EUR.csv -n 200 -o /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/result720/varLD${gene}.L200.txt
+
+
+done
+wait
+```
+
+
+
+## Genetic Correlation Analysis
+```{bash, eval = FALSE}
+#cd /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/noconstraint_EUR87
+export PATH="$PATH:/home/maries1/gcta_1.93.2beta"
+#./gcta64
+
+## Genetic correlation
+csvfile=allgenes.list.csv
 for line in `cat ${csvfile} | grep -v ^#`
 do
   gene=`echo ${line} | cut -d ',' -f 1`
-  chr=`echo ${line} | cut -d ',' -f 2`
-  up=`echo ${line} | cut -d ',' -f 10`
-  down=`echo ${line} | cut -d ',' -f 11`
-  vcftools --gzvcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr${chr}.1000gphase3.455.0.01.biallelic.recode.vcf --chr ${chr} --from-bp ${up} --to-bp ${down} --recode --out ${gene}.455.genotype
+  gcta64 --reml-bivar --reml-no-constrain --reml-bivar-no-constrain --reml-maxit 100 --grm  /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/${gene}  --pheno /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/nonconstraint_EUR87.2/phen/${gene}.EUR87.2.phen  --out results/${gene}_EUR87 
+done
 
+## General reml
+csvfile=allgenes.list.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} | cut -d ',' -f 1`
+  gcta64  --reml --reml-no-constrain --grm /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/${gene} --reml-maxit 100 --pheno /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/noconstraint_reml/material/EUR87.1/${gene}.EUR87.1.phen  --out /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/noconstraint_reml/results/EUR87.1/${gene}_87.1
 done
 
 ```
 
-## run SuSiE
 
+
+## Regression Analysis on Allele Frequency and Gene Expression
 ```{r, eval = FALSE}
+ggplot(data = x, 
+       aes(x = -(difference),
+           y = log2FoldChange,color=DEG,shape=DEG, alpha=0.7)) + 
+  geom_smooth(method=lm) + 
+  geom_point(size = 2) +
+  ggtitle("causal SNP frequency and gene expression") +
+  xlab("allele frequency difference in two pops") + theme_bw()+ ylab("log2FoldChange")+ stat_summary(fun = "mean", geom = "crossbar",  width = 0.5)
 
-library(susieR)
-library(data.table)
-## read the gene list
+ggscatter(x, "difference", "log2FoldChange", alpha=0.6, add = "reg.line", conf.int = TRUE,color = "DEG",shape="DEG")+ stat_cor(aes(color = "DEG",shape="DEG"))
 
-genelist=read.csv("BHloc.bothpop.ex.csv", stringsAsFactors = F)
-#gene.expression.Africa = read.table("Yoruba.TPM.scaled.gene.bed")
-gene.expression = read.csv("scaled.bothpops.TPM.csv", stringsAsFactors = F)
-
-## read a gene from the list
-filename<-paste("both/",genelist[,"gene"], ".455.genotype.recode.vcf", sep="")
-genotype<- lapply(both/filename, FUN=read.table, header = FALSE, stringsAsFactors = F)
-names(genotype) <- genelist[,"gene"]
-genotype.df <- rbindlist(genotype, fill=T, idcol = T)
-genotype.df<-genotype.df[!duplicated(genotype.df[,c(".id","V3" )])&!duplicated(genotype.df[,c(".id","V3" )], fromLast = T),]
-
-
-## convert vcf format as input dataset
-
-genotype.data <- genotype.df[,11:length(genotype.df[1,])] 
-
-genotype.data[genotype.data=="0|0"]<- 0L
-genotype.data[genotype.data=="0|1"]<- 1L
-genotype.data[genotype.data=="1|0"]<- 1L
-genotype.data[genotype.data=="1|1"]<- 2L
-genotype.data1<- as.matrix(genotype.data)
-genotype.data<- matrix(as.numeric(genotype.data1), nrow = nrow(genotype.data))
-
-## scale the genotypes
-scale.gen <- scale(t(genotype.data))
-#hist(scale.gen.Yoruba[,20])
-
-## extract genes from the gene expression list
-test.expression <- gene.expression[unlist(lapply(genelist$gene, grep, gene.expression$gene)),]
-expression <- t(test.expression[,-(1:4)])
-
-## susieR
-fitted.test<- as.list(NULL)
-for(i in 1:2998){
-  fitted.test[[i]] <-   susie(scale.gen[,(genotype.df$.id==genelist$gene[i])], expression[,i],
-                                     L = 10,
-                                     estimate_residual_variance = TRUE, 
-                                     estimate_prior_variance = FALSE,
-                                     scaled_prior_variance = 0.95,
-                                     verbose = TRUE)
-}
-
-fitted.test[[4]]$sets$cs
-## attach gene names to the result
-fitted <-  as.list(NULL)
-for(i in 1:2998){
-  if(length(fitted.test[[i]]$sets$cs)!=0){
-    fitted[[i]] <- stack(fitted.test[[i]]$sets$cs)
-  }
-}
-check <- rbindlist(fitted, idcol=T)
-check$name <- genelist[check$.id,"gene"]
-result.temp <- as.list(NULL)
-for(i in 1:length(check$.id)){result.temp[i] <- lapply(genotype[check$name[i]], "[", check$values[i],1:3)}
-result <- data.frame(check$name, check$ind, check$values, rbindlist(result.temp))
-
-names(result)<-c("gene","L","SNP","chr","loc","rs")
-
-library(dplyr)
-result<-result %>% as.data.frame() %>% mutate(gene.SNP = paste(!!!rlang::syms(c("gene", "rs")), sep="."))
-write.csv(result, file = "susieR.bothpops.csv")
-
-
-fitted<-  as.list(NULL)
-for(i in 1:1365){
-  if(length(fitted.test[[i]]$sets$cs)!=0){
-    fitted[[i]] <- cbind(stack(fitted.test[[i]]$sets$cs),fitted.test[[i]][["pip"]][unlist(fitted.test[[i]]$sets$cs)])
-  }
-}
-
-check<- rbindlist(fitted, idcol=T)
-check$name <- genelist[check$.id,"gene"]
-
-names(check)
-names(check)[4] <- "PIP"
-result.temp <- as.list(NULL)
-for(i in 1:length(check$.id)){result.temp[i] <- lapply(genotype[check$name[i]], "[", check$values[i],1:3,)}
-result<- data.frame(check$name, check$ind, check$values,check$PIP, rbindlist(result.temp))
-names(result)<-c("gene","L","SNP","PIP","chr","loc","rs")
-
-library(dplyr)
-result<-result %>% as.data.frame() %>% mutate(gene.SNP = paste(!!!rlang::syms(c("gene", "rs")), sep="."))
-write.csv(result, file = "susieR.bothpopsPIP.csv", append = T)
+ggplot(x, aes(x=difference, y=log2FoldChange)) +geom_point()+theme_bw(base_size = 12) 
++  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.5,
+               colour = "")
 
 ```
+ 
 
 
-## Result
-![population-merged analysis](assets/PR.7.2021/Slide8.png)
