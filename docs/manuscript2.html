@@ -15,13 +15,22 @@
 
 <title>For the manuscript (2) Fine-mapping</title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -31,7 +40,7 @@
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
-<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
 <style type="text/css">
 div.section {
@@ -51,11 +60,6 @@ div.section {
     </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -68,32 +72,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 
 
@@ -104,10 +83,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -124,40 +99,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -185,7 +136,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -197,7 +148,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -208,10 +159,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -223,7 +187,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -349,7 +312,7 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -363,7 +326,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -385,7 +348,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mariesaitou/myproject">
-    <span class="fas fa-github"></span>
+    <span class="fa fa-github"></span>
      
     Source code
   </a>
@@ -395,7 +358,7 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -426,7 +389,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-07-02
+<strong>Last updated:</strong> 2022-04-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -435,8 +398,8 @@ div.tocify {
 <strong>Knit directory:</strong> <code>myproject/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
 </p>
 <p>
-This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -517,16 +480,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree64421f6195b9c9ee98f59a1cbeddb2f0b1cfdb55targetblank64421f6a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/mariesaitou/myproject/tree/64421f6195b9c9ee98f59a1cbeddb2f0b1cfdb55" target="_blank">64421f6</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttreec6a488f0b70e081323923379084ed7da6ace3807targetblankc6a488fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/mariesaitou/myproject/tree/c6a488f0b70e081323923379084ed7da6ace3807" target="_blank">c6a488f</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree64421f6195b9c9ee98f59a1cbeddb2f0b1cfdb55targetblank64421f6a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttreec6a488f0b70e081323923379084ed7da6ace3807targetblankc6a488fa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/mariesaitou/myproject/tree/64421f6195b9c9ee98f59a1cbeddb2f0b1cfdb55" target="_blank">64421f6</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/mariesaitou/myproject/tree/c6a488f0b70e081323923379084ed7da6ace3807" target="_blank">c6a488f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -538,6 +501,8 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
+    Ignored:    analysis/.RData
+    Ignored:    analysis/.Rhistory
     Ignored:    analysis/11.24.2020.2.png
     Ignored:    analysis/11.24.2020.3.png
     Ignored:    analysis/11.24.2020.4.png
@@ -555,6 +520,10 @@ Untracked files:
     Untracked:  analysis/12.WIP.Rmd
     Untracked:  analysis/first-analysis.Rmd alias
     Untracked:  getfastqtest2.csv
+
+Unstaged changes:
+    Modified:   analysis/correl.Rmd
+    Modified:   analysis/manuscript3.Rmd
 
 </code></pre>
 <p>
@@ -593,6 +562,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/mariesaitou/myproject/blob/c6a488f0b70e081323923379084ed7da6ace3807/analysis/manuscript2.Rmd" target="_blank">c6a488f</a>
+</td>
+<td>
+mariesaitou
+</td>
+<td>
+2022-04-11
+</td>
+<td>
+Update the files for myproject
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/mariesaitou/myproject/d23b1beb8e50a7d5566a2c1dd1f4064f9456a9c0/docs/manuscript2.html" target="_blank">d23b1be</a>
+</td>
+<td>
+mariesaitou
+</td>
+<td>
+2021-07-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -670,13 +673,9 @@ Publish the files for myproject
 </div>
 <div id="section" class="section level26">
 <p class="heading"></p>
-<div class="figure">
-<img src="assets/PR.7.2021/Slide4.png" alt="" />
-<p class="caption">Fine-mapping with SuSiER</p>
 </div>
-</div>
-<div id="population-separated-analysis" class="section level1">
-<h1>population separated analysis</h1>
+<div id="fine-mapping" class="section level1">
+<h1>Fine Mapping</h1>
 <div id="cut-the-100k-updownstream-regions-from-the-genotype-file" class="section level2">
 <h2>Cut the 100k up/downstream regions from the genotype file</h2>
 <pre class="bash"><code>module load vcftools
@@ -693,193 +692,230 @@ do
 done
 </code></pre>
 </div>
-<div id="run-susie" class="section level2">
-<h2>run SuSiE</h2>
-<pre class="r"><code>library(susieR)
+<div id="run-susier" class="section level2">
+<h2>run SuSiER</h2>
+<pre class="r"><code>setwd(&quot;/project2/xuanyao/marie/E-GEUV-1/finemap&quot;)
+library(susieR)
 library(data.table)
-## read the gene list
-#genelist=read.csv(&quot;genelist.test.csv&quot;, stringsAsFactors = F)
-genelist=read.csv(&quot;gene.Yoruba.csv&quot;, stringsAsFactors = F)
-#gene.expression.Africa = read.table(&quot;Yoruba.TPM.scaled.gene.bed&quot;)
-gene.expression.Yoruba = fread(&quot;Yoruba.TPM.scaled.gene.bed.gz&quot;)
+genelist &lt;- read.csv(&quot;YRI.eGenes.csv&quot;, stringsAsFactors = F)
+gene.expression.YRI &lt;- fread(&quot;/project2/xuanyao/marie/E-GEUV-1/FastQTL/GEUV/Yoruba.TPM.scaled.gene.csv&quot;)
+
 
 ## read a gene from the list
-filenameYoruba&lt;-paste(genelist[,&quot;gene&quot;], &quot;.Yoruba.genotype.recode.vcf&quot;, sep=&quot;&quot;)
-genotype.Yoruba&lt;- lapply(filenameYoruba, FUN=read.table, header = FALSE, stringsAsFactors = F)
-names(genotype.Yoruba) &lt;- genelist[,&quot;gene&quot;]
-genotype.Yoruba.df &lt;- rbindlist(genotype.Yoruba, fill=T, idcol = T)
-genotype.Yoruba.df&lt;-genotype.Yoruba.df[!duplicated(genotype.Yoruba.df[,c(&quot;.id&quot;,&quot;V3&quot; )])&amp;!duplicated(genotype.Yoruba.df[,c(&quot;.id&quot;,&quot;V3&quot; )], fromLast = T),]
+filenameYRI&lt;-paste(&quot;YRI/&quot;,genelist[,&quot;gene&quot;], &quot;.Yoruba.genotype.recode.vcf&quot;, sep=&quot;&quot;)
+genotype.YRI&lt;- lapply(filenameYRI, FUN=read.table, header = FALSE, stringsAsFactors = F)
+names(genotype.YRI) &lt;- genelist[,&quot;gene&quot;]
+genotype.YRI.df &lt;- rbindlist(genotype.YRI, fill=T, idcol = T)
+genotype.YRI.df&lt;-genotype.YRI.df[!duplicated(genotype.YRI.df[,c(&quot;.id&quot;,&quot;V3&quot; )])&amp;!duplicated(genotype.YRI.df[,c(&quot;.id&quot;,&quot;V3&quot; )], fromLast = T),]
 
 
-## convert vcf format as input dataset
-
-genotype.Yoruba.data &lt;- genotype.Yoruba.df[,11:length(genotype.Yoruba.df[1,])] 
-
-genotype.Yoruba.data[genotype.Yoruba.data==&quot;0|0&quot;]&lt;- 0L
-genotype.Yoruba.data[genotype.Yoruba.data==&quot;0|1&quot;]&lt;- 1L
-genotype.Yoruba.data[genotype.Yoruba.data==&quot;1|0&quot;]&lt;- 1L
-genotype.Yoruba.data[genotype.Yoruba.data==&quot;1|1&quot;]&lt;- 2L
-genotype.Yoruba.data1&lt;- as.matrix(genotype.Yoruba.data)
-genotype.Yoruba.data&lt;- matrix(as.numeric(genotype.Yoruba.data1), nrow = nrow(genotype.Yoruba.data))
-
-## scale the genotypes
-scale.gen.Yoruba &lt;- scale(t(genotype.Yoruba.data))
-#hist(scale.gen.Yoruba[,20])
-
-## extract genes from the gene expression list
-test.expression.Yoruba &lt;- gene.expression.Yoruba[unlist(lapply(genelist$gene, grep, gene.expression.Yoruba$ID)),]
-expression.Yoruba &lt;- t(test.expression.Yoruba[,-(1:4)])
-
-## susieR
-fitted.test.Yoruba &lt;- as.list(NULL)
-for(i in 1:12419){
-  fitted.test.Yoruba[[i]] &lt;-   susie(scale.gen.Yoruba[,(genotype.Yoruba.df$.id==genelist$gene[i])], expression.Yoruba[,i],
-                                     L = 10,
-                                     estimate_residual_variance = TRUE, 
-                                     estimate_prior_variance = FALSE,
-                                     scaled_prior_variance = 0.95,
-                                     verbose = TRUE)
+## remove the rows with all 0|0 or 1|1 (V10:ncol(genotype.YRI.df))
+## remove the rows with all 0|1 or 1|0 (V10:ncol(genotype.YRI.df))
+allsame &lt;- function(vector){
+  length(unique(unlist(vector[11:ncol(genotype.YRI.df)]))) == 1
+}
+all0110 &lt;- function(vector){
+  len &lt;- length(unlist(vector[11:ncol(genotype.YRI.df)]))
+  sum(unlist(vector[11:ncol(genotype.YRI.df)]) %in% c(&quot;0|1&quot;, &quot;1|0&quot;)) == len
 }
 
-fitted.test.Yoruba[[4]]$sets$cs
-## attach gene names to the result
-fitted.Yoruba &lt;-  as.list(NULL)
-for(i in 1:12419){
-  if(length(fitted.test.Yoruba[[i]]$sets$cs)!=0){
-    fitted.Yoruba[[i]] &lt;- stack(fitted.test.Yoruba[[i]]$sets$cs)
+genotype.YRI.poly &lt;- genotype.YRI.df[!(apply(genotype.YRI.df, 1, allsame) | apply(genotype.YRI.df, 1, all0110)), ]
+
+## convert the vcf format as input dataset for SuSIE
+genotype.YRI.data &lt;- genotype.YRI.poly[,11:length(genotype.YRI.poly[1,])] 
+
+
+genotype.YRI.data[genotype.YRI.data==&quot;0|0&quot;]&lt;- 0L
+genotype.YRI.data[genotype.YRI.data==&quot;0|1&quot;]&lt;- 1L
+genotype.YRI.data[genotype.YRI.data==&quot;1|0&quot;]&lt;- 1L
+genotype.YRI.data[genotype.YRI.data==&quot;1|1&quot;]&lt;- 2L
+genotype.YRI.data1&lt;- as.matrix(genotype.YRI.data)
+genotype.YRI.data&lt;- matrix(as.numeric(genotype.YRI.data1), nrow = nrow(genotype.YRI.data))
+
+
+## Scale the genotypes
+scale.gen.YRI &lt;- scale(t(genotype.YRI.data))
+scale.gen.YRI.matrix &lt;- matrix(scale.gen.YRI, ncol = 87, byrow = TRUE)
+
+
+
+## Extract genes from the gene expression list
+test.expression.YRI &lt;- gene.expression.YRI[unlist(lapply(genelist$gene, grep, gene.expression.YRI$ID)),]
+expression.YRI &lt;- t(test.expression.YRI[,-(1:4)])
+
+## Covariates
+Zmat = read.table(&quot;Yoruba.cov.txt&quot;,stringsAsFactors = F)
+Zmat.t &lt;- t(Zmat[-(1),-(1)])
+Zmat.t &lt;-as.numeric(Zmat.t)
+Zmat1&lt;-matrix(as.numeric(Zmat.t), nrow=87)
+
+covtest&lt;-  as.list(NULL)
+for(i in 1:nrow(genelist)){
+  y=expression.YRI[,i]
+  y.res = residuals(lm(y~Zmat1, na.action=na.exclude))
+  covtest[[i]] &lt;- stack(y.res)
+}
+
+
+## Make a list for susieR  
+fitted.test.YRI &lt;- as.list(NULL)
+
+## Run SucieR ... Parameters are changeable
+  for(i in 1:nrow(genelist)){
+    fitted.test.YRI[[i]] &lt;-   susie(scale.gen.YRI[,(genotype.YRI.poly$.id==genelist$gene[i]),drop=F], covtest[[i]][[&quot;values&quot;]],
+                                    L = 10, 
+                                    estimate_residual_variance = TRUE, 
+                                    estimate_prior_variance = FALSE,
+                                    scaled_prior_variance = 0.95,
+                                    verbose = TRUE)
   }
+
+
+
+## Attach gene names to the result
+#### original PIP
+fitted.YRI &lt;-  list(NULL)
+for(i in 1:nrow(genelist)){
+  if(length(fitted.test.YRI[[i]]$sets$cs) != 0){
+    fitted.YRI[[i]] &lt;- cbind(stack(fitted.test.YRI[[i]]$sets$cs),
+                             fitted.test.YRI[[i]][[&quot;pip&quot;]][unlist(fitted.test.YRI[[i]]$sets$cs)])
+   # print(fitted.YRI[[i]])
+  }
+  
 }
-check.Yoruba &lt;- rbindlist(fitted.Yoruba, idcol=T)
-check.Yoruba$name &lt;- genelist[check.Yoruba$.id,&quot;gene&quot;]
-result.temp &lt;- as.list(NULL)
-for(i in 1:length(check.Yoruba$.id)){result.temp[i] &lt;- lapply(genotype.Yoruba[check.Yoruba$name[i]], &quot;[&quot;, check.Yoruba$values[i],1:3)}
-result.Yoruba &lt;- data.frame(check.Yoruba$name, check.Yoruba$ind, check.Yoruba$values, rbindlist(result.temp))
 
-names(result.Yoruba)&lt;-c(&quot;gene&quot;,&quot;L&quot;,&quot;SNP&quot;,&quot;chr&quot;,&quot;loc&quot;,&quot;rs&quot;)
+check.YRI &lt;- rbindlist(fitted.YRI, idcol = T) 
+check.YRI$name &lt;- genelist[check.YRI$.id, &quot;gene&quot;]
+names(check.YRI) &lt;- c(&quot;.id&quot;, &quot;values&quot;, &quot;ind&quot;, &quot;pip&quot;, &quot;name&quot;)
 
+result.temp &lt;- data.frame(row.names = c(&quot;V1&quot;, &quot;V2&quot;, &quot;V3&quot;))
+for(i in 1:length(check.YRI$.id)){
+  result.temp &lt;- rbind(result.temp, genotype.YRI.poly[genotype.YRI.poly$.id == check.YRI$name[i], ][check.YRI$values[i], 2:4])
+}
+result.YRI &lt;- data.frame(check.YRI$name, check.YRI$ind, check.YRI$values, check.YRI$pip, result.temp)
+names(result.YRI)&lt;-c(&quot;gene&quot;,&quot;L&quot;,&quot;SNP&quot;,&quot;PIP&quot;,&quot;chr&quot;,&quot;loc&quot;,&quot;rs&quot;)
+
+
+## Format the finemapped SNP file
 library(dplyr)
-result.Yoruba&lt;-result.Yoruba %&gt;% as.data.frame() %&gt;% mutate(gene.SNP = paste(!!!rlang::syms(c(&quot;gene&quot;, &quot;rs&quot;)), sep=&quot;.&quot;))
-write.csv(result.Yoruba, file = &quot;result.Yoruba.csv&quot;)</code></pre>
+result.YRI&lt;-result.YRI %&gt;% as.data.frame() %&gt;% mutate(gene.SNP = paste(!!!rlang::syms(c(&quot;gene&quot;, &quot;rs&quot;)), sep=&quot;.&quot;))
+write.csv(result.YRI, file = &quot;result.YRI.PIP.cov.02172022.csv&quot;)</code></pre>
 </div>
-<div id="result" class="section level2">
-<h2>Result</h2>
-<p><img src="assets/PR.7.2021/Slide5.png" alt="population-separated analysis" /> <img src="assets/PR.7.2021/Slide6.png" alt="population-separated analysis" /> <img src="assets/PR.7.2021/Slide7.png" alt="population-separated analysis" /></p>
+<div id="classification-of-the-finemapping-results" class="section level2">
+<h2>Classification of the finemapping results</h2>
+<pre class="r"><code>library(dplyr)
+grou12&lt;-read.csv(&quot;result.EUR.cluster.csv&quot;)
+group2&lt;-read.csv(&quot;result.YRI.cluster.csv&quot;)
+
+
+#(1) group1_only finemapped genes
+group1_only &lt;- unique(group1$gene[!(group1$gene %in% group2$gene)])
+#(2) group2_onlyfinemapped genes
+group2_only &lt;- unique(group2$gene[!(group2$gene %in% group1$gene)])
+#(3) both_overlapped
+#gene.SNP matched genes
+both_overlapped_SNP &lt;- unique(group2$gene[(group2$gene.SNP %in% group1$gene.SNP)])
+#(4) both_non_overlapped
+#gene.SNP non-matched genes
+both_overlapped &lt;- unique(group2$gene[(group2$gene %in% group1$gene)])
+both_non_overlapped &lt;- unique(both_overlapped[!(both_overlapped %in% both_overlapped_SNP)])
+
+df1 &lt;- data.frame(gene=both_overlapped_SNP, status = &quot;both_overlapped&quot;)
+df2 &lt;- data.frame(gene=both_non_overlapped, status = &quot;both_non_overlapped&quot;)
+df3 &lt;- data.frame(gene=group1_only, status = &quot;EUR_only&quot;)
+df4 &lt;- data.frame(gene=group2_only, status = &quot;YRI_only&quot;)
+
+DF4&lt;-rbind(df1,df2,df3,df4)
+write.csv(DF4, file = &quot;geneclass.csv&quot;)</code></pre>
 </div>
-</div>
-<div id="population-merged-analysis" class="section level1">
-<h1>population merged analysis</h1>
-<div id="cut-the-100k-updownstream-regions-from-the-genotype-file-1" class="section level2">
-<h2>Cut the 100k up/downstream regions from the genotype file</h2>
+<div id="obtain-the-frequency-of-the-genetic-variants" class="section level2">
+<h2>Obtain the frequency of the genetic variants</h2>
 <pre class="bash"><code>module load vcftools
-module load htslib 
-csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/BHloc.bothpop.csv
+module load bcftools
+module load htslib
+
+module load vcftools
+for i in `seq 1 22`
+do
+   vcftools --gzvcf chr$i.1000gphase3.EUR.0.01.biallelic.snp.recode.vcf.gz --snps SNPs.EURgroup.txt --keep group1_indivi.csv --recode --recode-INFO-all --out chr$i.specific_snp_group1
+done
+
+for i in `seq 1 22`
+do
+   vcftools --gzvcf chr$i.1000gphase3.EUR.0.01.biallelic.snp.recode.vcf.gz --snps SNPs.EURgroup.txt --remove group1_indivi.csv --recode --recode-INFO-all --out chr$i.specific_snp_group2
+done
+c
+
+bcftools concat chr{1..22}.specific_snp_group1.recode.vcf -o  specific_snp_group1.vcf
+bcftools concat chr{1..22}.specific_snp_group2.recode.vcf -o  specific_snp_group2.vcf
+
+
+vcftools --vcf specific_snp_group1.vcf --freq --out group1
+vcftools --vcf specific_snp_group2.vcf --freq --out group2
+done</code></pre>
+</div>
+<div id="varld-analysis" class="section level2">
+<h2>VarLD Analysis</h2>
+<pre class="bash"><code>module load vcftools
+module load htslib
+module load python
+module load java
+
+#sbatch varLD.slurm
+#cd /project2/xuanyao/marie/E-GEUV-1/LDSC/varLD
+
+#csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/genelist.location1.csv
+csvfile=/project2/xuanyao/marie/E-GEUV-1/finemap/varLD/result720/genelist.location2.csv
+for line in `cat ${csvfile} | grep -v ^#`
+
+do
+gene=`echo ${line} | cut -d &#39;,&#39; -f 1`
+srun --exclusive -N1 -n1 java -jar /project2/xuanyao/marie/E-GEUV-1/LDSC/varLD/rgenetics-1.0.jar -p VarLD /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.Yoruba.csv /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/${gene}.varLDgenotype.EUR.csv -n 200 -o /project2/xuanyao/marie/E-GEUV-1/finemap/varLD/result720/varLD${gene}.L200.txt
+
+
+done
+wait</code></pre>
+</div>
+<div id="genetic-correlation-analysis" class="section level2">
+<h2>Genetic Correlation Analysis</h2>
+<pre class="bash"><code>#cd /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/noconstraint_EUR87
+export PATH=&quot;$PATH:/home/maries1/gcta_1.93.2beta&quot;
+#./gcta64
+
+## Genetic correlation
+csvfile=allgenes.list.csv
 for line in `cat ${csvfile} | grep -v ^#`
 do
   gene=`echo ${line} | cut -d &#39;,&#39; -f 1`
-  chr=`echo ${line} | cut -d &#39;,&#39; -f 2`
-  up=`echo ${line} | cut -d &#39;,&#39; -f 10`
-  down=`echo ${line} | cut -d &#39;,&#39; -f 11`
-  vcftools --gzvcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr${chr}.1000gphase3.455.0.01.biallelic.recode.vcf --chr ${chr} --from-bp ${up} --to-bp ${down} --recode --out ${gene}.455.genotype
+  gcta64 --reml-bivar --reml-no-constrain --reml-bivar-no-constrain --reml-maxit 100 --grm  /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/${gene}  --pheno /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/nonconstraint_EUR87.2/phen/${gene}.EUR87.2.phen  --out results/${gene}_EUR87 
+done
 
+## General reml
+csvfile=allgenes.list.csv
+for line in `cat ${csvfile} | grep -v ^#`
+do
+  gene=`echo ${line} | cut -d &#39;,&#39; -f 1`
+  gcta64  --reml --reml-no-constrain --grm /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/${gene} --reml-maxit 100 --pheno /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/noconstraint_reml/material/EUR87.1/${gene}.EUR87.1.phen  --out /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/noconstraint_reml/results/EUR87.1/${gene}_87.1
 done
 </code></pre>
 </div>
-<div id="run-susie-1" class="section level2">
-<h2>run SuSiE</h2>
-<pre class="r"><code>library(susieR)
-library(data.table)
-## read the gene list
+<div id="regression-analysis-on-allele-frequency-and-gene-expression" class="section level2">
+<h2>Regression Analysis on Allele Frequency and Gene Expression</h2>
+<pre class="r"><code>ggplot(data = x, 
+       aes(x = -(difference),
+           y = log2FoldChange,color=DEG,shape=DEG, alpha=0.7)) + 
+  geom_smooth(method=lm) + 
+  geom_point(size = 2) +
+  ggtitle(&quot;causal SNP frequency and gene expression&quot;) +
+  xlab(&quot;allele frequency difference in two pops&quot;) + theme_bw()+ ylab(&quot;log2FoldChange&quot;)+ stat_summary(fun = &quot;mean&quot;, geom = &quot;crossbar&quot;,  width = 0.5)
 
-genelist=read.csv(&quot;BHloc.bothpop.ex.csv&quot;, stringsAsFactors = F)
-#gene.expression.Africa = read.table(&quot;Yoruba.TPM.scaled.gene.bed&quot;)
-gene.expression = read.csv(&quot;scaled.bothpops.TPM.csv&quot;, stringsAsFactors = F)
+ggscatter(x, &quot;difference&quot;, &quot;log2FoldChange&quot;, alpha=0.6, add = &quot;reg.line&quot;, conf.int = TRUE,color = &quot;DEG&quot;,shape=&quot;DEG&quot;)+ stat_cor(aes(color = &quot;DEG&quot;,shape=&quot;DEG&quot;))
 
-## read a gene from the list
-filename&lt;-paste(&quot;both/&quot;,genelist[,&quot;gene&quot;], &quot;.455.genotype.recode.vcf&quot;, sep=&quot;&quot;)
-genotype&lt;- lapply(both/filename, FUN=read.table, header = FALSE, stringsAsFactors = F)
-names(genotype) &lt;- genelist[,&quot;gene&quot;]
-genotype.df &lt;- rbindlist(genotype, fill=T, idcol = T)
-genotype.df&lt;-genotype.df[!duplicated(genotype.df[,c(&quot;.id&quot;,&quot;V3&quot; )])&amp;!duplicated(genotype.df[,c(&quot;.id&quot;,&quot;V3&quot; )], fromLast = T),]
-
-
-## convert vcf format as input dataset
-
-genotype.data &lt;- genotype.df[,11:length(genotype.df[1,])] 
-
-genotype.data[genotype.data==&quot;0|0&quot;]&lt;- 0L
-genotype.data[genotype.data==&quot;0|1&quot;]&lt;- 1L
-genotype.data[genotype.data==&quot;1|0&quot;]&lt;- 1L
-genotype.data[genotype.data==&quot;1|1&quot;]&lt;- 2L
-genotype.data1&lt;- as.matrix(genotype.data)
-genotype.data&lt;- matrix(as.numeric(genotype.data1), nrow = nrow(genotype.data))
-
-## scale the genotypes
-scale.gen &lt;- scale(t(genotype.data))
-#hist(scale.gen.Yoruba[,20])
-
-## extract genes from the gene expression list
-test.expression &lt;- gene.expression[unlist(lapply(genelist$gene, grep, gene.expression$gene)),]
-expression &lt;- t(test.expression[,-(1:4)])
-
-## susieR
-fitted.test&lt;- as.list(NULL)
-for(i in 1:2998){
-  fitted.test[[i]] &lt;-   susie(scale.gen[,(genotype.df$.id==genelist$gene[i])], expression[,i],
-                                     L = 10,
-                                     estimate_residual_variance = TRUE, 
-                                     estimate_prior_variance = FALSE,
-                                     scaled_prior_variance = 0.95,
-                                     verbose = TRUE)
-}
-
-fitted.test[[4]]$sets$cs
-## attach gene names to the result
-fitted &lt;-  as.list(NULL)
-for(i in 1:2998){
-  if(length(fitted.test[[i]]$sets$cs)!=0){
-    fitted[[i]] &lt;- stack(fitted.test[[i]]$sets$cs)
-  }
-}
-check &lt;- rbindlist(fitted, idcol=T)
-check$name &lt;- genelist[check$.id,&quot;gene&quot;]
-result.temp &lt;- as.list(NULL)
-for(i in 1:length(check$.id)){result.temp[i] &lt;- lapply(genotype[check$name[i]], &quot;[&quot;, check$values[i],1:3)}
-result &lt;- data.frame(check$name, check$ind, check$values, rbindlist(result.temp))
-
-names(result)&lt;-c(&quot;gene&quot;,&quot;L&quot;,&quot;SNP&quot;,&quot;chr&quot;,&quot;loc&quot;,&quot;rs&quot;)
-
-library(dplyr)
-result&lt;-result %&gt;% as.data.frame() %&gt;% mutate(gene.SNP = paste(!!!rlang::syms(c(&quot;gene&quot;, &quot;rs&quot;)), sep=&quot;.&quot;))
-write.csv(result, file = &quot;susieR.bothpops.csv&quot;)
-
-
-fitted&lt;-  as.list(NULL)
-for(i in 1:1365){
-  if(length(fitted.test[[i]]$sets$cs)!=0){
-    fitted[[i]] &lt;- cbind(stack(fitted.test[[i]]$sets$cs),fitted.test[[i]][[&quot;pip&quot;]][unlist(fitted.test[[i]]$sets$cs)])
-  }
-}
-
-check&lt;- rbindlist(fitted, idcol=T)
-check$name &lt;- genelist[check$.id,&quot;gene&quot;]
-
-names(check)
-names(check)[4] &lt;- &quot;PIP&quot;
-result.temp &lt;- as.list(NULL)
-for(i in 1:length(check$.id)){result.temp[i] &lt;- lapply(genotype[check$name[i]], &quot;[&quot;, check$values[i],1:3,)}
-result&lt;- data.frame(check$name, check$ind, check$values,check$PIP, rbindlist(result.temp))
-names(result)&lt;-c(&quot;gene&quot;,&quot;L&quot;,&quot;SNP&quot;,&quot;PIP&quot;,&quot;chr&quot;,&quot;loc&quot;,&quot;rs&quot;)
-
-library(dplyr)
-result&lt;-result %&gt;% as.data.frame() %&gt;% mutate(gene.SNP = paste(!!!rlang::syms(c(&quot;gene&quot;, &quot;rs&quot;)), sep=&quot;.&quot;))
-write.csv(result, file = &quot;susieR.bothpopsPIP.csv&quot;, append = T)</code></pre>
-</div>
-<div id="result-1" class="section level2">
-<h2>Result</h2>
-<div class="figure">
-<img src="assets/PR.7.2021/Slide8.png" alt="" />
-<p class="caption">population-merged analysis</p>
-</div>
+ggplot(x, aes(x=difference, y=log2FoldChange)) +geom_point()+theme_bw(base_size = 12) 
++  stat_summary(fun = &quot;mean&quot;,
+               geom = &quot;crossbar&quot;, 
+               width = 0.5,
+               colour = &quot;&quot;)</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -888,13 +924,13 @@ write.csv(result, file = &quot;susieR.bothpopsPIP.csv&quot;, append = T)</code><
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.2 (2020-06-22)
+<pre><code>R version 4.1.2 (2021-11-01)
 Platform: x86_64-apple-darwin17.0 (64-bit)
-Running under: macOS  10.16
+Running under: macOS Big Sur 10.16
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -903,17 +939,20 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.6.2
+[1] workflowr_1.7.0
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.6        whisker_0.4       knitr_1.31        magrittr_2.0.1   
- [5] R6_2.5.0          rlang_0.4.10      fansi_0.4.2       stringr_1.4.0    
- [9] tools_4.0.2       xfun_0.21         utf8_1.2.1        git2r_0.28.0     
-[13] htmltools_0.5.1.1 ellipsis_0.3.1    rprojroot_2.0.2   yaml_2.2.1       
-[17] digest_0.6.27     tibble_3.1.1      lifecycle_1.0.0   crayon_1.4.1     
-[21] later_1.2.0       vctrs_0.3.7       promises_1.2.0.1  fs_1.5.0         
-[25] glue_1.4.2        evaluate_0.14     rmarkdown_2.6     stringi_1.5.3    
-[29] compiler_4.0.2    pillar_1.6.0      httpuv_1.6.0      pkgconfig_2.0.3  </code></pre>
+ [1] Rcpp_1.0.8.2     bslib_0.3.1      compiler_4.1.2   pillar_1.7.0    
+ [5] later_1.3.0      git2r_0.29.0     jquerylib_0.1.4  tools_4.1.2     
+ [9] getPass_0.2-2    digest_0.6.29    jsonlite_1.8.0   evaluate_0.15   
+[13] tibble_3.1.6     lifecycle_1.0.1  pkgconfig_2.0.3  rlang_1.0.2     
+[17] cli_3.2.0        rstudioapi_0.13  yaml_2.3.5       xfun_0.30       
+[21] fastmap_1.1.0    httr_1.4.2       stringr_1.4.0    knitr_1.37      
+[25] sass_0.4.0       fs_1.5.2         vctrs_0.3.8      rprojroot_2.0.2 
+[29] glue_1.6.2       R6_2.5.1         processx_3.5.2   fansi_1.0.2     
+[33] rmarkdown_2.13   callr_3.7.0      magrittr_2.0.2   whisker_0.4     
+[37] ps_1.6.0         promises_1.2.0.1 htmltools_0.5.2  ellipsis_0.3.2  
+[41] httpuv_1.6.5     utf8_1.2.2       stringi_1.7.6    crayon_1.5.0    </code></pre>
 </div>
 </div>
 </div>
@@ -921,7 +960,7 @@ loaded via a namespace (and not attached):
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
-http://docs.mathjax.org/en/latest/configuration.html.  This will make
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
 the presentation more consistent at the cost of the webpage sometimes
 taking slightly longer to load. Note that this only works because the
 footer is added to webpages before the MathJax javascript. -->
@@ -961,7 +1000,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
@@ -970,6 +1009,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')
