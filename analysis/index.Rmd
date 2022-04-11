@@ -18,13 +18,6 @@ Manuscript XXX (to be updated)
 *  [1. Data preparation to fastQTL](manuscript1.html)
 *  [2. Fine-mapping to frequency analysis](manuscript2.html)
 
- 
-### ** Archive **
-* [1. Data Cleatning and fastQTL](prep.html)
-Obtain genotype and gene expression data, clean them and convert them to the fastQTL format and run the program on UChicago RCC system.
-* [2. Fine-mapping with SuSiE](susie.html)
-* [3. Downstream analysis]
-* [4. Genetic correlation analysis](correl.html)
-* [5. LD-based fine-mapping](varLD.html)
+
 * [6.  11.WIP](11.WIP.html)
 * [7. (ongoing) 12.WIP](12.20.WIP.html)
