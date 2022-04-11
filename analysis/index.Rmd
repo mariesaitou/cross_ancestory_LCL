@@ -19,5 +19,3 @@ Manuscript XXX (to be updated)
 *  [2. Fine-mapping to frequency analysis](manuscript2.html)
 
 
-* [6.  11.WIP](11.WIP.html)
-* [7. (ongoing) 12.WIP](12.20.WIP.html)
