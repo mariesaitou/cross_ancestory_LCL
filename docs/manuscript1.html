@@ -12,9 +12,9 @@
 <meta name="author" content="Marie Saitou" />
 
 
-<title>For the manuscript (1) Data Preparation</title>
+<title>Cross-Ancestry LCLs eQTL (1) Data Preparation</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -30,14 +30,14 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -157,11 +157,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -190,8 +194,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -199,16 +203,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -347,7 +344,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mariesaitou/myproject">
-    <span class="fa fa-github"></span>
+    <span class="fab fa-github"></span>
      
     Source code
   </a>
@@ -361,7 +358,8 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">For the manuscript (1) Data Preparation</h1>
+<h1 class="title toc-ignore">Cross-Ancestry LCLs eQTL (1) Data
+Preparation</h1>
 <h4 class="author">Marie Saitou</h4>
 <h4 class="date">7/1/2021</h4>
 
@@ -370,7 +368,9 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -379,7 +379,9 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -388,17 +390,27 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-04-11
+<strong>Last updated:</strong> 2024-09-21
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
 </p>
 <p>
-<strong>Knit directory:</strong> <code>myproject/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+<strong>Knit directory:</strong> <code>cross_ancestory_LCL/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
 </p>
 <p>
-This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -407,91 +419,138 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
 </p>
 </div>
 <div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200813code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200813)</code> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200813code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20200813)</code> </a>
 </p>
 </div>
-<div id="strongSeedstrongcodesetseed20200813code" class="panel-collapse collapse">
+<div id="strongSeedstrongcodesetseed20200813code"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>The command <code>set.seed(20200813)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+<p>The command <code>set.seed(20200813)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
 </p>
 </div>
-<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
 <div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
 </p>
 </div>
 <div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttreec6a488f0b70e081323923379084ed7da6ace3807targetblankc6a488fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/mariesaitou/myproject/tree/c6a488f0b70e081323923379084ed7da6ace3807" target="_blank">c6a488f</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree20c4949c5ccbf1e0c013d8d10bda5856b36a9ef4targetblank20c4949a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/mariesaitou/myproject/tree/20c4949c5ccbf1e0c013d8d10bda5856b36a9ef4" target="_blank">20c4949</a>
+</a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttreec6a488f0b70e081323923379084ed7da6ace3807targetblankc6a488fa" class="panel-collapse collapse">
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcommariesaitoumyprojecttree20c4949c5ccbf1e0c013d8d10bda5856b36a9ef4targetblank20c4949a"
+class="panel-collapse collapse">
 <div class="panel-body">
 <p>
-Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/mariesaitou/myproject/tree/c6a488f0b70e081323923379084ed7da6ace3807" target="_blank">c6a488f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version
+<a href="https://github.com/mariesaitou/myproject/tree/20c4949c5ccbf1e0c013d8d10bda5856b36a9ef4" target="_blank">20c4949</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
 </p>
 <p>
-Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
 </p>
 <pre><code>
 Ignored files:
@@ -513,8 +572,6 @@ Ignored files:
     Ignored:    genotype/
 
 Untracked files:
-    Untracked:  ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
-    Untracked:  ALL.chr2.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
     Untracked:  analysis/1.21.WIP.Rmd
     Untracked:  analysis/12.WIP.Rmd
     Untracked:  analysis/first-analysis.Rmd alias
@@ -522,11 +579,14 @@ Untracked files:
 
 Unstaged changes:
     Modified:   analysis/correl.Rmd
+    Modified:   analysis/manuscript2.Rmd
     Modified:   analysis/manuscript3.Rmd
 
 </code></pre>
 <p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
 </p>
 </div>
 </div>
@@ -537,7 +597,12 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/manuscript1.Rmd</code>) and HTML (<code>docs/manuscript1.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/manuscript1.Rmd</code>) and HTML
+(<code>docs/manuscript1.html</code>) files. If you’ve configured a
+remote Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -561,6 +626,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/mariesaitou/myproject/blob/20c4949c5ccbf1e0c013d8d10bda5856b36a9ef4/analysis/manuscript1.Rmd" target="_blank">20c4949</a>
+</td>
+<td>
+mariesaitou
+</td>
+<td>
+2024-09-21
+</td>
+<td>
+workflowr::wflow_publish("analysis/manuscript1.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/mariesaitou/myproject/9474f66537f8fca96f3521df850430bf38e23111/docs/manuscript1.html" target="_blank">9474f66</a>
+</td>
+<td>
+mariesaitou
+</td>
+<td>
+2022-04-11
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -672,8 +771,11 @@ Publish the files for myproject
 </div>
 <div id="genotype-dataset" class="section level1">
 <h1>Genotype Dataset</h1>
-<div id="download-the-genotype-dataset-from-the-1000-genomes-project-phase-3" class="section level2">
-<h2>Download the genotype dataset from the 1000 Genomes project phase 3</h2>
+<div
+id="download-the-genotype-dataset-from-the-1000-genomes-project-phase-3"
+class="section level2">
+<h2>Download the genotype dataset from the 1000 Genomes project phase
+3</h2>
 <pre class="bash"><code>
 mkdir genotype
 wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr{1..22}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
@@ -707,7 +809,8 @@ ggplot(data=pca, aes(V3,V4)) + geom_point()</code></pre>
 </div>
 <div id="gene-expression-dataset" class="section level1">
 <h1>Gene Expression Dataset</h1>
-<div id="gene-expression-quantification-with-kallisto" class="section level2">
+<div id="gene-expression-quantification-with-kallisto"
+class="section level2">
 <h2>Gene expression quantification with Kallisto</h2>
 <pre class="r"><code># Download the fastq dataset from the Geuvadis project
 # sample information https://www.ebi.ac.uk/arrayexpress/files/E-GEUV-1/
@@ -747,8 +850,11 @@ do
   kallisto quant -i human.GRCh37.cdna.all.idx -o kallisto/${file}.kallisto -n 100 -t 32 fastq2/${file}.1.fastq.gz fastq2/${file}.2.fastq.gz
 done</code></pre>
 </div>
-<div id="generate-sample---gene-expression-matrix-file-from-the-kallisto-output" class="section level2">
-<h2>Generate “sample - gene expression” matrix file from the kallisto output</h2>
+<div
+id="generate-sample---gene-expression-matrix-file-from-the-kallisto-output"
+class="section level2">
+<h2>Generate “sample - gene expression” matrix file from the kallisto
+output</h2>
 <pre class="r"><code>library(tximport)
 library(biomaRt)
 update.packages()
@@ -777,7 +883,8 @@ txi &lt;- tximport(files, type = &quot;kallisto&quot;, tx2gene = tx2gene, txOut 
 write.table(txi$est_counts,sep=&quot;\t&quot;, file = &quot;EUR.counts.tsv&quot;)
 write.table(txi$tpm,sep=&quot;\t&quot;, file = &quot;EUR.TPM.tsv&quot;)</code></pre>
 </div>
-<div id="add-gene-annotations-to-the-gene-expression-matrix-file" class="section level2">
+<div id="add-gene-annotations-to-the-gene-expression-matrix-file"
+class="section level2">
 <h2>Add gene annotations to the gene expression matrix file</h2>
 <pre class="r"><code>library(&#39;biomaRt&#39;)
 mart &lt;- useDataset(&quot;hsapiens_gene_ensembl&quot;, useMart(&quot;ensembl&quot;, host=&quot;grch37.ensembl.org&quot;))
@@ -829,8 +936,8 @@ library(ggplot2)
 ggplot(data=pca, aes(V3,V4)) + geom_point()
 </code></pre>
 </div>
-<div id="identify-sarrogate-variales" class="section level2">
-<h2>Identify sarrogate variales</h2>
+<div id="identify-sarrogate-variables" class="section level2">
+<h2>Identify sarrogate variables</h2>
 <pre class="r"><code>#  surrogate variable analysis
 library(sva)
 mm &lt;- model.matrix(~ population, colData(ddsTxi))
@@ -901,7 +1008,8 @@ for i in `seq 1 22`
 do
   ./bin/fastQTL.static fastQTL --vcf /project2/xuanyao/marie/E-GEUV-1/genotype/phase3/chr$i.1000gphase3.Yoruba.0.01.biallelic.recode.vcf.gz --bed GEUV/Yoruba.gene.TPM.sorted.bed.gz --region $i:1-249250621  --threshold 0.001 --permute 1000 --out GEUV/Yoruba.chr$i.permute.0.001.txt --cov GEUV/Yoruba.cov.txt --normal
 done</code></pre>
-<div id="cleaning-and-formatting-the-eqtl-result" class="section level2">
+<div id="cleaning-and-formatting-the-eqtl-result"
+class="section level2">
 <h2>cleaning and formatting the eQTL result</h2>
 <pre class="r"><code>setwd(&quot;/project2/xuanyao/marie/E-GEUV-1&quot;)
 library(ggplot2)
@@ -966,40 +1074,44 @@ YRI1&lt;-subset(YRI2, YRI2$gene.SNP!=&quot;ENSG00000143106.rs545041240&quot;&amp
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.1.2 (2021-11-01)
-Platform: x86_64-apple-darwin17.0 (64-bit)
-Running under: macOS Big Sur 10.16
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: x86_64-apple-darwin20 (64-bit)
+Running under: macOS Sonoma 14.6.1
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Oslo
+tzcode source: internal
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.7.0
+[1] workflowr_1.7.1
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.8.2     bslib_0.3.1      compiler_4.1.2   pillar_1.7.0    
- [5] later_1.3.0      git2r_0.29.0     jquerylib_0.1.4  tools_4.1.2     
- [9] getPass_0.2-2    digest_0.6.29    jsonlite_1.8.0   evaluate_0.15   
-[13] tibble_3.1.6     lifecycle_1.0.1  pkgconfig_2.0.3  rlang_1.0.2     
-[17] cli_3.2.0        rstudioapi_0.13  yaml_2.3.5       xfun_0.30       
-[21] fastmap_1.1.0    httr_1.4.2       stringr_1.4.0    knitr_1.37      
-[25] sass_0.4.0       fs_1.5.2         vctrs_0.3.8      rprojroot_2.0.2 
-[29] glue_1.6.2       R6_2.5.1         processx_3.5.2   fansi_1.0.2     
-[33] rmarkdown_2.13   callr_3.7.0      magrittr_2.0.2   whisker_0.4     
-[37] ps_1.6.0         promises_1.2.0.1 htmltools_0.5.2  ellipsis_0.3.2  
-[41] httpuv_1.6.5     utf8_1.2.2       stringi_1.7.6    crayon_1.5.0    </code></pre>
+ [1] vctrs_0.6.5       httr_1.4.7        cli_3.6.2         knitr_1.45       
+ [5] rlang_1.1.3       xfun_0.42         stringi_1.8.3     processx_3.8.3   
+ [9] promises_1.3.0    jsonlite_1.8.8    glue_1.7.0        rprojroot_2.0.4  
+[13] git2r_0.33.0      htmltools_0.5.7   httpuv_1.6.15     ps_1.7.6         
+[17] sass_0.4.8        fansi_1.0.6       rmarkdown_2.26    jquerylib_0.1.4  
+[21] tibble_3.2.1      evaluate_0.23     fastmap_1.1.1     yaml_2.3.8       
+[25] lifecycle_1.0.4   whisker_0.4.1     stringr_1.5.1     compiler_4.3.1   
+[29] fs_1.6.3          pkgconfig_2.0.3   Rcpp_1.0.12       rstudioapi_0.15.0
+[33] later_1.3.2       digest_0.6.34     R6_2.5.1          utf8_1.2.4       
+[37] pillar_1.9.0      callr_3.7.5       magrittr_2.0.3    bslib_0.6.1      
+[41] tools_4.3.1       cachem_1.0.8      getPass_0.2-4    </code></pre>
 </div>
 </div>
 </div>
