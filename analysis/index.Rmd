@@ -1,5 +1,5 @@
 ---
-title: "trans-ethnic eQTL project"
+title: "Cross-Ancestry LCLs eQTL Project"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
@@ -7,8 +7,6 @@ output:
 editor_options:
   chunk_output_type: console
 ---
-
-### **Cross-Ancestry LCLs eQTL Project**
 
 [preprint](https://www.medrxiv.org/content/10.1101/2022.10.21.22281371v1)
 
