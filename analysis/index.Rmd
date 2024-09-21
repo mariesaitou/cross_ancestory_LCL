@@ -8,13 +8,11 @@ editor_options:
   chunk_output_type: console
 ---
 
-### **Trans-ethnic eQTL project**
-To understand the trans-ethnic genetic architectures of gene expression of a single cell type, which serves as a simplified model to understand trans-ethnic genetic architecture of complex traits.
+### ** Cross-Ancestry LCLs eQTL Project **
+
+[preprint](https://www.medrxiv.org/content/10.1101/2022.10.21.22281371v1)
 
 
-Manuscript XXX (to be updated)
-
-### **For the manuscript**
 *  [1. Data preparation to fastQTL](manuscript1.html)
 *  [2. Fine-mapping to frequency analysis](manuscript2.html)
 
