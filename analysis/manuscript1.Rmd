@@ -1,5 +1,5 @@
 ---
-title: "For the manuscript (1) Data Preparation"
+title: "Cross-Ancestry LCLs eQTL (1) Data Preparation"
 author: "Marie Saitou"
 date: "7/1/2021"
 output: html_document
@@ -182,7 +182,7 @@ ggplot(data=pca, aes(V3,V4)) + geom_point()
 
 ```
 
-## Identify sarrogate variales
+## Identify sarrogate variables
 ```{r, eval = FALSE}
 #  surrogate variable analysis
 library(sva)
