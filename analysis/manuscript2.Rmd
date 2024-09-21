@@ -1,5 +1,5 @@
 ---
-title: "For the manuscript (2) Fine-mapping"
+title: "Cross-Ancestry LCLs eQTL (2) Fine-mapping"
 author: "mariesaitou"
 date: "2021-07-02"
 output: workflowr::wflow_html
@@ -228,6 +228,36 @@ wait
 
 
 ## Genetic Correlation Analysis
+### Prepare input files
+```{R, eval = FALSE}
+setwd("/Users/saitoumarie/Dropbox/Chicago/RCC/eQTL.practice/LDSC/phen")
+genelist=read.csv("LDSC/test3.location.csv", header=T,stringsAsFactors = F)
+EUR = read.csv("EUR.TPM.scaled.csv", header=T,stringsAsFactors = F)
+Yoruba = read.csv("Yoruba.TPM.scaled.csv", header=T,stringsAsFactors = F)
+
+## extract genes from the gene expression list
+
+loc = read.csv("genelist.location1.csv", header=T,stringsAsFactors = F)
+Yorubalist<-Yoruba[Yoruba[,1]%in%genelist[,1],]
+EURlist <- EUR[EUR[,1]%in%genelist[,1],]
+
+comlist <- Yorubalist$X[Yorubalist$X%in% EURlist$gene]
+
+for(i in 1:length(comlist)){
+  hako <- data.frame(cbind(c(names(EURlist), names(Yorubalist)), c(names(EURlist), names(Yorubalist))))
+  hako$EUR <- c(as.numeric(EURlist[EURlist$gene==comlist[i],]), rep(NA, length(Yorubalist)))
+  hako$Yoruba <-  c(rep(NA, length(EURlist)), as.numeric(Yorubalist[Yorubalist$X==comlist[i],]))
+  hako<-subset(hako,hako$X1!="gene")
+  hako<-subset(hako,hako$X1!="X")
+  colnames(hako) <- c('ID', 'ID', 'EUR', 'Yoruba')
+ # write.csv(hako, comlist[i])
+  write.table(hako, file = paste(comlist[i], ".pre"), sep = "\t", row.names = FALSE,
+              col.names = FALSE,quote=FALSE)
+}
+
+
+```
+### Run analysis
 ```{bash, eval = FALSE}
 #cd /project2/xuanyao/marie/E-GEUV-1/LDSC/GCTA/noconstraint_EUR87
 export PATH="$PATH:/home/maries1/gcta_1.93.2beta"
